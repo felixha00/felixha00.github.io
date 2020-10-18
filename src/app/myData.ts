@@ -78,7 +78,7 @@ export const kickstarterProjects = [
   {
     link:
       'https://www.kickstarter.com/projects/felixha00/prescription-playing-cards',
-    img: 'https://felixha00.github.io/assets/img/prescription_pc_cover.png',
+    img: 'https://ksr-ugc.imgix.net/assets/027/295/115/632d380c424cb1864dc7367ec94b9c5f_original.png?ixlib=rb-2.1.0&crop=faces&w=1552&h=873&fit=crop&v=1574351392&auto=format&frame=1&q=92&s=933556f07c971612d2adf24a28fdabcc',
     title: 'PRESCRIPTION Playing Cards',
     date: '2020',
     text: [
