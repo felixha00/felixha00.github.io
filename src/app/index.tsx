@@ -20,10 +20,10 @@ export function App() {
   return (
     <BrowserRouter>
       <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
+        titleTemplate="%s - Felix Ha"
+        defaultTitle="Felix Ha"
       >
-        <meta name="description" content="A React Boilerplate application" />
+        <meta name="description" content="Online portfolio of Felix Ha" />
       </Helmet>
 
       <Box p={6} maxW="2xl">
