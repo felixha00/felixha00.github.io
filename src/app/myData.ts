@@ -1,13 +1,13 @@
 export const personalData = {
   intro: `
-  👋  I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and computer-aided design.
+  👋  I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD.
   I also design and sell playing cards on Kickstarter.
 
   `,
   links: {
     Resume:
       'https://docs.google.com/document/d/1S-7jjRvNYgbu7KK92ACTwtGsqRwdCmz7yDXLl9j3vfI/edit?usp=sharing',
-    Github: 'https://felixha00.github.io/',
+    Github: 'https://github.com/felixha00',
     LinkedIn: 'https://www.linkedin.com/in/felixha00/',
   },
 };

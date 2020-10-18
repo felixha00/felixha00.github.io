@@ -26,12 +26,12 @@ export function App() {
         <meta name="description" content="Online portfolio of Felix Ha" />
       </Helmet>
 
-      <Box p={6} maxW="2xl">
+      <Container p={6} maxW="2xl">
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route component={NotFoundPage} />
         </Switch>
-      </Box>
+      </Container>
 
       <GlobalStyle />
     </BrowserRouter>
