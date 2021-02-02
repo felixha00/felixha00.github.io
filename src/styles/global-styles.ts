@@ -14,12 +14,13 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Courier', Helvetica, Arial, sans-serif;
+    font-family: 'Space Grotesk', Helvetica, Arial, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     font-size: inherit;
+    font-family: 'Space Grotesk' !important;
   }
 
   #root {
@@ -38,5 +39,38 @@ export const GlobalStyle = createGlobalStyle`
     font-family: inherit;
     font-size: inherit;
   }
+
+  .pulse {
+    border: 1px solid;
+  overflow: hidden;
+  position: relative;
+  
+  span {
+    z-index: 20;
+  }
+  
+  &:after {
+    background: #fff;
+    content: "";
+    height: 155px;
+    left: -75px;
+    opacity: .2;
+    position: absolute;
+    top: -50px;
+    transform: rotate(35deg);
+    transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+    width: 50px;
+    z-index: -10;
+  }
+  } 
+
+.pulse:hover {
+  &:after {
+    left: 120%;
+    transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+}
+
 
 `;

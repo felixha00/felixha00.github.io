@@ -18,7 +18,7 @@ const DataBox = (props: Props) => {
   console.log(props);
   return (
     <>
-      <Box border="1px solid white">
+      <Box className="pulse">
         <Link fontSize="lg" href={props.proj.link} isExternal>
           <AspectRatio ratio={16 / 9}>
             <Image src={props.proj.img}></Image>
@@ -37,7 +37,7 @@ const DataBox = (props: Props) => {
                 🔗
               </Link>
             )}
-            <Heading fontSize="md">
+            <Heading fontSize="lg">
               {props.proj.title}
               <span>
                 {' '}

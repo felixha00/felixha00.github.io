@@ -1,14 +1,12 @@
 export const personalData = {
-  intro: `
-  👋  I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD.
-  I also design and sell playing cards on Kickstarter.
-
-  `,
+  intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD.I also design and sell playing cards on Kickstarter.`,
   links: {
-    Resume:
+    '📄 CompEng_Resume':
+      'https://docs.google.com/document/d/1Z40-2IBpNq6X6sLBlw4Px-r1icZHxB-S6DQpTPvZ9JY/edit?usp=sharing',
+    '📄 FullStack_Resume':
       'https://docs.google.com/document/d/1S-7jjRvNYgbu7KK92ACTwtGsqRwdCmz7yDXLl9j3vfI/edit?usp=sharing',
-    Github: 'https://github.com/felixha00',
-    LinkedIn: 'https://www.linkedin.com/in/felixha00/',
+    '🦑 Github': 'https://github.com/felixha00',
+    '👥 LinkedIn': 'https://www.linkedin.com/in/felixha00/',
   },
 };
 
@@ -69,7 +67,7 @@ export const softwareProjects = [
 ];
 
 export const kickstarterStats = {
-  'Total Raised': '40,000',
+  'Total Raised': 'CAD$40,000+',
   Backers: '1000+',
   Projects: '2',
   'Products Sold': '3900+',
@@ -78,7 +76,8 @@ export const kickstarterProjects = [
   {
     link:
       'https://www.kickstarter.com/projects/felixha00/prescription-playing-cards',
-    img: 'https://ksr-ugc.imgix.net/assets/027/295/115/632d380c424cb1864dc7367ec94b9c5f_original.png?ixlib=rb-2.1.0&crop=faces&w=1552&h=873&fit=crop&v=1574351392&auto=format&frame=1&q=92&s=933556f07c971612d2adf24a28fdabcc',
+    img:
+      'https://ksr-ugc.imgix.net/assets/027/295/115/632d380c424cb1864dc7367ec94b9c5f_original.png?ixlib=rb-2.1.0&crop=faces&w=1552&h=873&fit=crop&v=1574351392&auto=format&frame=1&q=92&s=933556f07c971612d2adf24a28fdabcc',
     title: 'PRESCRIPTION Playing Cards',
     date: '2020',
     text: [
@@ -101,6 +100,20 @@ export const kickstarterProjects = [
 ];
 
 export const hardwareProjects = [
+  {
+    img:
+      'https://cdn.discordapp.com/attachments/482051217736859648/806048517645926400/download_1.png',
+    title: 'Hardware-Implemented Image Compression Project',
+    date: '2020',
+    link: '/',
+    text: [
+      `
+      Implemented an algorithm based on the JPEG standard to compress images in SystemVerilog with hardware.`,
+      `Utilized SRAM modules to read & write image data that are converted into RGB via colorspace conversion.`,
+      `Developed Dual-Port RAM modules to store and manage computed data taken from the SRAM modules. `,
+      `Modified testbenches and used ModelSIM to verify the correctness of the outputted image. `,
+    ],
+  },
   {
     img: 'https://oceanservice.noaa.gov/facts/lidar-lynhaven.jpg',
     title: 'Time of Flight LIDAR System Prototype',

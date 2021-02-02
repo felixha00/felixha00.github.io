@@ -2,11 +2,18 @@ import { Box, Divider, Heading, Link, Stack, Text } from '@chakra-ui/core';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { personalData } from '../../myData';
+import {
+  personalData,
+  hardwareProjects,
+  softwareProjects,
+  kickstarterProjects,
+} from '../../myData';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/core';
 import Hardware from '../Data/Hardware';
 import Software from '../Data/Software';
 import Kickstarter from '../Data/Kickstarter';
+import JSONPretty from 'react-json-pretty';
+var JSONPrettyMon = require('react-json-pretty/dist/1337');
 
 export function HomePage() {
   return (
@@ -17,7 +24,7 @@ export function HomePage() {
       </Helmet>
       <Box>
         <Stack spacing={3}>
-          <Heading fontSize="2xl">Felix Ha</Heading>
+          <Heading fontSize="4xl">Felix Ha</Heading>
           <Box>
             {Object.keys(personalData.links).map(key => (
               <Link
@@ -45,7 +52,12 @@ export function HomePage() {
                   pt={0}
                   pr={0}
                   pl={0}
-                  _selected={{ borderColor: 'white', color: 'white' }}
+                  _hover={{ color: 'white' }}
+                  _selected={{
+                    borderColor: 'white',
+                    color: 'white',
+                    outline: 'none',
+                  }}
                   fontSize="sm"
                   key={index}
                 >
@@ -70,15 +82,32 @@ export function HomePage() {
 
 const tabData = [
   {
-    label: 'Software',
+    label: '👨‍💻 Software',
     content: <Software />,
   },
   {
-    label: 'Hardware',
+    label: '⚙️ Hardware',
     content: <Hardware />,
   },
   {
-    label: 'Kickstarters',
+    label: '💵 Kickstarters',
     content: <Kickstarter />,
+  },
+  {
+    label: 'Raw Data',
+    content: (
+      <JSONPretty
+        mainStyle="padding:1em;"
+        style={{ borderRadius: '20px' }}
+        id="json-pretty"
+        data={{
+          personalData: { ...personalData },
+          softwareProjects: { ...softwareProjects },
+          hardwareProjects: { ...hardwareProjects },
+          kickstarterProjects: { ...kickstarterProjects },
+        }}
+        theme={JSONPrettyMon}
+      ></JSONPretty>
+    ),
   },
 ];
