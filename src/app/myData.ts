@@ -1,6 +1,7 @@
 export const personalData = {
-  intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD.I also design and sell playing cards on Kickstarter.`,
-  links: {
+  intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter. 
+  💼 🎉 Incoming 2021 Student Web Applications Developer at Evertz Microsystems. `,
+  links: { 
     '📄 CompEng_Resume':
       'https://docs.google.com/document/d/1Z40-2IBpNq6X6sLBlw4Px-r1icZHxB-S6DQpTPvZ9JY/edit?usp=sharing',
     '📄 FullStack_Resume':

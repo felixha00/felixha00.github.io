@@ -1,4 +1,4 @@
-import { Box, Divider, Heading, Link, Stack, Text } from '@chakra-ui/core';
+import { Box, Divider, Heading, Link, Stack, Text, VStack } from '@chakra-ui/core';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
@@ -24,7 +24,10 @@ export function HomePage() {
       </Helmet>
       <Box>
         <Stack spacing={3}>
+          <Stack>
           <Heading fontSize="4xl">Felix Ha</Heading>
+          </Stack>
+         
           <Box>
             {Object.keys(personalData.links).map(key => (
               <Link
