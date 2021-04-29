@@ -35,22 +35,6 @@ export function HomePage() {
           <Stack>
             <Heading fontSize="4xl">Felix Ha</Heading>
           </Stack>
-          <div
-            className="LI-profile-badge"
-            data-version="v1"
-            data-size="large"
-            data-locale="en_US"
-            data-type="horizontal"
-            data-theme="dark"
-            data-vanity="felixha00"
-          >
-            <a
-              className="LI-simple-link"
-              href="https://ca.linkedin.com/in/felixha00?trk=profile-badge"
-            >
-              Felix H.
-            </a>
-          </div>
 
           <Box>
             {Object.keys(personalData.links).map(key => (
