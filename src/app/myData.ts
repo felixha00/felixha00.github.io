@@ -1,7 +1,7 @@
 export const personalData = {
   intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter. 
   💼 🎉 Incoming 2021 Student Web Applications Developer at Evertz Microsystems. `,
-  links: { 
+  links: {
     '📄 CompEng_Resume':
       'https://docs.google.com/document/d/1Z40-2IBpNq6X6sLBlw4Px-r1icZHxB-S6DQpTPvZ9JY/edit?usp=sharing',
     '📄 FullStack_Resume':
@@ -32,8 +32,7 @@ export const softwareProjects = [
   {
     title: 'Keybin',
     link: 'https://keybin.herokuapp.com',
-    img:
-      'https://cdn.shopify.com/s/files/1/0046/9539/2305/articles/IMG_0230_1024x.jpg',
+    img: 'https://i.ibb.co/tZF9R28/IMG-20200924-110527.jpg',
     date: '2020 - Present',
     text: [
       `Developing a keyboard collection website using the MERN (MongoDB, ExpressJS, ReactJS, NodeJS) stack.`,
