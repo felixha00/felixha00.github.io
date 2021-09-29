@@ -33,9 +33,10 @@ interface Props {
 
 const theme = extendTheme({
   fonts: {
-    heading: 'Roboto Mono',
+    heading: 'Space Grotesk',
     body: 'Roboto Mono',
   },
+
   colors: {
     my: {
       p: '#9b9b9b',

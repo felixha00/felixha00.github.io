@@ -8,7 +8,14 @@ interface Props {}
 const Kickstarter = (props: Props) => {
   return (
     <>
-      <Box border="1px solid white" p={6}>
+      <Box
+        boxShadow="xl"
+        border="1px solid"
+        borderColor="whiteAlpha.300"
+        className="rounded"
+        bg="whiteAlpha.50"
+        p={{ base: 4, lg: 8 }}
+      >
         <Heading fontSize="md" mb={6}>
           📓 Statistics:
         </Heading>

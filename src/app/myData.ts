@@ -1,6 +1,5 @@
 export const personalData = {
-  intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter. 
-  💼 🎉 Incoming 2021 Student Web Applications Developer at Evertz Microsystems. `,
+  intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter.`,
   links: {
     '📄 CompEng_Resume':
       'https://docs.google.com/document/d/1Z40-2IBpNq6X6sLBlw4Px-r1icZHxB-S6DQpTPvZ9JY/edit?usp=sharing',
@@ -13,11 +12,19 @@ export const personalData = {
 
 export const softwareProjects = [
   {
+    title: 'IEEE McMaster Student Branch Website',
+    link: 'https://www.ieeemcmaster.ca/',
+    img:
+      'https://firebasestorage.googleapis.com/v0/b/kollabrise.appspot.com/o/banner.png?alt=media',
+    date: 'August 2021 - Present',
+    text: [],
+  },
+  {
     title: 'Kollabrise',
     link: 'https://kollabrise.web.app',
     img:
       'https://firebasestorage.googleapis.com/v0/b/kollabrise.appspot.com/o/banner.png?alt=media',
-    date: '2020 - Present',
+    date: '2020 - 2021',
     text: [
       `Building a webapp using ReactJS & Firebase that allows creators and businesses to collaborate with each other. `,
 
@@ -33,7 +40,7 @@ export const softwareProjects = [
     title: 'Keybin',
     link: 'https://keybin.herokuapp.com',
     img: 'https://i.ibb.co/tZF9R28/IMG-20200924-110527.jpg',
-    date: '2020 - Present',
+    date: '2020 - 2021',
     text: [
       `Developing a keyboard collection website using the MERN (MongoDB, ExpressJS, ReactJS, NodeJS) stack.`,
       `Implemented salting & hashing sensitive data and rate-limiting to prevent abuse of the API.`,

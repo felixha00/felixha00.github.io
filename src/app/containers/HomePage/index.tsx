@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
   VStack,
+  SimpleGrid,
 } from '@chakra-ui/core';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -21,9 +22,15 @@ import Hardware from '../Data/Hardware';
 import Software from '../Data/Software';
 import Kickstarter from '../Data/Kickstarter';
 import JSONPretty from 'react-json-pretty';
+import Marquee from 'react-fast-marquee';
 var JSONPrettyMon = require('react-json-pretty/dist/1337');
 
 export function HomePage() {
+  const [tabIndex, setTabIndex] = React.useState(0);
+
+  const handleTabChange = (index: number) => {
+    setTabIndex(index);
+  };
   return (
     <>
       <Helmet>
@@ -31,7 +38,7 @@ export function HomePage() {
         <meta name="description" content="My Work" />
       </Helmet>
       <Box>
-        <Stack spacing={3}>
+        <Stack spacing={4}>
           <Stack>
             <Heading fontSize="4xl">Felix Ha</Heading>
           </Stack>
@@ -50,11 +57,12 @@ export function HomePage() {
                 {key}
               </Link>
             ))}
-            <Divider mt={3}></Divider>
+            <Divider mt={4}></Divider>
           </Box>
           <Text fontSize="sm">{personalData.intro}</Text>
-          <Tabs fontSize="sm">
-            <TabList mt={3} borderColor="transparent">
+          <Divider mt={4}></Divider>
+          <Tabs onChange={handleTabChange} fontSize="sm" isLazy={false}>
+            <TabList my={4} borderColor="transparent">
               {tabData.map((tab, index) => (
                 <Tab
                   color="my.p"
@@ -76,11 +84,37 @@ export function HomePage() {
                 </Tab>
               ))}
             </TabList>
-
+            <Box
+              bg="black"
+              position="sticky"
+              top="0"
+              zIndex="999"
+              py={2}
+              boxShadow="xl"
+            >
+              <Marquee gradient={false} style={{ overflow: 'hidden' }}>
+                {[...Array(20).keys()].map(n => {
+                  return (
+                    <Heading key={n}>
+                      {tabData[tabIndex].label.toUpperCase()} &nbsp;
+                    </Heading>
+                  );
+                })}
+              </Marquee>
+            </Box>
             <TabPanels>
               {tabData.map((tab, index) => (
                 <TabPanel p={0} mt={6} key={index}>
-                  <Stack spacing={6}>{tab.content}</Stack>
+                  <Stack spacing={{ base: 4, lg: 8 }}>
+                    <SimpleGrid
+                      className="rounded"
+                      overflowY="hidden"
+                      columns={{ base: 1, lg: 2 }}
+                      spacing={{ base: 4, lg: 8 }}
+                    >
+                      {tab.content}
+                    </SimpleGrid>
+                  </Stack>
                 </TabPanel>
               ))}
             </TabPanels>
@@ -105,7 +139,7 @@ const tabData = [
     content: <Kickstarter />,
   },
   {
-    label: 'Raw Data',
+    label: '📄 Raw Data',
     content: (
       <JSONPretty
         mainStyle="padding:1em;"

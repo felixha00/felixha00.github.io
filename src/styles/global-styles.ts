@@ -5,12 +5,20 @@ export const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
   
+  button:focus, input:focus {
+    box-shadow: none !important;
+  }
+
+  button[aria-selected=true], button:active, button:focus {
+    background: none !important;
+  }
+
   html,
   body {
     height: 100%;
     width: 100%;
-    background: black;
-    color: #fff;
+    background: rgba(4,4,4);
+   
   }
 
   body {
@@ -20,6 +28,7 @@ export const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     font-size: inherit;
+    color:white;
     font-family: 'Space Grotesk' !important;
   }
 
@@ -33,6 +42,7 @@ export const GlobalStyle = createGlobalStyle`
   label {
     font-family: 'Space Grotesk';
     line-height: 1.5em;
+    color: rgb(200,200,200) !important;
   }
 
   input, select {
@@ -40,10 +50,13 @@ export const GlobalStyle = createGlobalStyle`
     font-size: inherit;
   }
 
+  .rounded {
+    border-radius:10px;
+  }
   .pulse {
     border: 1px solid;
-  overflow: hidden;
-  position: relative;
+    overflow: hidden;
+    position: relative;
   
   span {
     z-index: 20;
