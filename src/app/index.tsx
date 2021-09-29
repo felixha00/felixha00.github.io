@@ -23,7 +23,7 @@ export function App() {
         <meta name="description" content="Online portfolio of Felix Ha" />
       </Helmet>
 
-      <Container p={4} maxW="container.xl">
+      <Container py={{ base: 4, lg: 16 }} maxW="container.xl">
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route component={NotFoundPage} />

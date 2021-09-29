@@ -1,9 +1,9 @@
 export const personalData = {
   intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter.`,
   links: {
-    '📄 CompEng_Resume':
+    '📄 Computer Engineering Resume':
       'https://docs.google.com/document/d/1Z40-2IBpNq6X6sLBlw4Px-r1icZHxB-S6DQpTPvZ9JY/edit?usp=sharing',
-    '📄 FullStack_Resume':
+    '📄 Full Stack Resume':
       'https://docs.google.com/document/d/1S-7jjRvNYgbu7KK92ACTwtGsqRwdCmz7yDXLl9j3vfI/edit?usp=sharing',
     '🦑 Github': 'https://github.com/felixha00',
     '👥 LinkedIn': 'https://www.linkedin.com/in/felixha00/',
@@ -14,16 +14,20 @@ export const softwareProjects = [
   {
     title: 'IEEE McMaster Student Branch Website',
     link: 'https://www.ieeemcmaster.ca/',
-    img:
-      'https://firebasestorage.googleapis.com/v0/b/kollabrise.appspot.com/o/banner.png?alt=media',
-    date: 'August 2021 - Present',
+    img: 'https://i.imgur.com/wWVPEyx.png',
+    date: 'July 2021 - Present',
+    text: [],
+  },
+  {
+    title: 'Showboat Music Displayer',
+    img: 'https://i.imgur.com/NwKHKOC.png',
+    date: 'May 2021 - Present',
     text: [],
   },
   {
     title: 'Kollabrise',
     link: 'https://kollabrise.web.app',
-    img:
-      'https://firebasestorage.googleapis.com/v0/b/kollabrise.appspot.com/o/banner.png?alt=media',
+    img: 'https://i.imgur.com/NZUzNIj.png',
     date: '2020 - 2021',
     text: [
       `Building a webapp using ReactJS & Firebase that allows creators and businesses to collaborate with each other. `,
@@ -39,7 +43,7 @@ export const softwareProjects = [
   {
     title: 'Keybin',
     link: 'https://keybin.herokuapp.com',
-    img: 'https://i.ibb.co/tZF9R28/IMG-20200924-110527.jpg',
+    img: 'https://i.imgur.com/s2X2dW8.png',
     date: '2020 - 2021',
     text: [
       `Developing a keyboard collection website using the MERN (MongoDB, ExpressJS, ReactJS, NodeJS) stack.`,
@@ -112,7 +116,6 @@ export const hardwareProjects = [
       'https://cdn.discordapp.com/attachments/482051217736859648/806048517645926400/download_1.png',
     title: 'Hardware-Implemented Image Compression Project',
     date: '2020',
-    link: '/',
     text: [
       `
       Implemented an algorithm based on the JPEG standard to compress images in SystemVerilog with hardware.`,

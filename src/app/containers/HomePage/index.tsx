@@ -40,7 +40,7 @@ export function HomePage() {
       <Box>
         <Stack spacing={4}>
           <Stack>
-            <Heading fontSize="4xl">Felix Ha</Heading>
+            <Heading fontSize="6xl">Felix Ha</Heading>
           </Stack>
 
           <Box>
