@@ -14,7 +14,7 @@ import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './containers/HomePage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
-import { Box, Container } from '@chakra-ui/core';
+import { Container } from '@chakra-ui/core';
 
 export function App() {
   return (

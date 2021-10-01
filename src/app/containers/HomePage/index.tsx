@@ -5,7 +5,6 @@ import {
   Link,
   Stack,
   Text,
-  VStack,
   SimpleGrid,
 } from '@chakra-ui/core';
 import React from 'react';
@@ -40,13 +39,13 @@ export function HomePage() {
       <Box>
         <Stack spacing={4}>
           <Stack>
-            <Heading fontSize="6xl">Felix Ha</Heading>
+            <Heading fontSize="5xl">Felix Ha</Heading>
           </Stack>
 
           <Box>
             {Object.keys(personalData.links).map(key => (
               <Link
-                _hover={{ color: 'white' }}
+                _hover={{ marginLeft: '3px', color: 'white' }}
                 color="my.p"
                 display="block"
                 w="fit-content"

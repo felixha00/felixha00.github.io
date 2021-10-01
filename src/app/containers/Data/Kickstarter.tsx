@@ -17,7 +17,10 @@ const Kickstarter = (props: Props) => {
         p={{ base: 4, lg: 8 }}
       >
         <Heading fontSize="md" mb={6}>
-          📓 Statistics:
+          <span role="img" aria-label="Kickstarter Statistics">
+            📓
+          </span>{' '}
+          Statistics:
         </Heading>
         <Stack>
           {Object.keys(kickstarterStats).map(function (key, index) {
