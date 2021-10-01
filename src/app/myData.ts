@@ -1,5 +1,5 @@
 export const personalData = {
-  intro: `👋 Hey there! I'm a 3rd year student studying Computer Engineering student at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter.`,
+  intro: `👋 Hey there! I'm a 4th year student studying Computer Engineering at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter.`,
   links: {
     '📄 Computer Engineering Resume':
       'https://docs.google.com/document/d/1Z40-2IBpNq6X6sLBlw4Px-r1icZHxB-S6DQpTPvZ9JY/edit?usp=sharing',
