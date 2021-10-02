@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AspectRatio,
   Box,
-  Container,
   Text,
   Image,
   Heading,
