@@ -11,13 +11,14 @@ import {
   DarkMode,
 } from '@chakra-ui/core';
 import { RiLinksFill } from 'react-icons/ri';
+import { usePalette } from 'react-palette';
 
 interface Props {
   proj: any;
 }
 
 const DataBox = (props: Props) => {
-  console.log(props);
+  const { data, loading, error } = usePalette(props.proj.img);
   return (
     <>
       <Box
@@ -25,7 +26,7 @@ const DataBox = (props: Props) => {
         border="1px solid"
         borderColor="whiteAlpha.300"
         className="rounded"
-        bg="whiteAlpha.100"
+        bg={`whiteAlpha.100`}
       >
         <Link fontSize="lg" href={props.proj.link} isExternal>
           <AspectRatio ratio={16 / 9}>
@@ -62,7 +63,7 @@ const DataBox = (props: Props) => {
             <Stack spacing={4} h="100%">
               {props.proj.text &&
                 props.proj.text.map(text => (
-                  <Text color="#e2e2e2">‣ {text}</Text>
+                  <Text color="whiteAlpha.700">‣ {text}</Text>
                 ))}
             </Stack>
           )}

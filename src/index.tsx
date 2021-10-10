@@ -32,6 +32,21 @@ interface Props {
 }
 
 const theme = extendTheme({
+  styles: {
+    global: props => ({
+      // body: {
+      //   bg: mode('blackAlpha.50', 'blackAlpha.900')(props),
+      // },
+      // h1: {
+      //   fontWeight: 500,
+      //   marginBottom: '0.5em',
+      // },
+      p: {
+        color: 'whiteAlpha.700',
+        fontWeight: 400,
+      },
+    }),
+  },
   fonts: {
     heading: 'Space Grotesk',
     body: 'Roboto Mono',

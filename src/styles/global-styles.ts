@@ -42,7 +42,7 @@ export const GlobalStyle = createGlobalStyle`
   label {
     font-family: 'Space Grotesk';
     line-height: 1.5em;
-    color: rgb(200,200,200) !important;
+ 
   }
 
   input, select {
