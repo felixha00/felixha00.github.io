@@ -61,9 +61,15 @@ export function HomePage() {
           <Text fontSize="sm">{personalData.intro}</Text>
           <Divider mt={4}></Divider>
           <Tabs onChange={handleTabChange} fontSize="sm" isLazy={false}>
-            <TabList my={4} borderColor="transparent">
+            <TabList
+              my={4}
+              borderColor="transparent"
+              overflowX="auto"
+              overflowY="hidden"
+            >
               {tabData.map((tab, index) => (
                 <Tab
+                  whiteSpace="nowrap"
                   color="my.p"
                   mr={6}
                   pb={2}
