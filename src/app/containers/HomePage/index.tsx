@@ -63,6 +63,7 @@ export function HomePage() {
           <Tabs onChange={handleTabChange} fontSize="sm" isLazy={false}>
             <TabList
               my={4}
+              pb="2px"
               borderColor="transparent"
               overflowX="auto"
               overflowY="hidden"
