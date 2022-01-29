@@ -29,8 +29,8 @@ const DataBox = (props: Props) => {
         bg={`whiteAlpha.100`}
       >
         <Link fontSize="lg" href={props.proj.link} isExternal>
-          <AspectRatio ratio={16 / 9}>
-            <Image className="rounded" src={props.proj.img}></Image>
+          <AspectRatio ratio={16 / 9} className="img-hover-zoom rounded">
+            <Image src={props.proj.img}></Image>
           </AspectRatio>
         </Link>
         <Stack p={{ base: 4, lg: 8 }} spacing={{ base: 4, lg: 8 }}>
@@ -40,7 +40,7 @@ const DataBox = (props: Props) => {
                 <IconButton
                   aria-label="Link to Project"
                   as={Link}
-                  color="white"
+                  color={data.lightVibrant || 'white'}
                   icon={<RiLinksFill />}
                   fontSize="md"
                   href={props.proj.link}
@@ -49,7 +49,7 @@ const DataBox = (props: Props) => {
                 ></IconButton>
               </DarkMode>
             )}
-            <Heading fontSize="lg">
+            <Heading fontSize="lg" color={data.lightVibrant}>
               {props.proj.title}
               <span>
                 <Text color="my.p" fontSize="sm" fontWeight="normal">

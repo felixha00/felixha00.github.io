@@ -8,7 +8,7 @@ const Hardware = (props: Props) => {
   return (
     <>
       {hardwareProjects.map(proj => (
-        <DataBox proj={proj} key={proj.title} />
+        <DataBox proj={proj} />
       ))}
     </>
   );

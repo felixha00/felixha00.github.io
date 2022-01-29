@@ -50,6 +50,20 @@ export const GlobalStyle = createGlobalStyle`
     font-size: inherit;
   }
 
+  .img-hover-zoom {
+    height: inherit;
+  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+}
+
+/* [2] Transition property for smooth transformation of images */
+.img-hover-zoom img {
+  transition: transform .5s ease;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+.img-hover-zoom:hover img {
+  transform: scale(1.05);
+}
   .rounded {
     border-radius:10px;
   }
