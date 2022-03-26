@@ -149,5 +149,6 @@ export const hardwareProjects = [
       `Creatively adapted and improved existing designs and material choices to reduce costs. `,
       `Successfully built a final product approximately 20 times cheaper than retail prices.`,
     ],
+    githubURL: 'https://api.github.com/repos/felixha00/lowcost-voltex',
   },
 ];

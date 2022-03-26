@@ -8,9 +8,11 @@ import {
   Link,
   Stack,
   IconButton,
+  Badge,
+  Icon,
   DarkMode,
 } from '@chakra-ui/core';
-import { RiLinksFill } from 'react-icons/ri';
+import { RiGithubFill, RiLinksFill, RiStarFill } from 'react-icons/ri';
 import { usePalette } from 'react-palette';
 
 interface Props {
@@ -18,6 +20,20 @@ interface Props {
 }
 
 const DataBox = (props: Props) => {
+  const [githubData, setGithubData] = React.useState<any>();
+
+  React.useEffect(() => {
+    if (props.proj.githubURL) {
+      fetch(props.proj.githubURL)
+        .then(data => {
+          return data.json();
+        })
+        .then(res => {
+          setGithubData(res);
+        });
+    }
+  }, [props.proj.githubURL]);
+
   const { data, loading, error } = usePalette(props.proj.img);
   return (
     <>
@@ -59,6 +75,19 @@ const DataBox = (props: Props) => {
             </Heading>
           </Stack>
 
+          {githubData && (
+            <Stack alignItems="center" direction="row" color="white">
+              <Icon as={RiGithubFill} />
+              <Badge bg="whiteAlpha.900" p={1} display="flex">
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Icon as={RiStarFill} />
+                  <Text color="black" fontSize="md" lineHeight="1em">
+                    {githubData?.stargazers_count}
+                  </Text>
+                </Stack>
+              </Badge>
+            </Stack>
+          )}
           {props.proj.text && props.proj.text.length > 0 && (
             <Stack spacing={4} h="100%">
               {props.proj.text &&
