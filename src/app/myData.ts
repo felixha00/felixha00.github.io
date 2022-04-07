@@ -5,6 +5,7 @@ export const personalData = {
       'https://docs.google.com/document/d/1S-7jjRvNYgbu7KK92ACTwtGsqRwdCmz7yDXLl9j3vfI/edit?usp=sharing',
     '🦑 Github': 'https://github.com/felixha00',
     '👥 LinkedIn': 'https://www.linkedin.com/in/felixha00/',
+    '🏬 FH5VE Webstore': 'https://fh5ve.com/',
   },
 };
 
