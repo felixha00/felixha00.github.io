@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
   SimpleGrid,
+  Image,
 } from '@chakra-ui/core';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -22,6 +23,7 @@ import Software from '../Data/Software';
 import Kickstarter from '../Data/Kickstarter';
 import JSONPretty from 'react-json-pretty';
 import Marquee from 'react-fast-marquee';
+import NameLogo from '../../../assets/felix-ha-logo-white.svg';
 var JSONPrettyMon = require('react-json-pretty/dist/1337');
 
 export function HomePage() {
@@ -38,8 +40,8 @@ export function HomePage() {
       </Helmet>
       <Box>
         <Stack spacing={4}>
-          <Stack>
-            <Heading fontSize="5xl">Felix Ha</Heading>
+          <Stack pb={4}>
+            <Image maxW="600px" src={NameLogo}></Image>
           </Stack>
 
           <Box>
