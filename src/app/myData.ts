@@ -11,6 +11,16 @@ export const personalData = {
 
 export const softwareProjects = [
   {
+    title: 'FH5VE Museum',
+    link: 'https://museum.fh5ve.com/',
+    img: 'https://i.imgur.com/gVlbsrW.png',
+    date: 'Present',
+    text: [
+      `Maintaining a website used for archiving backers and decks produced by FH5VE Playing Cards`,
+      `Built with NextJS + PostgreSQL, implementing Strapi as a content management system (CMS)`,
+    ],
+  },
+  {
     title: 'IEEE McMaster Student Branch Website',
     link: 'https://www.ieeemcmaster.ca/',
     img: 'https://i.imgur.com/wWVPEyx.png',
