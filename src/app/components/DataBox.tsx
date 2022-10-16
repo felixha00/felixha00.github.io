@@ -11,6 +11,7 @@ import {
   Badge,
   Icon,
   DarkMode,
+  Wrap,
 } from '@chakra-ui/core';
 import { RiGithubFill, RiLinksFill, RiStarFill } from 'react-icons/ri';
 import { usePalette } from 'react-palette';
@@ -34,7 +35,7 @@ const DataBox = (props: Props) => {
     }
   }, [props.proj.githubURL]);
 
-  const { data, loading, error } = usePalette(props.proj.img);
+  const { data } = usePalette(props.proj.img);
   return (
     <>
       <Box
@@ -50,6 +51,13 @@ const DataBox = (props: Props) => {
           </AspectRatio>
         </Link>
         <Stack p={{ base: 4, lg: 8 }} spacing={{ base: 4, lg: 8 }}>
+          {props.proj.tags && (
+            <Wrap>
+              {props.proj.tags.map(tag => {
+                return <Badge colorScheme="whiteAlpha">{tag}</Badge>;
+              })}
+            </Wrap>
+          )}
           <Stack isInline alignItems="center">
             {props.proj.link && (
               <DarkMode>
@@ -74,14 +82,13 @@ const DataBox = (props: Props) => {
               </span>
             </Heading>
           </Stack>
-
           {githubData && (
             <Stack alignItems="center" direction="row" color="white">
               <Icon as={RiGithubFill} />
-              <Badge bg="whiteAlpha.900" p={1} display="flex">
+              <Badge bg="whiteAlpha.900">
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <Icon as={RiStarFill} />
-                  <Text color="black" fontSize="md" lineHeight="1em">
+                  <Text color="black" fontSize="sm" lineHeight="1em">
                     {githubData?.stargazers_count}
                   </Text>
                 </Stack>

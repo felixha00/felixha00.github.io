@@ -7,6 +7,9 @@ import {
   Text,
   SimpleGrid,
   Image,
+  AspectRatio,
+  Avatar,
+  Spacer,
 } from '@chakra-ui/core';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -40,8 +43,20 @@ export function HomePage() {
       </Helmet>
       <Box>
         <Stack spacing={4}>
-          <Stack pb={4}>
+          <Stack
+            alignItems="center"
+            direction={{ base: 'column', md: 'row' }}
+            pb={4}
+            spacing={4}
+          >
             <Image maxW="600px" src={NameLogo}></Image>
+            <Spacer />
+            <Box>
+              <Avatar
+                size="2xl"
+                src="https://github.com/felixha00.png?size=256"
+              />
+            </Box>
           </Stack>
 
           <Box>
