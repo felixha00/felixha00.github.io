@@ -3,9 +3,7 @@ import React from 'react';
 import DataBox from '../../components/DataBox';
 import { kickstarterProjects, kickstarterStats } from '../../myData';
 
-interface Props {}
-
-const Kickstarter = (props: Props) => {
+const Kickstarter = () => {
   return (
     <>
       <Box

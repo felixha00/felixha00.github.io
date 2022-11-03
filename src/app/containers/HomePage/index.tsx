@@ -7,7 +7,6 @@ import {
   Text,
   SimpleGrid,
   Image,
-  AspectRatio,
   Avatar,
   Spacer,
 } from '@chakra-ui/core';

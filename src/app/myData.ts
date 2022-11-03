@@ -1,8 +1,7 @@
 export const personalData = {
   intro: `👋 Hey there! I'm a 4th year student studying Computer Engineering at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter.`,
   links: {
-    '📄 Resume':
-      'https://docs.google.com/document/d/1S-7jjRvNYgbu7KK92ACTwtGsqRwdCmz7yDXLl9j3vfI/edit?usp=sharing',
+    '📄 Resume': 'https://cv.felixha.com',
     '🦑 Github': 'https://github.com/felixha00',
     '👥 LinkedIn': 'https://www.linkedin.com/in/felixha00/',
     '🏬 FH5VE Webstore': 'https://fh5ve.com/',

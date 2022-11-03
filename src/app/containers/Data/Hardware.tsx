@@ -2,9 +2,7 @@ import React from 'react';
 import DataBox from '../../components/DataBox';
 import { hardwareProjects } from '../../myData';
 
-interface Props {}
-
-const Hardware = (props: Props) => {
+const Hardware = () => {
   return (
     <>
       {hardwareProjects.map(proj => (

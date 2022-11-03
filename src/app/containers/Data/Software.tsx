@@ -2,9 +2,7 @@ import React from 'react';
 import DataBox from '../../components/DataBox';
 import { softwareProjects } from '../../myData';
 
-interface Props {}
-
-const Software = (props: Props) => {
+const Software = () => {
   return (
     <>
       {softwareProjects.map(proj => (
