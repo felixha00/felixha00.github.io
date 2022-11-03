@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.js": "/static/js/main.2908319f.chunk.js",
-    "runtime-main.js": "/static/js/runtime-main.d81b9cdd.js",
+    "main.js": "/static/js/main.95b46029.chunk.js",
+    "runtime-main.js": "/static/js/runtime-main.6f00bfa2.js",
     "static/css/2.d54bb455.chunk.css": "/static/css/2.d54bb455.chunk.css",
     "static/js/2.a373bf8e.chunk.js": "/static/js/2.a373bf8e.chunk.js",
     "static/js/3.d616868b.chunk.js": "/static/js/3.d616868b.chunk.js",
-    "static/js/4.b092f409.chunk.js": "/static/js/4.b092f409.chunk.js",
+    "static/js/4.d639b10b.chunk.js": "/static/js/4.d639b10b.chunk.js",
     "static/js/5.7e00a57c.chunk.js": "/static/js/5.7e00a57c.chunk.js",
     "index.html": "/index.html",
-    "precache-manifest.fb8b9139e56b945cefa81ff66b59b24b.js": "/precache-manifest.fb8b9139e56b945cefa81ff66b59b24b.js",
+    "precache-manifest.7caa200cc080aed22153aaf0ddd8c7a8.js": "/precache-manifest.7caa200cc080aed22153aaf0ddd8c7a8.js",
     "service-worker.js": "/service-worker.js",
     "static/js/2.a373bf8e.chunk.js.LICENSE.txt": "/static/js/2.a373bf8e.chunk.js.LICENSE.txt",
     "static/js/3.d616868b.chunk.js.LICENSE.txt": "/static/js/3.d616868b.chunk.js.LICENSE.txt",
     "static/media/felix-ha-logo-white.svg": "/static/media/felix-ha-logo-white.f9fab7e1.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.d81b9cdd.js",
+    "static/js/runtime-main.6f00bfa2.js",
     "static/css/2.d54bb455.chunk.css",
     "static/js/2.a373bf8e.chunk.js",
-    "static/js/main.2908319f.chunk.js"
+    "static/js/main.95b46029.chunk.js"
   ]
 }
