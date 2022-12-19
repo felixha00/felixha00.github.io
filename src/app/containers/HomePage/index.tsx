@@ -161,7 +161,7 @@ const tabData = [
     content: <Kickstarter />,
   },
   {
-    label: '📄 Raw Data',
+    label: '📄 JSON Data',
     content: (
       <JSONPretty
         mainStyle="padding:1em;"

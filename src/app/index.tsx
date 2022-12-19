@@ -20,7 +20,10 @@ export function App() {
   return (
     <BrowserRouter>
       <Helmet titleTemplate="%s - Felix Ha" defaultTitle="Felix Ha">
-        <meta name="description" content="Online portfolio of Felix Ha" />
+        <meta
+          name="description"
+          content="Projects Portfolio of Felix Ha built with React"
+        />
       </Helmet>
 
       <Container py={{ base: 4, lg: 16 }} maxW="container.xl">
