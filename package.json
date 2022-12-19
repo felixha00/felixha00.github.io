@@ -63,7 +63,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "echo 'https://www.felixha.com' > ./build/CNAME && gh-pages -d build",
     "test:generators": "ts-node --project=./internals/ts-node.tsconfig.json ./internals/testing/test-generators.ts",
     "start:prod": "npm run build && serve -s build",
     "checkTs": "tsc --noEmit",
