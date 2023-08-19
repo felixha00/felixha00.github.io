@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 664.08 83.02"><defs><style>.cls-1{fill:#fff;}</style></defs><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M0,83V0H70.26V16.73H18.59V35.44H68.4V52H18.59V83Z"/><path class="cls-1" d="M78.19,83V0h131.6V16.73h-113V33h113V49.57h-113V66.3h113V83Z"/><path class="cls-1" d="M218.22,83V0h18.59V66.3h49.44V83Z"/><path class="cls-1" d="M293.69,83V0h18.58V83Z"/><path class="cls-1" d="M316.49,83l32.34-41V40.64L316.49,0h24.29l23.29,29.62h1.36L387.86,0h24.29L379.93,41v1.36L412.15,83H387.86L364.69,53h-1.36L340.78,83Z"/><path class="cls-1" d="M435.2,69.15v-20H415.5V33.83h19.7V13.88h16V33.83h19.7V49.19h-19.7v20Z"/><path class="cls-1" d="M479.82,83V0H498.4V33h43.37V0h18.59V83H541.77V49.69H498.4V83Z"/><path class="cls-1" d="M564.7,83,601,0h26.52l36.55,83H642.77L635,64.68H593.45L585.52,83ZM600.64,48h27.14L620,29.86,614.89,17h-1.37l-5.08,12.88Z"/></g></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 664.1 83" style="enable-background:new 0 0 664.1 83;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+</style>
+<g id="Layer_2_00000107567069954130280780000005617480740317220744_">
+	<g id="Layer_1-2">
+		<path class="st0" d="M0,83V0h70.3v16.7H18.6v18.7h49.8V52H18.6v31H0z"/>
+		<path class="st0" d="M78.2,83V0h131.6v16.7h-113V33h113v16.6h-113v16.7h113V83H78.2z"/>
+		<path class="st0" d="M218.2,83V0h18.6v66.3h49.4V83H218.2z"/>
+		<path class="st0" d="M293.7,83V0h18.6v83H293.7z"/>
+		<path class="st0" d="M316.5,83l32.3-41v-1.4L316.5,0h24.3l23.3,29.6h1.4L387.9,0h24.3l-32.2,41v1.4L412.1,83h-24.3l-23.2-30h-1.4
+			l-22.6,30H316.5z"/>
+		<path class="st0" d="M479.8,83V0h18.6v33h43.4V0h18.6v83h-18.6V49.7h-43.4V83H479.8z"/>
+		<path class="st0" d="M564.7,83L601,0h26.5l36.5,83h-21.3L635,64.7h-41.5L585.5,83H564.7z M600.6,48h27.1L620,29.9L614.9,17h-1.4
+			l-5.1,12.9L600.6,48z"/>
+	</g>
+</g>
+</svg>
