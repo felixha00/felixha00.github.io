@@ -1,8 +1,7 @@
 export const personalData = {
-  intro: `👋 Hey there! I'm a 4th year student studying Computer Engineering at McMaster University, with experience in hardware/software programming, graphic design and CAD. I also design and sell playing cards on Kickstarter.`,
+  intro: `👋 Hey there! I'm a Computer Engineering graduate from McMaster University. I also design and sell playing cards on Kickstarter.`,
   links: {
-    '📄 Resume': 'https://cv.felixha.com',
-    '🦑 Github': 'https://github.com/felixha00',
+    '🦑 GitHub': 'https://github.com/felixha00',
     '👥 LinkedIn': 'https://www.linkedin.com/in/felixha00/',
     '🏬 FH5VE Webstore': 'https://fh5ve.com/',
   },
@@ -13,7 +12,7 @@ export const softwareProjects = [
     title: 'FH5VE Museum',
     link: 'https://museum.fh5ve.com/',
     img: 'https://i.imgur.com/gVlbsrW.png',
-    date: 'Present',
+    date: '-',
     text: [
       `Maintaining a website used for archiving backers and decks produced by FH5VE Playing Cards`,
       `Built with Next.js + PostgreSQL, implementing Strapi as a content management system (CMS)`,
@@ -32,7 +31,7 @@ export const softwareProjects = [
     title: 'IEEE McMaster Student Branch Website',
     link: 'https://www.ieeemcmaster.ca/',
     img: 'https://drive.google.com/uc?id=1x-yY9LaYGpqgYlAeBudcjEyYRTMXXy_g',
-    date: 'July 2021 - Present',
+    date: '-',
     text: [],
     tags: [
       'React (JavaScript)',
@@ -46,7 +45,7 @@ export const softwareProjects = [
   {
     title: 'Showboat Music Displayer',
     img: 'https://i.imgur.com/NwKHKOC.png',
-    date: 'May 2021 - Present',
+    date: '-',
     text: [],
     tags: ['React (Typescript)', 'ElectronJS', 'Frontend'],
   },
