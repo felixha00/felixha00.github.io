@@ -9,24 +9,30 @@ export const personalData = {
 
 export const softwareProjects = [
   {
-    title: 'FH5VE Museum',
-    link: 'https://museum.fh5ve.com/',
-    img: 'https://i.imgur.com/gVlbsrW.png',
-    date: '-',
-    text: [
-      `Maintaining a website used for archiving backers and decks produced by FH5VE Playing Cards`,
-      `Built with Next.js + PostgreSQL, implementing Strapi as a content management system (CMS)`,
-    ],
-    tags: [
-      'React (Typescript)',
-      'Next.js',
-      'Strapi (Content Management System)',
-      'Heroku',
-      'Vercel',
-      'Frontend',
-      'Backend',
-    ],
+    title: 'Keybin',
+    link: 'https://keybin.app',
+    img: 'https://i.imgur.com/H5faLTG.png',
+    date: '2023 - Present',
   },
+  // {
+  //   title: 'FH5VE Museum',
+  //   link: 'https://museum.fh5ve.com/',
+  //   img: 'https://i.imgur.com/gVlbsrW.png',
+  //   date: '-',
+  //   text: [
+  //     `Maintaining a website used for archiving backers and decks produced by FH5VE Playing Cards`,
+  //     `Built with Next.js + PostgreSQL, implementing Strapi as a content management system (CMS)`,
+  //   ],
+  //   tags: [
+  //     'React (Typescript)',
+  //     'Next.js',
+  //     'Strapi (Content Management System)',
+  //     'Heroku',
+  //     'Vercel',
+  //     'Frontend',
+  //     'Backend',
+  //   ],
+  // },
   {
     title: 'IEEE McMaster Student Branch Website',
     link: 'https://www.ieeemcmaster.ca/',
@@ -63,17 +69,6 @@ export const softwareProjects = [
       `Integrated the OAuth library to verify ownership of Instagram, Youtube and Twitch users.`,
       `Constructing attractive and user-friendly UI/UX components in TypeScript by inspecting other websites’ CSS and design styles.
 `,
-    ],
-  },
-  {
-    title: 'Keybin',
-    link: 'https://keybin.herokuapp.com',
-    img: 'https://i.imgur.com/s2X2dW8.png',
-    date: '2020 - 2021',
-    text: [
-      `Developing a keyboard collection website using the MERN (MongoDB, ExpressJS, ReactJS, NodeJS) stack.`,
-      `Implemented salting & hashing sensitive data and rate-limiting to prevent abuse of the API.`,
-      `Utilizing a production-ready TypeScript boilerplate and deployed with Heroku`,
     ],
   },
   {
