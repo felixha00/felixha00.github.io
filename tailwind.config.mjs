@@ -11,6 +11,7 @@ const config = {
 			center: true,
 			padding: "2rem",
 			screens: {
+				'xs': '320px',
 				"2xl": "1400px"
 			}
 		},
@@ -67,7 +68,8 @@ const config = {
 				sm: "calc(var(--radius) - 4px)"
 			},
 			fontFamily: {
-				sans: ["Inter", ...fontFamily.sans]
+				sans: ["Geist Sans", ...fontFamily.sans],
+				mono: ["Geist Mono", ...fontFamily.mono]
 			},
 			keyframes: {
 				"accordion-down": {
