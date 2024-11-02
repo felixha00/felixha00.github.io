@@ -1,13 +1,41 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
+import Card from "@/components/svelte/Card.svelte";
+import IntroCard from "@/components/svelte/IntroCard.svelte";
+import PageCard from "@/components/svelte/PageCard.svelte";
+import Navbar from "@/components/svelte/Navbar.svelte";
 
-import "@/styles/app.css";
+import { Image } from "astro:assets";
 ---
 
 <Layout title="Astro">
 	<main>
-		<p>Welcome to Astro.</p>
+		<Navbar client:load />
+		<div
+			class="grid-container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+		>
+			<IntroCard>
+				<Image
+					class={"rounded-full"}
+					slot="profile-picture"
+					src="https://avatars.githubusercontent.com/u/51464337?v=4"
+					width="180"
+					height="180"
+					alt="Felix Ha Github profile"
+				/>
+			</IntroCard>
+			<PageCard title="Experience" />
+			<PageCard title="Projects" />
+			<PageCard title="Education" />
+			<Card />
+			<Card />
+			<Card />
+			<Card />
+			<Card />
+			<Card />
+
+			<!-- Add any content if you want; it will sit inside the grid -->
+		</div>
 	</main>
 </Layout>
 
