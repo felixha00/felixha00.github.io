@@ -6,6 +6,7 @@
         IconHome,
         IconSettings,
         IconUser,
+        IconPackage,
         IconHammer,
         IconCopy,
     } from "@tabler/icons-svelte";
@@ -23,7 +24,7 @@
     };
 
     // Select the icon based on the title; default to IconBriefcase if not found
-    const SelectedIcon = iconMap[title.toLowerCase()] || IconCopy;
+    const SelectedIcon = iconMap[title.toLowerCase()] || IconPackage;
 </script>
 
 <a href={`/${title.toLowerCase()}`}>

@@ -1,0 +1,23 @@
+---
+import IntroCard from "@/components/svelte/IntroCard.svelte";
+import { Image } from "astro:assets";
+import BaseLayout from "./BaseLayout.astro";
+---
+
+<BaseLayout title="MainLayout">
+    <main
+        class="grid-container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
+        <IntroCard>
+            <Image
+                class={"rounded-full"}
+                slot="profile-picture"
+                src="https://avatars.githubusercontent.com/u/51464337?v=4"
+                width="180"
+                height="180"
+                alt="Felix Ha Github profile"
+            />
+        </IntroCard>
+        <slot />
+    </main>
+</BaseLayout>

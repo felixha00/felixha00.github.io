@@ -3,6 +3,7 @@
     import {
         IconBrandGithub,
         IconBrandLinkedinFilled,
+        IconDownload,
     } from "@tabler/icons-svelte";
     import { Button } from "@/components/ui/button";
     import socials from "@/config/socials.json";
@@ -12,11 +13,13 @@
     let profileRadioValue = $state("benoit");
 </script>
 
-<nav class="flex flex-row">
+<nav
+    class="z-50 flex flex-row fixed w-full bg-background/30 backdrop-blur-sm bac"
+>
     <a href={"/"} data-sveltekit-preload-data="hover">
         <Button class="rounded-none">Felix Ha</Button>
     </a>
-    <Menubar.Root class="flex-grow">
+    <Menubar.Root class="flex-grow p-0">
         <Menubar.Menu>
             <Menubar.Trigger>Edit</Menubar.Trigger>
             <Menubar.Content>
@@ -79,7 +82,7 @@
                 <Menubar.Item inset>Add Profile...</Menubar.Item>
             </Menubar.Content>
         </Menubar.Menu>
-        <div class="grow"/>
+        <div class="grow" />
         <a href={socials.github}>
             <Button size="icon" variant="ghost">
                 <IconBrandGithub />
@@ -88,6 +91,11 @@
         <a href={socials.linkedin}>
             <Button size="icon" variant="ghost">
                 <IconBrandLinkedinFilled />
+            </Button>
+        </a>
+        <a href={socials.resume}>
+            <Button class="rounded-none">
+                Resume <IconDownload />
             </Button>
         </a>
     </Menubar.Root>

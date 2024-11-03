@@ -7,37 +7,22 @@ import PageCard from "@/components/svelte/PageCard.svelte";
 import Navbar from "@/components/svelte/Navbar.svelte";
 
 import { Image } from "astro:assets";
+import MainLayout from "@/layouts/MainLayout.astro";
 ---
 
-<BaseLayout title="Astro">
-	<main>
-		<div
-			class="grid-container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-		>
-			<IntroCard>
-				<Image
-					class={"rounded-full"}
-					slot="profile-picture"
-					src="https://avatars.githubusercontent.com/u/51464337?v=4"
-					width="180"
-					height="180"
-					alt="Felix Ha Github profile"
-				/>
-			</IntroCard>
-			<PageCard title="Experience" />
-			<PageCard title="Projects" />
-			<PageCard title="Education" />
-			<ItemCard title="Keybin" />
-			<Card />
-			<Card />
-			<Card />
-			<Card />
-			<Card />
+<MainLayout title="Astro">
+	<PageCard title="Experience" />
+	<PageCard title="Projects" />
+	<PageCard title="Education" />
+	<!-- <ItemCard title="Keybin" />
+	<Card />
+	<Card />
+	<Card />
+	<Card />
+	<Card /> -->
 
-			<!-- Add any content if you want; it will sit inside the grid -->
-		</div>
-	</main>
-</BaseLayout>
+	<!-- Add any content if you want; it will sit inside the grid -->
+</MainLayout>
 
 <!-- <BaseLayout title="Welcome to Astro." class:list={"dark"}>
 	<main>
