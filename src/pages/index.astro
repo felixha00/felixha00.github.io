@@ -1,16 +1,16 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Card from "@/components/svelte/Card.svelte";
 import IntroCard from "@/components/svelte/IntroCard.svelte";
+import ItemCard from "@/components/svelte/ItemCard.svelte";
 import PageCard from "@/components/svelte/PageCard.svelte";
 import Navbar from "@/components/svelte/Navbar.svelte";
 
 import { Image } from "astro:assets";
 ---
 
-<Layout title="Astro">
+<BaseLayout title="Astro">
 	<main>
-		<Navbar client:load />
 		<div
 			class="grid-container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 		>
@@ -27,7 +27,7 @@ import { Image } from "astro:assets";
 			<PageCard title="Experience" />
 			<PageCard title="Projects" />
 			<PageCard title="Education" />
-			<Card />
+			<ItemCard title="Keybin" />
 			<Card />
 			<Card />
 			<Card />
@@ -37,9 +37,9 @@ import { Image } from "astro:assets";
 			<!-- Add any content if you want; it will sit inside the grid -->
 		</div>
 	</main>
-</Layout>
+</BaseLayout>
 
-<!-- <Layout title="Welcome to Astro." class:list={"dark"}>
+<!-- <BaseLayout title="Welcome to Astro." class:list={"dark"}>
 	<main>
 		<svg
 			class="astro-a"
@@ -99,7 +99,7 @@ import { Image } from "astro:assets";
 			/>
 		</ul>
 	</main>
-</Layout>
+</BaseLayout>
 
 <style>
 	main {

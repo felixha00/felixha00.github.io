@@ -79,6 +79,7 @@
                 <Menubar.Item inset>Add Profile...</Menubar.Item>
             </Menubar.Content>
         </Menubar.Menu>
+        <div class="grow"/>
         <a href={socials.github}>
             <Button size="icon" variant="ghost">
                 <IconBrandGithub />
