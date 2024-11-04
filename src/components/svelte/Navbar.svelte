@@ -6,7 +6,15 @@
         IconDownload,
     } from "@tabler/icons-svelte";
     import { Button } from "@/components/ui/button";
+    import ModeToggle from "./ModeToggle.svelte";
+
     import socials from "@/config/socials.json";
+
+    type Props = {
+        url: URL;
+    };
+    const { url }: Props = $props();
+    const pathSegments = url.pathname.split("/").filter((segment) => segment);
 
     let bookmarks = $state(false);
     let fullUrls = $state(true);
@@ -14,12 +22,15 @@
 </script>
 
 <nav
-    class="z-50 flex flex-row fixed w-full bg-background/30 backdrop-blur-sm bac"
+    class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm"
 >
     <a href={"/"} data-sveltekit-preload-data="hover">
         <Button class="rounded-none">Felix Ha</Button>
     </a>
-    <Menubar.Root class="flex-grow p-0">
+    {#each pathSegments as pathSegment}
+        <p>{pathSegment}</p>
+    {/each}
+    <!-- <Menubar.Root class="flex-grow rounded-none p-0">
         <Menubar.Menu>
             <Menubar.Trigger>Edit</Menubar.Trigger>
             <Menubar.Content>
@@ -82,21 +93,22 @@
                 <Menubar.Item inset>Add Profile...</Menubar.Item>
             </Menubar.Content>
         </Menubar.Menu>
-        <div class="grow" />
-        <a href={socials.github}>
-            <Button size="icon" variant="ghost">
-                <IconBrandGithub />
-            </Button>
-        </a>
-        <a href={socials.linkedin}>
-            <Button size="icon" variant="ghost">
-                <IconBrandLinkedinFilled />
-            </Button>
-        </a>
-        <a href={socials.resume}>
-            <Button class="rounded-none">
-                Resume <IconDownload />
-            </Button>
-        </a>
-    </Menubar.Root>
+    </Menubar.Root> -->
+    <div class="grow" />
+    <a href={socials.github}>
+        <Button size="icon" variant="ghost">
+            <IconBrandGithub />
+        </Button>
+    </a>
+    <a href={socials.linkedin}>
+        <Button size="icon" variant="ghost" class="rounded-none">
+            <IconBrandLinkedinFilled />
+        </Button>
+    </a>
+    <ModeToggle />
+    <a href={socials.resume}>
+        <Button class="rounded-none">
+            Resume <IconDownload />
+        </Button>
+    </a>
 </nav>

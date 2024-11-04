@@ -1,6 +1,5 @@
-import { fontFamily } from "tailwindcss/defaultTheme";
+import theme, { fontFamily, } from "tailwindcss/defaultTheme";
 import tailwindcssAnimate from 'tailwindcss-animate'
-
 /** @type {import('tailwindcss').Config} */
 const config = {
 	darkMode: ["class"],
@@ -90,9 +89,24 @@ const config = {
 				"accordion-up": "accordion-up 0.2s ease-out",
 				"caret-blink": "caret-blink 1.25s ease-out infinite",
 			},
+			// typography: (theme) => ({
+			// 	DEFAULT: {
+			// 		css: {
+			// 			'--tw-prose-body': theme('colors.neutral[800]')
+			// 		}
+			// 	}
+			// })
 		},
 	},
-	plugins: [tailwindcssAnimate],
+	plugins: [tailwindcssAnimate,
+		require('@tailwindcss/typography'),
+		function ({ addComponents, theme }) { // override
+			addComponents({
+				'.prose': {
+					'@apply dark:prose-invert prose-neutral prose-base leading-tight': {},
+				},
+			});
+		},],
 };
 
 export default config;

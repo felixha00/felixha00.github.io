@@ -2,11 +2,15 @@
 import IntroCard from "@/components/svelte/IntroCard.svelte";
 import { Image } from "astro:assets";
 import BaseLayout from "./BaseLayout.astro";
+
+import { Content } from "@/data/intro.md";
 ---
 
+<!-- [&>*]:h-1/2 -->
 <BaseLayout title="MainLayout">
-    <main
-        class="grid-container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    <section
+        class="grow grid-container grid
+        grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
         <IntroCard>
             <Image
@@ -17,7 +21,8 @@ import BaseLayout from "./BaseLayout.astro";
                 height="180"
                 alt="Felix Ha Github profile"
             />
+            <Content slot="intro-md" />
         </IntroCard>
         <slot />
-    </main>
+    </section>
 </BaseLayout>

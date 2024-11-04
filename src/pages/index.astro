@@ -4,18 +4,29 @@ import Card from "@/components/svelte/Card.svelte";
 import IntroCard from "@/components/svelte/IntroCard.svelte";
 import ItemCard from "@/components/svelte/ItemCard.svelte";
 import PageCard from "@/components/svelte/PageCard.svelte";
+import DataCard from "@/components/svelte/DataCard.svelte";
 import Navbar from "@/components/svelte/Navbar.svelte";
+
+import { Content } from "@/data/intro.md";
 
 import { Image } from "astro:assets";
 import MainLayout from "@/layouts/MainLayout.astro";
 ---
 
 <MainLayout title="Astro">
+	<DataCard title="About">
+		<Content slot="md" />
+	</DataCard>
 	<PageCard title="Experience" />
 	<PageCard title="Projects" />
-	<PageCard title="Education" />
-	<!-- <ItemCard title="Keybin" />
-	<Card />
+	<PageCard title="Blog" />
+	<ItemCard title="Keybin" />
+	<ItemCard title="Keybin" />
+	<ItemCard title="Keybin" />
+	<ItemCard title="Keybin" />
+	<ItemCard title="Keybin" />
+
+	<!-- <Card />
 	<Card />
 	<Card />
 	<Card />
