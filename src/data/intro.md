@@ -1,6 +1,6 @@
-## 你好! 
+## Hello! / 你好! 
 
-i'm **felix**, a software engineer with a passion in engineering products on the web and doing whatever interests me.   
+i'm **felix**, a 🍁 software engineer with a passion in engineering products on the web and doing whatever interests me.   
 
 i graduated from **computer engineering** @ mcmaster university in 2023 and am currently developing frontend at **evertz microsystems**.   
 

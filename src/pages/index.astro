@@ -5,10 +5,12 @@ import IntroCard from "@/components/svelte/IntroCard.svelte";
 import ItemCard from "@/components/svelte/ItemCard.svelte";
 import PageCard from "@/components/svelte/PageCard.svelte";
 import DataCard from "@/components/svelte/DataCard.svelte";
+import BaseCard from "@/components/svelte/BaseCard.svelte";
 import Navbar from "@/components/svelte/Navbar.svelte";
 
 import { Content as IntroMd } from "@/data/intro.md";
 import { Content as RhythmGamesMd } from "@/data/rhythm-games.md";
+import { Content as ExperienceMd } from "@/data/experience.md";
 
 import { Image } from "astro:assets";
 import MainLayout from "@/layouts/MainLayout.astro";
@@ -19,12 +21,17 @@ import MainLayout from "@/layouts/MainLayout.astro";
 		<IntroMd slot="md" />
 	</DataCard>
 
+	<DataCard title="Experience">
+		<ExperienceMd slot="md" />
+	</DataCard>
+
 	<DataCard title="Rhythm Games">
 		<RhythmGamesMd slot="md" />
 	</DataCard>
-	<PageCard title="Experience" />
+
+	<!-- <PageCard title="Experience" />
 	<PageCard title="Projects" />
-	<PageCard title="Blog" />
+	<PageCard title="Blog" /> -->
 	<ItemCard title="Keybin" />
 	<ItemCard title="Keybin" />
 	<ItemCard title="Keybin" />

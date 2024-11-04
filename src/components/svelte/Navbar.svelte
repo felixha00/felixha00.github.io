@@ -33,16 +33,24 @@
 </script>
 
 <nav
-    class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm items-center gap-4"
+    class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm gap-4"
 >
-    <a
-        href={"/"}
-        data-sveltekit-preload-data="hover"
-        onmouseenter={changeNickname}
-        onmouseleave={() => (currentNickname = "Felix")}
-    >
-        <Button class="rounded-none">{currentNickname} Ha</Button>
-    </a>
+    <div class="flex items-center">
+        <a
+            href={"/"}
+            data-sveltekit-preload-data="hover"
+            onmouseenter={changeNickname}
+            onmouseleave={() => (currentNickname = "Felix")}
+        >
+            <Button class="rounded-none">{currentNickname} Ha</Button>
+        </a>
+        <a href={socials.github}>
+            <Button class="rounded-none" size="icon" variant="outline">
+                <IconSearch />
+            </Button>
+        </a>
+    </div>
+
     {#each pathSegments as pathSegment}
         <p class="font-mono uppercase">{pathSegment}</p>
     {/each}
@@ -127,10 +135,12 @@
             <IconBrandLinkedinFilled />
         </Button>
     </a>
-    <ModeToggle />
-    <a href={socials.resume}>
-        <Button class="rounded-none">
-            Resume <IconDownload />
-        </Button>
-    </a>
+    <div class="flex items-center">
+        <ModeToggle />
+        <a href={socials.resume}>
+            <Button class="rounded-none">
+                Resume <IconDownload />
+            </Button>
+        </a>
+    </div>
 </nav>

@@ -24,7 +24,7 @@
         </span>
     </Card.Header>
 
-    <Card.Content>
+    <Card.Content class="overflow-auto">
         <div class="prose">
             <slot name="md" />
         </div>

@@ -19,13 +19,13 @@
 <Card.Root
     class="group flex flex-col relative rounded-none transition-colors hover:bg-muted hover:border-muted-foreground"
 >
-    <div class="aspect-video border-b border-b-border relative">
+    <a href="/projects" class="aspect-video border-b border-b-border relative">
         <img
             class="absolute group-hover:brightness-105"
             src="/sample.png"
             alt={title + "Header Image"}
         />
-    </div>
+    </a>
 
     <Card.Header>
         <Card.Title class="font-mono">{title}</Card.Title>
