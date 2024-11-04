@@ -19,13 +19,27 @@
     let bookmarks = $state(false);
     let fullUrls = $state(true);
     let profileRadioValue = $state("benoit");
+
+    // randomly iterate through nicknames
+    let nicknames = ["Fellef", "Felan", "Fillip", "Filfred", "Felipe"];
+    let currentNickname = $state("Felix");
+
+    function changeNickname() {
+        const randomIndex = Math.floor(Math.random() * nicknames.length);
+        currentNickname = nicknames[randomIndex];
+    }
 </script>
 
 <nav
     class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm"
 >
-    <a href={"/"} data-sveltekit-preload-data="hover">
-        <Button class="rounded-none">Felix Ha</Button>
+    <a
+        href={"/"}
+        data-sveltekit-preload-data="hover"
+        onmouseenter={changeNickname}
+        onmouseleave={() => (currentNickname = "Felix")}
+    >
+        <Button class="rounded-none">{currentNickname} Ha</Button>
     </a>
     {#each pathSegments as pathSegment}
         <p>{pathSegment}</p>
