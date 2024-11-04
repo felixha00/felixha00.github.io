@@ -1,7 +1,10 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+
+import ItemCard from "@/components/svelte/ItemCard.svelte";
 ---
 
-<BaseLayout title="Projects">
-    <main></main>
-</BaseLayout>
+<MainLayout title="Projects">
+    <ItemCard title="Keybin" />
+</MainLayout>

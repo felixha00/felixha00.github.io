@@ -7,7 +7,8 @@ import PageCard from "@/components/svelte/PageCard.svelte";
 import DataCard from "@/components/svelte/DataCard.svelte";
 import Navbar from "@/components/svelte/Navbar.svelte";
 
-import { Content } from "@/data/intro.md";
+import { Content as IntroMd } from "@/data/intro.md";
+import { Content as RhythmGamesMd } from "@/data/rhythm-games.md";
 
 import { Image } from "astro:assets";
 import MainLayout from "@/layouts/MainLayout.astro";
@@ -15,7 +16,11 @@ import MainLayout from "@/layouts/MainLayout.astro";
 
 <MainLayout title="Astro">
 	<DataCard title="About">
-		<Content slot="md" />
+		<IntroMd slot="md" />
+	</DataCard>
+
+	<DataCard title="Rhythm Games">
+		<RhythmGamesMd slot="md" />
 	</DataCard>
 	<PageCard title="Experience" />
 	<PageCard title="Projects" />

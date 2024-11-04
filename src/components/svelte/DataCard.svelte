@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as Card from "@/components/ui/card/index";
-    import type { Icon } from "@tabler/icons-svelte";
     import { IconDatabase } from "@tabler/icons-svelte";
+    import CardCorners from "@/components/visual/CardCorners.svelte";
 
     type Props = {
         title: string;
@@ -11,7 +11,7 @@
 </script>
 
 <Card.Root
-    class="overflow-hidden rounded-none relative transition-colors hover:bg-muted/50 hover:border-muted-foreground p-4 h-full"
+    class="rounded-none relative transition-colors hover:bg-muted/50 hover:border-muted-foreground p-4 h-full"
 >
     <Card.Header>
         <span class="flex-row flex items-center justify-between">
@@ -29,6 +29,5 @@
             <slot name="md" />
         </div>
     </Card.Content>
-
-    <div class="absolute bottom-0 right-0 size-8 bg-primary"></div>
+    <CardCorners />
 </Card.Root>

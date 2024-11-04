@@ -103,7 +103,7 @@ const config = {
 		function ({ addComponents, theme }) { // override
 			addComponents({
 				'.prose': {
-					'@apply dark:prose-invert prose-neutral prose-base leading-tight': {},
+					'@apply dark:prose-invert prose-neutral prose-sm leading-tight': {},
 				},
 			});
 		},],

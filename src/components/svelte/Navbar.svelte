@@ -4,9 +4,11 @@
         IconBrandGithub,
         IconBrandLinkedinFilled,
         IconDownload,
+        IconSearch,
     } from "@tabler/icons-svelte";
     import { Button } from "@/components/ui/button";
     import ModeToggle from "./ModeToggle.svelte";
+    import { Input } from "@/components/ui/input/index";
 
     import socials from "@/config/socials.json";
 
@@ -31,7 +33,7 @@
 </script>
 
 <nav
-    class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm"
+    class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm items-center gap-4"
 >
     <a
         href={"/"}
@@ -42,8 +44,14 @@
         <Button class="rounded-none">{currentNickname} Ha</Button>
     </a>
     {#each pathSegments as pathSegment}
-        <p>{pathSegment}</p>
+        <p class="font-mono uppercase">{pathSegment}</p>
     {/each}
+
+    <!-- <form class="flex w-full max-w-sm items-center space-x-2">
+        <IconSearch class="size-4" />
+        <Input class="h-8 w-32" placeholder="Search" />
+    </form> -->
+
     <!-- <Menubar.Root class="flex-grow rounded-none p-0">
         <Menubar.Menu>
             <Menubar.Trigger>Edit</Menubar.Trigger>
