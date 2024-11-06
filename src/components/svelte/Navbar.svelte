@@ -9,7 +9,7 @@
     import { Button } from "@/components/ui/button";
     import ModeToggle from "./ModeToggle.svelte";
     import { Input } from "@/components/ui/input/index";
-
+    import Searchbox from "@/components/searchbox.svelte";
     import socials from "@/config/socials.json";
 
     type Props = {
@@ -33,7 +33,7 @@
 </script>
 
 <nav
-    class="z-50 flex flex-row fixed w-full border-b border-b-primary bg-background/80 backdrop-blur-sm gap-4"
+    class="z-50 flex flex-row items-center fixed w-full border-b border-b-primary bg-background/90 backdrop-blur-sm gap-0"
 >
     <div class="flex items-center">
         <a
@@ -42,13 +42,14 @@
             onmouseenter={changeNickname}
             onmouseleave={() => (currentNickname = "Felix")}
         >
-            <Button class="rounded-none">{currentNickname} Ha</Button>
+            <Button class="rounded-none  pl-2">👋 {currentNickname} Ha</Button>
         </a>
-        <a href={socials.github}>
+        <!-- <a href={socials.github}>
             <Button class="rounded-none" size="icon" variant="outline">
                 <IconSearch />
             </Button>
-        </a>
+        </a> -->
+        <Searchbox />
     </div>
 
     {#each pathSegments as pathSegment}
@@ -62,7 +63,9 @@
 
     <!-- <Menubar.Root class="flex-grow rounded-none p-0">
         <Menubar.Menu>
-            <Menubar.Trigger>Edit</Menubar.Trigger>
+            <Menubar.Trigger
+                ><p class="font-mono font-bold">HOME</p></Menubar.Trigger
+            >
             <Menubar.Content>
                 <Menubar.Item>
                     Undo <Menubar.Shortcut>⌘Z</Menubar.Shortcut>
@@ -124,7 +127,7 @@
             </Menubar.Content>
         </Menubar.Menu>
     </Menubar.Root> -->
-    <div class="grow" />
+    <div class="grow"></div>
     <a href={socials.github}>
         <Button size="icon" variant="ghost">
             <IconBrandGithub />

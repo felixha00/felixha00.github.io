@@ -1,0 +1,55 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Button } from "@/components/ui/button";
+import type { MarkdownInstance } from "astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+
+// src/pages/blog/[slug].astro
+export async function getStaticPaths() {
+    const projectEntries = await getCollection("projects");
+    return projectEntries.map((entry) => ({
+        params: { project: entry.slug },
+        props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { data: frontmatter } = entry;
+const { Content, headings } = await entry.render();
+---
+
+<style>
+    article {
+        @apply prose prose-base prose-code:whitespace-pre-wrap p-4;
+
+        code {
+            @apply !text-muted-foreground;
+        }
+    }
+
+    hr {
+        @apply mx-[-100rem] border-dashed;
+    }
+</style>
+
+<BaseLayout title={frontmatter.title}>
+    <section class="container border-x grow">
+        <article class="justify-between flex w-full items-center bg-muted">
+            <code>📁 {frontmatter.dir}</code>
+            <a href={frontmatter.url}>
+                <Button class="not-prose px-2 py-1" size="xs"> View -> </Button>
+            </a>
+        </article>
+        <hr />
+        <article>
+            <h1 class="mb-0">{frontmatter.title}</h1>
+            <h3 class="text-muted-foreground">{frontmatter.summary}</h3>
+            <code>📅 {frontmatter.date}</code>
+        </article>
+        <hr />
+        <Image src={frontmatter.cover} alt={frontmatter.title} />
+        <hr />
+        <article><Content /></article>
+    </section>
+</BaseLayout>

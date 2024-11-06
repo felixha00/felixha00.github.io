@@ -1,0 +1,27 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+
+import ItemCard from "@/components/svelte/ItemCard.svelte";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+
+projects.sort((a, b) => {
+    // Helper function to parse dates
+    const parseDate = (dateStr?: string) => {
+        if (!dateStr) return 0;
+        if (dateStr.includes("Present")) return new Date().getFullYear(); // Assume "Present" is the current year
+        return parseInt(dateStr.split(" - ")[0], 10); // Use the starting year in case of a range
+    };
+
+    const dateA = parseDate(a.data.date);
+    const dateB = parseDate(b.data.date);
+
+    return dateB - dateA; // Descending order
+});
+---
+
+<MainLayout title="Projects">
+    {projects.map((p) => <ItemCard {...p.data} />)}
+</MainLayout>

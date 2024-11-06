@@ -1,8 +1,9 @@
-## Hello! / 你好! 
+## hello! / 你好! 
 
-i'm **felix**, a 🍁 software engineer with a passion in engineering products on the web and doing whatever interests me.   
+i'm **Felix**, a 🍁 software engineer with a passion in engineering products on the web and doing whatever interests me.   
 
-i graduated from **computer engineering** @ mcmaster university in 2023 and am currently developing frontend at **evertz microsystems**.   
+👨‍💼 i graduated from **Computer Engineering** @ McMaster University in 2023 and am currently developing frontend at **Evertz Microsystems**.   
 
-i also design and sell playing cards on [kickstarter](https://www.kickstarter.com/projects/felixha00/prescription-playing-cards).
+⏰ right now i'm: working on [Keybin](https://keybin.app) and learning Rust + WebAssembly.
 
+i also design and sell playing cards on [Kickstarter](https://www.kickstarter.com/projects/felixha00/prescription-playing-cards).

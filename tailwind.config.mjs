@@ -8,13 +8,15 @@ const config = {
 	theme: {
 		container: {
 			center: true,
-			padding: "2rem",
+			// padding: "1rem",
 			screens: {
-				'xs': '320px',
 				"2xl": "1400px"
 			}
 		},
 		extend: {
+			screens: {
+				'xs': '320px'
+			},
 			colors: {
 				border: "hsl(var(--border) / <alpha-value>)",
 				input: "hsl(var(--input) / <alpha-value>)",
@@ -60,12 +62,12 @@ const config = {
 					ring: "hsl(var(--sidebar-ring))",
 				},
 			},
-			borderRadius: {
-				xl: "calc(var(--radius) + 4px)",
-				lg: "var(--radius)",
-				md: "calc(var(--radius) - 2px)",
-				sm: "calc(var(--radius) - 4px)"
-			},
+			// borderRadius: {
+			// 	xl: "calc(var(--radius) + 4px)",
+			// 	lg: "var(--radius)",
+			// 	md: "calc(var(--radius) - 2px)",
+			// 	sm: "calc(var(--radius) - 4px)"
+			// },
 			fontFamily: {
 				sans: ["Geist Sans", ...fontFamily.sans],
 				mono: ["Geist Mono", ...fontFamily.mono]
@@ -103,7 +105,7 @@ const config = {
 		function ({ addComponents, theme }) { // override
 			addComponents({
 				'.prose': {
-					'@apply dark:prose-invert prose-neutral prose-sm leading-tight': {},
+					'@apply dark:prose-invert prose-headings:font-mono prose-neutral prose-sm leading-snug lg:prose-base lg:leading-tight [&>*:first-child]:mt-0': {},
 				},
 			});
 		},],

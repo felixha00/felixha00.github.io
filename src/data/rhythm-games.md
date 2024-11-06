@@ -2,15 +2,14 @@
 title: Rhythm Games
 ---
 
-| IGN: FELIGS                          |      |
+#### 🕹️ game
+|                       |      |
 |------------------------------|-----------|
-| **Sound Voltex** Exceed Gear     | 17.051 VF   |
-| **Pump It Up** PHX               | ADV 1 |
-| **ITL** 2024 | 324K  |
-| **DDR** ???               | SP(17/18)       |
-| **Chunithm** Luminous               | 14.56       |
-| **maimai** BUDDiES               | 11.2K       |
-|
-
-<small>(ordered by how good i think i am at the game)</small>
+| **sound voltex** exceed gear     | 17.051 vf   |
+| **pump it up** phoenix               | adv 1 |
+| **itl** 2024 | 324k  |
+| **ddr** world               | sp(17/18)       |
+| **chunithm** luminous               | 14.56       |
+| **maimai** buddies               | 11.2k       |
+| 
 

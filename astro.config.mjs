@@ -13,4 +13,5 @@ export default defineConfig({
     integrations: [tailwind({
         applyBaseStyles: false,
     }), react(), svelte(), mdx()],
+
 })

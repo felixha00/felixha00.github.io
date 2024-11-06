@@ -10,7 +10,9 @@ import Navbar from "@/components/svelte/Navbar.svelte";
 
 import { Content as IntroMd } from "@/data/intro.md";
 import { Content as RhythmGamesMd } from "@/data/rhythm-games.md";
-import { Content as ExperienceMd } from "@/data/experience.md";
+import { Content as ExperienceMd } from "@/data/experience.mdx";
+import { Content as LinksMd } from "@/data/links.md";
+import { frontmatter as keybinData } from "@/content/projects/keybin.mdx";
 
 import { Image } from "astro:assets";
 import MainLayout from "@/layouts/MainLayout.astro";
@@ -19,6 +21,10 @@ import MainLayout from "@/layouts/MainLayout.astro";
 <MainLayout title="Astro">
 	<DataCard title="About">
 		<IntroMd slot="md" />
+	</DataCard>
+
+	<DataCard title="Links">
+		<LinksMd slot="md" />
 	</DataCard>
 
 	<DataCard title="Experience">
@@ -32,11 +38,7 @@ import MainLayout from "@/layouts/MainLayout.astro";
 	<!-- <PageCard title="Experience" />
 	<PageCard title="Projects" />
 	<PageCard title="Blog" /> -->
-	<ItemCard title="Keybin" />
-	<ItemCard title="Keybin" />
-	<ItemCard title="Keybin" />
-	<ItemCard title="Keybin" />
-	<ItemCard title="Keybin" />
+	<ItemCard {...keybinData} client:only="svelte" />
 
 	<!-- <Card />
 	<Card />
