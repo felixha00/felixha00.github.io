@@ -5,8 +5,10 @@
         IconBrandLinkedinFilled,
         IconDownload,
         IconSearch,
+        IconMenu2,
     } from "@tabler/icons-svelte";
     import { Button } from "@/components/ui/button";
+    import * as DropdownMenu from "@/components/ui/dropdown-menu";
     import ModeToggle from "./ModeToggle.svelte";
     import { Input } from "@/components/ui/input/index";
     import Searchbox from "@/components/searchbox.svelte";
@@ -30,10 +32,15 @@
         const randomIndex = Math.floor(Math.random() * nicknames.length);
         currentNickname = nicknames[randomIndex];
     }
+
+    const navItems = {
+        home: "/",
+        projects: "/projects",
+    };
 </script>
 
 <nav
-    class="z-50 flex flex-row items-center fixed w-full border-b border-b-primary bg-background/90 backdrop-blur-sm gap-0"
+    class="z-50 flex flex-row items-center fixed w-full border-b border-b-primary bg-card gap-0"
 >
     <div class="flex items-center">
         <a
@@ -41,20 +48,54 @@
             data-sveltekit-preload-data="hover"
             onmouseenter={changeNickname}
             onmouseleave={() => (currentNickname = "Felix")}
+            class="hidden md:flex"
         >
-            <Button class="rounded-none  pl-2">👋 {currentNickname} Ha</Button>
+            <Button class="rounded-none pl-2">👋 {currentNickname} Ha</Button>
         </a>
         <!-- <a href={socials.github}>
             <Button class="rounded-none" size="icon" variant="outline">
                 <IconSearch />
             </Button>
         </a> -->
-        <Searchbox />
     </div>
 
-    {#each pathSegments as pathSegment}
+    <!-- {#each pathSegments as pathSegment}
         <p class="font-mono uppercase">{pathSegment}</p>
-    {/each}
+    {/each} -->
+
+    <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+            <Button
+                variant="outline"
+                class="uppercase font-mono rounded-none font-semibold pl-3"
+            >
+                <IconMenu2 />
+                <p class="mt-[3px]">{pathSegments[0] ?? "HOME"}</p>
+            </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="start">
+            <DropdownMenu.Group>
+                <!-- <DropdownMenu.GroupHeading>Navigation</DropdownMenu.GroupHeading
+                >
+                <DropdownMenu.Separator /> -->
+                {#each Object.entries(navItems) as [key, value]}
+                    <DropdownMenu.Item
+                        ><a
+                            href={value}
+                            class="uppercase font-mono font-bold mt-[3px] w-full flex"
+                            >{key}</a
+                        ></DropdownMenu.Item
+                    >
+                {/each}
+            </DropdownMenu.Group>
+        </DropdownMenu.Content>
+    </DropdownMenu.Root>
+    <!-- <Searchbox /> -->
+    <!-- <Button
+        href="/blog"
+        variant="ghost"
+        class="uppercase font-mono rounded-none font-semibold">BLOG</Button
+    > -->
 
     <!-- <form class="flex w-full max-w-sm items-center space-x-2">
         <IconSearch class="size-4" />
@@ -128,7 +169,7 @@
         </Menubar.Menu>
     </Menubar.Root> -->
     <div class="grow"></div>
-    <a href={socials.github}>
+    <!-- <a href={socials.github}>
         <Button size="icon" variant="ghost">
             <IconBrandGithub />
         </Button>
@@ -137,7 +178,7 @@
         <Button size="icon" variant="ghost" class="rounded-none">
             <IconBrandLinkedinFilled />
         </Button>
-    </a>
+    </a> -->
     <div class="flex items-center">
         <ModeToggle />
         <a href={socials.resume}>

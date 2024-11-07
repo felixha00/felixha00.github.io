@@ -2,8 +2,7 @@
     import * as Card from "@/components/ui/card/index";
     import { IconDatabase } from "@tabler/icons-svelte";
     import CardCorners from "@/components/visual/CardCorners.svelte";
-    import { ScrollArea } from "@/components/ui/scroll-area/index.js";
-    import placeholder from "@/images/placeholder.jpg";
+
     type Props = {
         title: string;
     };
@@ -19,9 +18,7 @@
 >
     <Card.Header>
         <span class="flex-row flex items-center justify-between">
-            <h1
-                class="text-4xl font-extrabold tracking-wider font-mono uppercase"
-            >
+            <h1 class="text-4xl font-bold uppercase">
                 {title}
             </h1>
             <IconDatabase class="size-10 stroke-muted" />

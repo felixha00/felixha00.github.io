@@ -2,9 +2,6 @@
 import IntroCard from "@/components/svelte/IntroCard.svelte";
 import { Image } from "astro:assets";
 import BaseLayout from "./BaseLayout.astro";
-
-import { Content } from "@/data/intro.md";
-import type { loadTSConfig } from "node_modules/astro/dist/core/config";
 ---
 
 <!-- [&>*]:h-1/2 --><!-- [&>*]:min-h-[calc((100vh-40px-theme(space.6))/2)] -->
@@ -14,7 +11,7 @@ import type { loadTSConfig } from "node_modules/astro/dist/core/config";
         grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
         grid-rows-2"
     >
-        <IntroCard client:only="svelte">
+        <IntroCard client:load>
             <Image
                 slot="profile-picture"
                 src="https://avatars.githubusercontent.com/u/51464337?v=4"
@@ -22,7 +19,6 @@ import type { loadTSConfig } from "node_modules/astro/dist/core/config";
                 height="180"
                 alt="Felix Ha Github profile"
             />
-            <Content slot="intro-md" />
         </IntroCard>
         <slot />
     </section>

@@ -9,6 +9,7 @@
         IconTag,
         IconWindowMaximize,
     } from "@tabler/icons-svelte";
+    import { AspectRatio } from "../ui/aspect-ratio";
 
     type Props = {
         id: string;
@@ -19,6 +20,7 @@
         date?: string;
         url?: string;
         tags: string[];
+        banner?: string;
     };
 
     const {
@@ -30,6 +32,7 @@
         url,
         date,
         tags = [],
+        banner,
     }: Props = $props();
 
     let image: HTMLImageElement;
@@ -69,37 +72,50 @@
 <Card.Root
     class="group flex flex-col relative rounded-none transition-colors hover:bg-muted/20 hover:border-muted-foreground"
 >
-    <a
-        href={dir}
-        class="aspect-[2] border-b border-b-border border-dashed relative"
-    >
-        <img
-            bind:this={image}
-            id="originalImage"
-            class="aspect-[2] object-cover absolute group-hover:brightness-105"
-            src={cover?.src ?? "/gradient.jpg"}
-            alt={title + "Header Image"}
-        />
+    <a href={dir} class="p-7 border-b border-dashed">
+        <AspectRatio ratio={2}>
+            {#if banner}
+                <div
+                    class="p-1 pr-2 text-primary-foreground bg-primary absolute z-20 bottom-0 left-0 right-0"
+                >
+                    <p class="lowercase font-mono font-bold text-sm">
+                        {banner}
+                    </p>
+                </div>
+            {/if}
+            <img
+                bind:this={image}
+                id="originalImage"
+                class="aspect-[2] object-cover absolute group-hover:brightness-110"
+                src={cover?.src ?? "/gradient.jpg"}
+                alt={`${title} cover`}
+            />
+        </AspectRatio>
     </a>
+    <!-- <a  class="aspect-[2] m-4 relative">
+        
+    </a> -->
     <!-- <canvas id="canvas" bind:this={canvas}></canvas> -->
 
     <div class="flex flex-row h-full">
         <div class="flex flex-col grow">
             <Card.Header>
-                <span class="w-full flex items-center justify-between"
-                    ><Card.Title class="font-mono">{title}</Card.Title>
-                </span>
-                <Card.Description>{date}</Card.Description>
-            </Card.Header>
+                <a href={dir} class="w-fit">
+                    <span class="w-full flex items-center justify-between"
+                        ><Card.Title class="font-mono">{title}</Card.Title>
+                    </span>
+                    <Card.Description>{date}</Card.Description>
+                </a></Card.Header
+            >
             <Card.Content class="grow">
                 {#if summary}
                     <p>{summary}</p>
                 {/if}
             </Card.Content>
             <Card.Footer class="flex gap-2 flex-row flex-wrap">
-                <!-- {#each tags as tag} -->
-                <Badge>{tags[0]}</Badge>
-                <!-- {/each} -->
+                {#each tags.slice(0, 2) as tag}
+                    <Badge>{tag}</Badge>
+                {/each}
             </Card.Footer>
         </div>
         <aside

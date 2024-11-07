@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import type { MarkdownInstance } from "astro";
-import { Image } from "astro:assets";
+import { Image, Picture } from "astro:assets";
 import { getCollection } from "astro:content";
+import placeholder from "@/images/placeholder.jpg";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-// src/pages/blog/[slug].astro
+
 export async function getStaticPaths() {
     const projectEntries = await getCollection("projects");
     return projectEntries.map((entry) => ({
@@ -43,13 +46,30 @@ const { Content, headings } = await entry.render();
         </article>
         <hr />
         <article>
-            <h1 class="mb-0">{frontmatter.title}</h1>
-            <h3 class="text-muted-foreground">{frontmatter.summary}</h3>
+            <h1 class="!my-0">{frontmatter.title}</h1>
+            <p class="text-muted-foreground !mt-0">{frontmatter.summary}</p>
             <code>📅 {frontmatter.date}</code>
         </article>
         <hr />
-        <Image src={frontmatter.cover} alt={frontmatter.title} />
+        <div class="p-4 gap-2 flex flex-row flex-wrap">
+        🏷️ {frontmatter.tags?.map(tag => {
+            return <Badge>{tag}</Badge>
+        })}
+        
+        </div>
         <hr />
-        <article><Content /></article>
+        {
+            !frontmatter.hideCover && frontmatter.cover && (
+                <AspectRatio ratio={16 / 9}>
+                    <Image
+                        class="object-cover h-full w-full"
+                        src={frontmatter.cover}
+                        alt={frontmatter.title}
+                    />
+                </AspectRatio>
+                <hr />
+            )
+        }
+        <article class="prose"><Content /></article>
     </section>
 </BaseLayout>
