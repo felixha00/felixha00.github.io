@@ -26,18 +26,19 @@
 
     onMount(() => {
         randomCharacters = generateRandomString(800);
-        fetch(
-            "https://api.open-meteo.com/v1/forecast?latitude=43.7&longitude=-79.42&current_weather=true",
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.current_weather) {
-                    temperature = data.current_weather.temperature;
-                }
-            })
-            .catch((error) =>
-                console.error("Error fetching weather data:", error),
-            );
+
+        // fetch(
+        //     "https://api.open-meteo.com/v1/forecast?latitude=43.7&longitude=-79.42&current_weather=true",
+        // )
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         if (data.current_weather) {
+        //             temperature = data.current_weather.temperature;
+        //         }
+        //     })
+        //     .catch((error) =>
+        //         console.error("Error fetching weather data:", error),
+        //     );
 
         const interval = setInterval(() => {
             time = new Date();
