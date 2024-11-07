@@ -1,5 +1,4 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
 import MainLayout from "@/layouts/MainLayout.astro";
 
 import ItemCard from "@/components/svelte/ItemCard.svelte";
@@ -7,7 +6,7 @@ import { getCollection } from "astro:content";
 
 const projects = await getCollection("projects");
 
-projects.sort((a, b) => {
+projects.sort((a: any, b: any) => {
     const parseDate = (dateStr?: string) => {
         if (!dateStr) return 0;
         if (dateStr.includes("Present")) return new Date().getFullYear();
