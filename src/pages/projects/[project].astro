@@ -2,12 +2,9 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { MarkdownInstance } from "astro";
-import { Image, Picture } from "astro:assets";
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import placeholder from "@/images/placeholder.jpg";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-
 
 export async function getStaticPaths() {
     const projectEntries = await getCollection("projects");
@@ -36,12 +33,12 @@ const { Content, headings } = await entry.render();
     }
 </style>
 
-<BaseLayout title={frontmatter.title}>
+<BaseLayout title={`${frontmatter.title} | felix ha`}>
     <section class="container border-x grow">
-        <article class="justify-between flex w-full items-center bg-muted">
-            <code>📁 {frontmatter.dir}</code>
+        <article class="justify-between flex w-full items-center bg-muted !pr-0 !py-0">
+            <code class="!mt-[3px]">📁 {frontmatter.dir}</code>
             <a href={frontmatter.url}>
-                <Button class="not-prose px-2 py-1" size="xs"> View -> </Button>
+                <Button variant="outline" class="not-prose px-3 py-1 rounded-none" size="xs"> View -{'>'} </Button>
             </a>
         </article>
         <hr />

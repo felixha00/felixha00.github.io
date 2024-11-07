@@ -105,7 +105,7 @@ const config = {
 		function ({ addComponents, theme }) { // override
 			addComponents({
 				'.prose': {
-					'@apply dark:prose-invert max-w-full prose-hr:my-4  prose-neutral prose-sm leading-snug lg:prose-base lg:leading-tight [&>*:first-child]:mt-0': {},
+					'@apply dark:prose-invert max-w-full prose-hr:my-4  prose-neutral prose-sm leading-snug xl:prose-base lg:leading-tight [&>*:first-child]:mt-0': {},
 				},
 			});
 		},],
