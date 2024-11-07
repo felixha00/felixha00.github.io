@@ -10,7 +10,9 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
+    output: 'static',
     integrations: [tailwind({
         applyBaseStyles: false,
     }), react(), svelte(), mdx()],
+    site: 'https://felixha.com'
 })
