@@ -102,12 +102,15 @@ const config = {
 	},
 	plugins: [tailwindcssAnimate,
 		require('@tailwindcss/typography'),
-		function ({ addComponents, theme }) { // override
+		function ({ addComponents, theme, addBase }) { // override
 			addComponents({
 				'.prose': {
-					'@apply dark:prose-invert max-w-full prose-hr:my-4  prose-neutral prose-sm leading-snug xl:prose-base lg:leading-tight [&>*:first-child]:mt-0': {},
+					'@apply dark:prose-invert max-w-full prose-hr:my-4 prose-neutral prose-base leading-snug xl:prose-base lg:leading-tight [&>*:first-child]:mt-0': {},
 				},
 			});
+			addBase({
+				'html': { fontSize: "14px" },
+			})
 		},],
 };
 

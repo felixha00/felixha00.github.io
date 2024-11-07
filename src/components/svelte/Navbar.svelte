@@ -37,7 +37,7 @@
 </script>
 
 <nav
-    class="z-50 flex flex-row items-center fixed w-full border-b border-b-primary bg-card gap-0"
+    class="z-50 flex flex-row items-center fixed w-full border-b border-b-primary bg-card gap-0 h-[36px]"
 >
     <div class="flex items-center">
         <a
