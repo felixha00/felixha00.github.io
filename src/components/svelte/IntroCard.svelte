@@ -25,7 +25,7 @@
     }
 
     onMount(() => {
-        randomCharacters = generateRandomString(750);
+        randomCharacters = generateRandomString(800);
         fetch(
             "https://api.open-meteo.com/v1/forecast?latitude=43.7&longitude=-79.42&current_weather=true",
         )
@@ -41,7 +41,7 @@
 
         const interval = setInterval(() => {
             time = new Date();
-            // randomCharacters = generateRandomString(750);
+            randomCharacters = generateRandomString(800);
         }, 1000);
 
         return () => {
@@ -74,23 +74,30 @@
         {/if}
     </div>
 
-    <div class="absolute before bottom-0 right-0 p-4 z-20">
+    <!-- <div class="absolute before bottom-0 right-0 p-4 z-20">
         <a
             href="/"
             class="font-mono relative z-0 pl-2 w-fit before:absolute before:inset-0 before:bg-card before:-z-10"
         >
             felixha.com
         </a>
-    </div>
+    </div> -->
 
-    <div class="rounded-full [&_*]:rounded-full [&_*]:border z-10">
+    <div
+        class="rounded-full [&_*]:rounded-full [&_*]:border-primary [&_*]:border-4 z-10"
+    >
         <slot name="profile-picture" />
     </div>
-    <img
-        alt="Felix Ha spinning text"
-        src="/felix-ha-circular-text.svg"
-        class="absolute size-72 text-spin dark:invert z-10 before:absolute before:bg-card before:inset-0"
-    />
+
+    <!-- <div
+        class="absolute top-0 left-0 right-0 bottom-0 overflow-hidden flex items-center justify-center"
+    >
+        <img
+            alt="Felix Ha spinning text"
+            src="/felix-ha-circular-text.svg"
+            class="size-[42rem] text-spin dark:invert z-10 grow max-w-[200%]"
+        />
+    </div> -->
 
     <div
         class="absolute top-0 left-0 right-0 bottom-0 m-4 opacity-50 font-mono text-justify overflow-hidden bg-clip-text text-transparent
