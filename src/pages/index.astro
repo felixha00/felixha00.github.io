@@ -1,6 +1,7 @@
 ---
 import ItemCard from "@/components/svelte/ItemCard.svelte";
 import DataCard from "@/components/svelte/DataCard.svelte";
+import IntroCard from "@/components/svelte/IntroCard.svelte";
 
 import { Content as IntroMd } from "@/data/intro.mdx";
 import { Content as RhythmGamesMd } from "@/data/rhythm-games.md";
@@ -10,12 +11,22 @@ import { Content as AchievementsMd } from "@/data/achievements.mdx";
 
 import MainLayout from "@/layouts/MainLayout.astro";
 import { getEntry } from "astro:content";
+import { Image } from "astro:assets";
 
 const currProject = await getEntry("projects", "keybin");
 const favProject = await getEntry("projects", "prescription-playing-cards");
 ---
 
 <MainLayout title="home">
+	<IntroCard client:load>
+		<Image
+			slot="profile-picture"
+			src="https://avatars.githubusercontent.com/u/51464337?v=4"
+			width="180"
+			height="180"
+			alt="Felix Ha Github profile"
+		/>
+	</IntroCard>
 	<DataCard title="About">
 		<IntroMd slot="md" />
 	</DataCard>
