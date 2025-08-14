@@ -9,16 +9,19 @@ import Link from "next/link";
 import PromptFooter from "@/components/prompt-footer";
 import { NavigatorProvider } from "@/contexts/client-navigator-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BriefcaseBusiness, Cpu, FolderGit2, Palette, Video, TerminalSquare } from "lucide-react";
+import { BriefcaseBusiness, Cpu, FolderGit2, Palette, Video, TerminalSquare, Plus } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import React from "react";
+import SlidingTabs from "@/components/tabs-nav";
 
 const SECTIONS = [
-  { key: "home", label: "CLI", icon: <TerminalSquare className="w-4 h-4" /> },
-  { key: "experience", label: "Experience", icon: <BriefcaseBusiness className="w-4 h-4" /> },
-  { key: "software", label: "Software", icon: <FolderGit2 className="w-4 h-4" /> },
-  { key: "hardware", label: "Hardware", icon: <Cpu className="w-4 h-4" /> },
-  { key: "design", label: "Graphic Design", icon: <Palette className="w-4 h-4" /> },
-  { key: "content", label: "Content Creation", icon: <Video className="w-4 h-4" /> },
+  { key: "home", label: "CLI", icon: <TerminalSquare className="size-3" /> },
+  { key: "experience", label: "Experience", icon: <BriefcaseBusiness className="size-3" /> },
+  { key: "software", label: "Software", icon: <FolderGit2 className="size-3" /> },
+  { key: "hardware", label: "Hardware", icon: <Cpu className="size-3" /> },
+  { key: "design", label: "Graphic Design", icon: <Palette className="size-3" /> },
+  { key: "content", label: "Content Creation", icon: <Video className="size-3" /> },
 ];
 
 const geistSans = Geist({
@@ -44,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <NavigatorProvider>
           <ThemeProvider
@@ -55,44 +58,23 @@ export default function RootLayout({
           >
             <nav className="p-2 w-full flex flex-row items-stretch gap-4 fixed pointer-events-none z-50 pb-16">
               {/* background gradient layer, non-interactive */}
-              <div className="bg-linear-to-b from-background from-25% to-transparent absolute inset-0 pointer-events-none" />
-              {/* actual nav content, interactive */}
-              <div className="flex flex-row items-stretch gap-4 w-full pointer-events-auto z-50">
+              <div className="bg-linear-to-b from-background from-25% to-transparent absolute inset-0 pointer-events-none blend" />
+
+              <div className="flex flex-row items-stretch gap-2 w-full pointer-events-auto z-50">
                 <Link href={'/'}>
-                  <Button variant="outline" className="h-full p-1 aspect-square rounded-full cursor-pointer shrink-0">
-                    <GithubAvatar />
+                  <Button variant="outline" className="h-full p-0 aspect-square rounded-full cursor-pointer shrink-0 size-9">
+                    <GithubAvatar className="size-7" />
                   </Button>
                 </Link>
                 <div className="flex grow items-center text-sm">
-                  <Tabs defaultValue="home" className="flex grow">
-                    <ScrollArea className="rounded-md">
-                      <div className="w-full relative h-10">
-                        <TabsList className="flex absolute h-10">
-                          {SECTIONS.map((s) => (
-                            <TabsTrigger key={s.key} value={s.key} className="flex items-center gap-2">
-                              {s.icon}
-                              <span className="">{s.label}</span>
-                            </TabsTrigger>
-                          ))}
-                        </TabsList>
-                      </div>
-                      <ScrollBar orientation="horizontal" />
-                    </ScrollArea>
-
-
-
-                    {/* <TabsContent value="account">Make changes to your account here.</TabsContent>
-                    <TabsContent value="password">Change your password here.</TabsContent> */}
-                  </Tabs>
-                  {/* <h6 className="font-mono">CLI</h6> */}
+                  <SlidingTabs />
                 </div>
-                {/* <div className="bg-muted/50 backdrop-blur-lg rounded-sm flex grow items-center p-2 border text-sm">
-                Navbar Placeholder
-              </div> */}
               </div>
             </nav>
 
-            {children}
+            <div className="grow mt-11">
+              {children}
+            </div>
             <footer className="p-2 w-full flex flex-row gap-4 fixed z-50 bottom-0 pt-16 pointer-events-none">
               {/* visual shadow */}
               <div className="bg-linear-to-t from-background from-25% to-transparent w-full pointer-events-none absolute inset-0" />

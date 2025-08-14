@@ -245,8 +245,8 @@ export default function PortfolioCLI() {
     const themeClass = theme === "dark" ? "dark" : "";
 
     return (
-        <div className={cls(themeClass, "w-full min-h-screen bg-background text-foreground p-4")}>
-            <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className={cls(themeClass, "w-full min-h-screen bg-background text-foreground p-2")}>
+            <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Terminal Card */}
                 <Card className="relative overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 border-slate-800 text-slate-100 shadow-xl">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
