@@ -41,6 +41,15 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* CUSTOM STYLES */
+  --breakpoint-2xs: 320px;
+  --breakpoint-xs: 480px;
+  --breakpoint-3xl: 1792px;
+  --radius: var(--radius);
+
+  --font-heading: "Geist Mono", sans-serif;
+  --font-sans: "Geist", sans-serif;
 }
 
 :root {
@@ -119,4 +128,33 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), serif;
+  }
+}
+
+@layer components {
+  h1 {
+    @apply text-[2rem] md:text-[3rem] lg:text-[4rem] 3xl:text-[5rem] font-bold;
+  }
+  h2 {
+    @apply text-[1.75rem] md:text-[2.5rem] lg:text-[3.5rem] 3xl:text-[4rem] font-bold;
+  }
+  h3 {
+    @apply text-[1.5rem] md:text-[2rem] lg:text-[2.5rem] 3xl:text-[3rem] font-semibold;
+  }
+  h4 {
+    @apply text-[1.25rem] md:text-[1.5rem] lg:text-[1.75rem] 3xl:text-[2rem] font-semibold;
+  }
+  h5 {
+    @apply text-[1.125rem] md:text-[1.25rem] lg:text-[1.5rem] 3xl:text-[1.75rem] font-medium;
+  }
+  h6 {
+    @apply text-[1rem] md:text-[1.125rem] lg:text-[1.25rem] 3xl:text-[1.5rem] font-medium;
+  }
+}
+
+@utility hover-opacity {
+  @apply opacity-100 hover:opacity-85 transition-opacity;
 }
