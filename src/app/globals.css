@@ -42,17 +42,19 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+
   /* CUSTOM STYLES */
+  --text-tiny: 0.625rem;
   --breakpoint-2xs: 320px;
   --breakpoint-xs: 480px;
   --breakpoint-3xl: 1792px;
-  --radius: var(--radius);
+  /* --radius: var(--radius); */
 
   --font-heading: "Geist Mono", sans-serif;
   --font-sans: "Geist", sans-serif;
 }
 
-:root {
+:root, .light {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
