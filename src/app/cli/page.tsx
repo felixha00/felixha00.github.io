@@ -150,12 +150,12 @@ export default function PortfolioCLI() {
     const inputRef = useRef<HTMLInputElement>(null);
 
     // Keyboard focus into input like a real terminal
-    useEffect(() => {
-        const focus = () => inputRef.current?.focus();
-        focus();
-        window.addEventListener("click", focus);
-        return () => window.removeEventListener("click", focus);
-    }, []);
+    // useEffect(() => {
+    //     const focus = () => inputRef.current?.focus();
+    //     focus();
+    //     window.addEventListener("click", focus);
+    //     return () => window.removeEventListener("click", focus);
+    // }, []);
 
     // Simple inline suggestions based on prefix
     useEffect(() => {

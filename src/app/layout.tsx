@@ -6,6 +6,7 @@ import "./globals.css";
 import GithubAvatar from "@/components/github-avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import PromptFooter from "@/components/prompt-footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,19 +39,38 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <nav className="p-4 w-full flex flex-row items-stretch gap-4 fixed z-50">
+          <nav className="bg-linear-to-b from-background from-25% to-transparent p-2 w-full flex flex-row items-stretch gap-4 fixed z-50">
             <Link href={'/'}>
               <Button variant={"outline"} className="h-full p-1 aspect-square rounded-full cursor-pointer shrink-0">
                 <GithubAvatar />
               </Button>
             </Link>
-            <div className="bg-muted/50 backdrop-blur-lg rounded flex grow items-center p-2 border text-sm">
-              Navbar Placeholder
+            <div className="flex grow items-center text-sm">
+              <h6 className="font-mono">CLI</h6>
             </div>
+            {/* <div className="bg-muted/50 backdrop-blur-lg rounded-sm flex grow items-center p-2 border text-sm">
+              Navbar Placeholder
+            </div> */}
           </nav>
           {children}
         </ThemeProvider>
+        <footer className="p-2 w-full flex flex-row gap-4 fixed z-50 bottom-0 bg-linear-to-t from-background from-25% to-transparent">
+          <PromptFooter />
+        </footer>
       </body>
     </html>
+  );
+}
+
+function Prompt() {
+  return (
+    <div className="select-none font-mono text-xs md:text-sm">
+      <span className="text-emerald-400">guest</span>
+      <span className="text-slate-500">@</span>
+      <span className="text-cyan-400">portfolio</span>
+      <span className="text-slate-500">:</span>
+      <span className="text-fuchsia-400">~</span>
+      <span className="text-slate-500">$</span>
+    </div>
   );
 }
