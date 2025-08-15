@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 const INITIAL_SECTIONS = [
     { key: "home", label: "Home", icon: <Fingerprint className="size-3" /> },
@@ -83,9 +83,11 @@ export default function SlidingTabs() {
                                     />
                                 )}
 
+                                {/* main tab trigger */}
                                 <TabsTrigger
+                                    data-active={isActive}
                                     value={s.key}
-                                    className={cn("flex items-center gap-2 px-3 relative z-10", isCustomTab && "pr-6")}
+                                    className={cn('flex items-center gap-2 px-2 relative z-10 data-[active=true]:inset-shadow-sm data-[active=true]:inset-shadow-background/50', isCustomTab && "pr-6")}
                                 >
                                     {s.icon}
                                     <span>{s.label}</span>

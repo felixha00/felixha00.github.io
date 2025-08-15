@@ -7,13 +7,14 @@ import GithubAvatar from "@/components/github-avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PromptFooter from "@/components/prompt-footer";
-import { NavigatorProvider } from "@/contexts/client-navigator-context";
+import { NavigatorProvider } from "@/providers/client-navigator-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BriefcaseBusiness, Cpu, FolderGit2, Palette, Video, TerminalSquare, Plus } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import React from "react";
 import SlidingTabs from "@/components/tabs-nav";
+import { CommandProvider } from "@/providers/command-provider";
 
 const SECTIONS = [
   { key: "home", label: "CLI", icon: <TerminalSquare className="size-3" /> },
@@ -49,41 +50,45 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <NavigatorProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <nav className="p-2 w-full flex flex-row items-stretch gap-4 fixed pointer-events-none z-50 pb-16">
-              {/* background gradient layer, non-interactive */}
-              <div className="bg-linear-to-b from-background from-25% to-transparent absolute inset-0 pointer-events-none blend" />
+        <CommandProvider>
 
-              <div className="flex flex-row items-stretch gap-2 w-full pointer-events-auto z-50">
-                <Link href={'/'}>
-                  <Button variant="outline" className="h-full p-0 aspect-square rounded-full cursor-pointer shrink-0 size-9">
-                    <GithubAvatar className="size-7" />
-                  </Button>
-                </Link>
-                <div className="flex grow items-center text-sm">
-                  <SlidingTabs />
+
+          <NavigatorProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <nav className="p-2 w-full flex flex-row items-stretch gap-4 fixed pointer-events-none z-50 pb-16">
+                {/* background gradient layer, non-interactive */}
+                <div className="bg-linear-to-b from-background from-25% to-transparent absolute inset-0 pointer-events-none blend" />
+
+                <div className="flex flex-row items-stretch gap-2 w-full pointer-events-auto z-50">
+                  <Link href={'/'}>
+                    <Button variant="outline" className="h-full p-0 aspect-square rounded-full cursor-pointer shrink-0 size-9">
+                      <GithubAvatar className="size-7" />
+                    </Button>
+                  </Link>
+                  <div className="flex grow items-center text-sm">
+                    <SlidingTabs />
+                  </div>
                 </div>
-              </div>
-            </nav>
+              </nav>
 
-            <div className="grow mt-11">
-              {children}
-            </div>
-            <footer className="p-2 w-full flex flex-row gap-4 fixed z-50 bottom-0 pt-16 pointer-events-none">
-              {/* visual shadow */}
-              <div className="bg-linear-to-t from-background from-25% to-transparent w-full pointer-events-none absolute inset-0" />
-              <div className="pointer-events-auto flex w-full">
-                <PromptFooter />
+              <div className="grow mt-11">
+                {children}
               </div>
-            </footer>
-          </ThemeProvider>
-        </NavigatorProvider>
+              <footer className="p-2 w-full flex flex-row gap-4 fixed z-50 bottom-0 pt-16 pointer-events-none">
+                {/* visual shadow */}
+                <div className="bg-linear-to-t from-background from-25% to-transparent w-full pointer-events-none absolute inset-0" />
+                <div className="pointer-events-auto flex w-full">
+                  <PromptFooter />
+                </div>
+              </footer>
+            </ThemeProvider>
+          </NavigatorProvider>
+        </CommandProvider>
 
       </body>
     </html>

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -159,4 +160,14 @@
 
 @utility hover-opacity {
   @apply opacity-100 hover:opacity-85 transition-opacity;
+}
+
+/* removes the backticks from code */
+@utility prose {
+  code {
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
 }

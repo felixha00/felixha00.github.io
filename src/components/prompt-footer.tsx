@@ -6,7 +6,9 @@ import { Kbd, KbdKey } from "./ui/shadcn-io/kbd";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { History, Keyboard } from "lucide-react";
-import { useNavigator } from "@/contexts/client-navigator-context";
+import { useNavigator } from "@/providers/client-navigator-context";
+import { Status, StatusIndicator } from "./ui/shadcn-io/status";
+import { useCommand } from "@/providers/command-provider";
 
 const ALL_COMMANDS = [
     { cmd: "help", desc: "Show available commands" },
@@ -19,20 +21,25 @@ const ALL_COMMANDS = [
     { cmd: "works content", desc: "Go to Content Creation" },
     { cmd: "theme light", desc: "Switch to light theme" },
     { cmd: "theme dark", desc: "Switch to dark theme" },
+
+    { cmd: "goto home", desc: "Go to Home page" },
+    { cmd: "goto cli", desc: "Go to CLI page" },
+
+    { cmd: "play {url}", desc: "Play a YouTube video by URL" },
+    { cmd: "set theme {theme}", desc: "Set the theme (light/dark)" },
 ];
 
 type Props = {
-    runCommand?: (cmd: string) => void;
     onClear?: () => void;
 };
 
-const PromptFooter = ({ runCommand, onClear }: Props) => {
+const PromptFooter = ({ onClear }: Props) => {
     const [value, setValue] = useState("");
     const [hint, setHint] = useState<string | null>(null);
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number>(-1);
-    const [open, setOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const { runCommand } = useCommand();
 
     const { userAgent, platform, isMobile } = useNavigator();
 
@@ -47,14 +54,10 @@ const PromptFooter = ({ runCommand, onClear }: Props) => {
 
     function executeCommand(cmd: string) {
         const trimmed = cmd.trim() || "help";
-        if (trimmed === "clear") {
-            onClear?.();
-        } else {
-            runCommand?.(trimmed);
-        }
+
+        runCommand(trimmed);
         setHistory(prev => [...prev, trimmed]);
         setHistoryIndex(-1);
-        setOpen(false);
     }
 
     function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -87,20 +90,22 @@ const PromptFooter = ({ runCommand, onClear }: Props) => {
             e.preventDefault();
             onClear?.();
         }
-        setOpen(value.length > 0);
     }
 
     return (
         <div className="bg-muted/50 backdrop-blur-lg rounded-sm flex-col grow items-center p-2 border text-sm gap-2 font-mono">
-            <div className="flex items-center gap-2">
-                <Prompt userName={platform || "guest"} />
+            <div className="flex items-center gap-2 pl-1">
+                <span className="group online">
+                    <StatusIndicator />
+                </span>
+
+                <Prompt userName={platform} />
                 <div className="relative flex-1">
                     <input
                         ref={inputRef}
                         value={value}
                         onChange={(e) => {
                             setValue(e.target.value);
-                            setOpen(e.target.value.length > 0);
                         }}
                         onKeyDown={onKeyDown}
                         placeholder="Type a command… (try: works)"
@@ -117,13 +122,13 @@ const PromptFooter = ({ runCommand, onClear }: Props) => {
                 <Button
                     variant={"ghost"}
                     size="sm"
-                    className="gap-2"
-                    onClick={() => executeCommand(value)}
+                    className="pr-1 pl-2 gap-2"
+                    onClick={() => { executeCommand(value); setValue(""); }}
                 >
                     Run<Kbd className=""><KbdKey>⤶</KbdKey></Kbd>
                 </Button>
             </div>
-            {!isMobile && (
+            {/* {!isMobile && (
                 <div className="flex flex-wrap gap-4 text-tiny text-muted-foreground">
                     <div className="flex items-center gap-1">
                         <History size={14} /> <span>Navigate history:</span>
@@ -139,7 +144,7 @@ const PromptFooter = ({ runCommand, onClear }: Props) => {
                         <Kbd><KbdKey>Tab</KbdKey></Kbd>
                     </div>
                 </div>
-            )}
+            )} */}
 
         </div>
     );
@@ -147,7 +152,7 @@ const PromptFooter = ({ runCommand, onClear }: Props) => {
 
 export default PromptFooter;
 
-function Prompt({ userName }: { userName: string }) {
+function Prompt({ userName = "guest" }: { userName: string }) {
     return (
         <div className="select-none font-mono text-xs md:text-sm flex items-center">
             <span className="text-emerald-400">{userName}</span>
