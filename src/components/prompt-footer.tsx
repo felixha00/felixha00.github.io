@@ -9,6 +9,8 @@ import { History, Keyboard } from "lucide-react";
 import { useNavigator } from "@/providers/client-navigator-context";
 import { Status, StatusIndicator } from "./ui/shadcn-io/status";
 import { useCommand } from "@/providers/command-provider";
+import { useAppContext } from "@/providers/app-provider";
+import Prompt from "@/components/helpers/prompt"
 
 const ALL_COMMANDS = [
     { cmd: "help", desc: "Show available commands" },
@@ -42,6 +44,7 @@ const PromptFooter = ({ onClear }: Props) => {
     const { runCommand } = useCommand();
 
     const { userAgent, platform, isMobile } = useNavigator();
+    const { ip } = useAppContext()
 
     useEffect(() => {
         if (!value) {
@@ -93,13 +96,13 @@ const PromptFooter = ({ onClear }: Props) => {
     }
 
     return (
-        <div className="bg-muted/50 backdrop-blur-lg rounded-sm flex-col grow items-center p-2 border text-sm gap-2 font-mono">
-            <div className="flex items-center gap-2 pl-1">
-                <span className="group online">
+        <div className="bg-muted/50 backdrop-blur-lg flex-col grow items-center p-2 border text-sm gap-2 font-mono">
+            <div className="flex items-center gap-2">
+                {/* <span className="group online">
                     <StatusIndicator />
-                </span>
+                </span> */}
 
-                <Prompt userName={platform} />
+                <Prompt userName={ip} />
                 <div className="relative flex-1">
                     <input
                         ref={inputRef}
@@ -109,18 +112,18 @@ const PromptFooter = ({ onClear }: Props) => {
                         }}
                         onKeyDown={onKeyDown}
                         placeholder="Type a command… (try: works)"
-                        className="w-full bg-transparent outline-none placeholder:text-muted-foreground text-left"
+                        className="w-full bg-transparent outline-none placeholder:text-muted-foreground/50 text-left"
                     />
 
                     {hint && hint !== value && (
-                        <span className="pointer-events-none absolute left-0 top-0 text-slate-500 select-none">
+                        <span className="pointer-events-none absolute left-0 top-0 text-muted-foreground select-none">
                             <span className="invisible">{value}</span>
                             <span className="opacity-60">{hint.slice(value.length)}</span>
                         </span>
                     )}
                 </div>
                 <Button
-                    variant={"ghost"}
+                    variant={"secondary"}
                     size="sm"
                     className="pr-1 pl-2 gap-2"
                     onClick={() => { executeCommand(value); setValue(""); }}
@@ -151,16 +154,3 @@ const PromptFooter = ({ onClear }: Props) => {
 };
 
 export default PromptFooter;
-
-function Prompt({ userName = "guest" }: { userName: string }) {
-    return (
-        <div className="select-none font-mono text-xs md:text-sm flex items-center">
-            <span className="text-emerald-400">{userName}</span>
-            <span className="text-slate-500">@</span>
-            <span className="text-cyan-400">portfolio</span>
-            <span className="text-slate-500">:</span>
-            <span className="text-fuchsia-400">~</span>
-            <span className="text-slate-500">$</span>
-        </div>
-    );
-}

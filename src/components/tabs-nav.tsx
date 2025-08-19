@@ -78,7 +78,7 @@ export default function SlidingTabs() {
                                 {hoverKey === s.key && (
                                     <motion.div
                                         layoutId="hoverBackground"
-                                        className="absolute inset-0 bg-muted-foreground/10 rounded-md z-0"
+                                        className="absolute inset-0 bg-muted-foreground/10 rounded-md z-0 "
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                     />
                                 )}
@@ -87,7 +87,7 @@ export default function SlidingTabs() {
                                 <TabsTrigger
                                     data-active={isActive}
                                     value={s.key}
-                                    className={cn('flex items-center gap-2 px-2 relative z-10 data-[active=true]:inset-shadow-sm data-[active=true]:inset-shadow-background/50', isCustomTab && "pr-6")}
+                                    className={cn('flex items-center gap-2 px-2 relative z-10 data-[active=true]:inset-shadow-sm data-[active=true]:inset-shadow-background/50 cursor-pointer', isCustomTab && "pr-6")}
                                 >
                                     {s.icon}
                                     <span>{s.label}</span>
@@ -96,7 +96,7 @@ export default function SlidingTabs() {
                                 {/* Close button for dynamic CLI tabs */}
                                 {isCustomTab && (
                                     <div
-                                        className="absolute right-1 z-20 cursor-pointer rounded hover:bg-muted p-0.5"
+                                        className="absolute right-1 z-20 cursor-pointer rounded hover:bg-muted p-0.5 cursor-pointer"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleRemoveTab(s.key);
@@ -112,7 +112,7 @@ export default function SlidingTabs() {
                         <Button
                             variant={"outline"}
                             onClick={handleAddTab}
-                            className="flex h-7 ml-1 items-center justify-center aspect-square shrink-0 rounded-md hover:bg-muted transition-colors"
+                            className="flex h-7 ml-1 items-center justify-center aspect-square shrink-0 rounded-md hover:bg-muted transition-colors cursor-pointer"
                         >
                             <Plus className="size-3" />
                         </Button>

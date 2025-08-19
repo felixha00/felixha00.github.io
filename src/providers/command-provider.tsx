@@ -1,6 +1,7 @@
 "use client"
 
 import { useMDXComponents } from "@/components/mdx-components";
+import { GH_REPO_URL, RAW_GH_REPO_URL } from "@/constants";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type CommandEntry = {
@@ -30,28 +31,43 @@ type CommandProviderProps = {
 export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) => {
     const [commandsHistory, setCommandsHistory] = useState<CommandEntry[]>([]);
 
+    const getDefaultCmdOutput = async (cmd: string) => {
+        const { default: MDX } = await import(`@/content/commands/${cmd}.mdx`);
+        return <MDX components={useMDXComponents()} />;
+    }
+
     const runCommand = async (command: string) => {
         let output: ReactNode = null;
-
         const [cmd, ...args] = command.split(" ");
-        console.log("args:", args);
 
         switch (cmd.toLowerCase()) {
+            case "whoami":
+                const { default: MDX } = await import(`@/content/about.mdx`);
+                output = <>
+                    <code>@/content/about.mdx</code>
+                    <MDX components={useMDXComponents()} />
+                </>;
+                break;
             case "echo":
-                // echo prints whatever the user types
                 output = <p>{args.join(" ")}</p>;
                 break;
             case "date":
                 output = <p>{new Date().toString()}</p>;
                 break;
             case "clear":
-                // Clear command history
                 setCommandsHistory([]);
-                return; // exit early, nothing to add to history
+                return;
             case "cat":
                 const fileName = args[0];
                 if (!fileName) {
-                    output = <p className="text-destructive">Usage: cat &lt;file&gt;</p>;
+                    const data = await (await fetch("https://api.thecatapi.com/v1/images/search")).json();
+                    output = (
+                        <div>
+                            <p>Usage: cat &lt;file&gt;</p>
+                            <small className="text-muted-foreground">Here's a cat for your troubles</small>
+                            <img src={data[0].url}></img>
+                        </div>
+                    )
                 } else {
                     try {
                         const { default: FileContent } = await import(`@/content/commands/${fileName}.mdx`);
@@ -61,7 +77,6 @@ export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) =>
                     }
                 }
                 break;
-
             case "cd":
                 const page = args[0];
 
@@ -76,13 +91,49 @@ export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) =>
                     </div>
                 );
                 break;
+            case "apt":
+                if (args[0] === "list") {
+                    try {
+                        const res = await fetch(`${RAW_GH_REPO_URL}/package.json`);
+                        const pkg = await res.json();
+
+                        const allDeps = {
+                            ...(pkg.dependencies || {}),
+                            ...(pkg.devDependencies || {}),
+                        };
+
+                        output = (
+                            <>
+                                <p>Listing... Done</p>
+                                <code className="font-mono text-sm rounded">
+                                    {Object.entries(allDeps).length > 0 ? (
+                                        Object.entries(allDeps).map(([name, version]) => (
+                                            <div key={name} className="text-[var(--tw-prose-body)] font-normal">
+                                                <span className="text-green-500">{name}</span>/{version as string} stable [installed]
+                                            </div>
+                                        ))
+                                    ) : (
+                                        "No dependencies found"
+                                    )}
+                                </code>
+                                <br />
+                            </>
+                        );
+                    } catch (err) {
+                        output = <p className="text-destructive">Error fetching dependencies</p>;
+                    }
+                } else {
+                    output = await getDefaultCmdOutput(cmd)
+                    // output = <p>Usage: apt [command]</p>;
+                }
+                break;
             default:
                 try {
                     const { default: MDX } = await import(`@/content/commands/${cmd}.mdx`);
                     output = <MDX components={useMDXComponents()} />;
                 } catch (err) {
                     output = (
-                        <p className="text-destructive">{command}: command not found</p>
+                        <p>{command}: command not found</p>
                     );
                 }
         }

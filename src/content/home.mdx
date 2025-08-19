@@ -1,6 +1,26 @@
-Welcome!
+import { useAppContext } from "@/providers/app-provider";
+import { GH_REPO_URL } from "@/constants";
 
-This is a terminal-style interface where you can type commands or click tabs to explore my work.  
+export const IP = () => {
+  const {ip} = useAppContext();
+  return ip
+};
 
-- Type `help` to get started. Try `works` to see everything.
-- Or just browse like a regular website.
+Welcome to <span className='text-primary'>**Felix's Portfolio**</span> [latest] (react@19.1.0 • next@15.4.6 • tailwindcss@4.1.12 • typescript@5.9.2)
+
+* Getting Started: Type `help` to list available commands
+* Documentation:  https://help.ubuntu.com  
+* Management:     https://landscape.canonical.com  
+* Support:        https://ubuntu.com/pro  
+
+Last login: 
+{/* {new Date().toString()} */}
+
+
+{/* &nbsp;IP: <IP /> */}
+
+  {/* System load:  0.0 Processes:             66  
+  Usage of /:   10.3% of 1006.85GB   Users logged in:       0  
+  Memory usage: 2%                   IPv4 address for eth0: 172.23.207.184  
+  Swap usage:   0% */}
+
