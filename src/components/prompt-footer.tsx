@@ -21,14 +21,15 @@ const ALL_COMMANDS = [
     { cmd: "works hardware", desc: "Go to Hardware Projects" },
     { cmd: "works design", desc: "Go to Graphic Design" },
     { cmd: "works content", desc: "Go to Content Creation" },
+
     { cmd: "theme light", desc: "Switch to light theme" },
     { cmd: "theme dark", desc: "Switch to dark theme" },
+    { cmd: "theme system", desc: "Switch to dark theme" },
 
     { cmd: "goto home", desc: "Go to Home page" },
     { cmd: "goto cli", desc: "Go to CLI page" },
 
     { cmd: "play {url}", desc: "Play a YouTube video by URL" },
-    { cmd: "set theme {theme}", desc: "Set the theme (light/dark)" },
 ];
 
 type Props = {
@@ -98,10 +99,6 @@ const PromptFooter = ({ onClear }: Props) => {
     return (
         <div className="bg-muted/50 backdrop-blur-lg flex-col grow items-center p-2 border text-sm gap-2 font-mono">
             <div className="flex items-center gap-2">
-                {/* <span className="group online">
-                    <StatusIndicator />
-                </span> */}
-
                 <Prompt userName={ip} />
                 <div className="relative flex-1">
                     <input

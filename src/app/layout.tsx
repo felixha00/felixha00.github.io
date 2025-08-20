@@ -59,10 +59,17 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+
       <body
         className={cn(`${geistSans.variable} ${geistMono.variable} antialiased max-h-screen min-h-screen flex flex-col`, false && `bg-[url(/bg-thing.svg)] bg-no-repeat bg-center bg-size-[80vw] bg-fixed`)}
       >
-        {/* <div className="fixed inset-0 pointer-events-none z-[-1]">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* <div className="fixed inset-0 pointer-events-none z-[-1]">
           <div className="relative flex justify-center items-center w-full h-full">
             <Image
               src="/bg-thing.svg"
@@ -74,15 +81,10 @@ export default async function RootLayout({
             />
           </div>
         </div> */}
-        <AppProvider ip={ip}>
-          <CommandProvider>
-            <NavigatorProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
+          <AppProvider ip={ip}>
+            <CommandProvider>
+              <NavigatorProvider>
+
 
                 <nav className="p-2 w-full flex flex-row items-stretch gap-4 fixed pointer-events-none z-50 pb-16">
                   {/* background gradient layer, non-interactive */}
@@ -103,11 +105,12 @@ export default async function RootLayout({
                     <PromptFooter />
                   </div>
                 </footer>
-              </ThemeProvider>
-            </NavigatorProvider>
-          </CommandProvider>
-        </AppProvider>
+
+              </NavigatorProvider>
+            </CommandProvider>
+          </AppProvider>
+        </ThemeProvider>
       </body>
-    </html>
+    </html >
   );
 }

@@ -53,6 +53,15 @@
 
   --font-heading: "Geist Mono", sans-serif;
   --font-sans: "Geist", sans-serif;
+
+  --color-ansi-black: var(--color-ansi-black);
+  --color-ansi-red: var(--color-ansi-red);
+  --color-ansi-green: var(--color-ansi-green);
+  --color-ansi-yellow: var(--color-ansi-yellow);
+  --color-ansi-blue: var(--color-ansi-blue);
+  --color-ansi-magenta: var(--color-ansi-magenta);
+  --color-ansi-cyan: var(--color-ansi-cyan);
+  --color-ansi-white: var(--color-ansi-white);
 }
 
 :root, .light {
@@ -88,6 +97,15 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --color-ansi-black: rgb(1, 1, 1);
+  --color-ansi-red: rgb(222, 56, 43);
+  --color-ansi-green: rgb(57, 181, 74);
+  --color-ansi-yellow: rgb(255, 199, 6);
+  --color-ansi-blue: rgb(0, 111, 184);
+  --color-ansi-magenta: rgb(118, 38, 113);
+  --color-ansi-cyan: rgb(44, 181, 233);
+  --color-ansi-white: rgb(204, 204, 204);
 }
 
 .dark {
@@ -122,6 +140,15 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --color-ansi-black: rgb(128, 128, 128);
+  --color-ansi-red: rgb(255, 0, 0);
+  --color-ansi-green: rgb(0, 255, 0);
+  --color-ansi-yellow: rgb(255, 255, 0);
+  --color-ansi-blue: rgb(0, 0, 255);
+  --color-ansi-magenta: rgb(255, 0, 255);
+  --color-ansi-cyan: rgb(0, 255, 255);
+  --color-ansi-white: rgb(255, 255, 255);
 }
 
 @layer base {

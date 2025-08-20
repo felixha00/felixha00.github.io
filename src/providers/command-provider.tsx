@@ -2,6 +2,7 @@
 
 import { useMDXComponents } from "@/components/mdx-components";
 import { GH_REPO_URL, RAW_GH_REPO_URL } from "@/constants";
+import { useTheme } from "next-themes";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type CommandEntry = {
@@ -30,6 +31,7 @@ type CommandProviderProps = {
 
 export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) => {
     const [commandsHistory, setCommandsHistory] = useState<CommandEntry[]>([]);
+    const { setTheme } = useTheme()
 
     const getDefaultCmdOutput = async (cmd: string) => {
         const { default: MDX } = await import(`@/content/commands/${cmd}.mdx`);
@@ -41,6 +43,10 @@ export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) =>
         const [cmd, ...args] = command.split(" ");
 
         switch (cmd.toLowerCase()) {
+            case "theme":
+                setTheme(args[0] || "system")
+                output = <p>Set <span className="text-ansi-magenta">theme</span> to <span className="text-ansi-green">{args[0]}</span></p>
+                break;
             case "whoami":
                 const { default: MDX } = await import(`@/content/about.mdx`);
                 output = <>
