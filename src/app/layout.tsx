@@ -92,7 +92,7 @@ export default async function RootLayout({
                   <Nav />
                 </nav>
 
-                <div className="pt-15 pb-[50px] flex flex-col grow">
+                <div className="pt-14 pb-[50px] flex flex-col grow">
                   {children}
                   <ScrollIntoViewComponent />
                 </div>

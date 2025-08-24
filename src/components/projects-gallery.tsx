@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "./ui/badge";
+import CardComponent from "./cards/project-card";
 
 export type ProjectItem = {
     slug: string;
@@ -99,12 +101,12 @@ export default function ProjectsGallery({
     };
 
     return (
-        <div className="min-h-screen bg-white text-gray-900">
-            <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
+        <div className="px-2 flex flex-col gap-2">
+            {/* <section className="mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className="text-3xl sm:text-4xl font-bold">Projects</h1>
                 <p className="text-gray-600 mt-2">Filter, sort, and click a card to zoom into details.</p>
 
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-3 items-stretch">
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-0 items-stretch">
                     <Input
                         placeholder="Search by title or description"
                         value={query}
@@ -129,38 +131,18 @@ export default function ProjectsGallery({
                         <SelectContent>
                             <SelectItem value="newest">Newest first</SelectItem>
                             <SelectItem value="oldest">Oldest first</SelectItem>
-                            <SelectItem value="title">Title A→Z</SelectItem>
+                            <SelectItem value="title">Title A → Z</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-20">
-                <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <AnimatePresence initial={false}>
+            <section>
+                <ul className="grid gap-2 items-stretch grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4">
+                    <AnimatePresence>
                         {filtered.map((item) => (
-                            <motion.li key={item.slug} layout layoutId={`card-${item.slug}`} className="group cursor-pointer">
-                                <Card onClick={() => onOpen(item.slug)} className="h-full overflow-hidden">
-                                    {item.image && (
-                                        <motion.div layoutId={`image-${item.slug}`} className="relative h-40 w-full">
-                                            <Image src={item.image} alt={item.title} fill className="object-cover" />
-                                        </motion.div>
-                                    )}
-                                    <CardHeader>
-                                        <div className="flex items-center justify-between gap-2">
-                                            <CardTitle>
-                                                <Link href={`${baseRoute}/${item.slug}`}>{item.title}</Link>
-                                            </CardTitle>
-                                            <span className="text-xs rounded-full bg-gray-100 px-2 py-1 text-gray-700 border">
-                                                {typeLabels[item.type] ?? item.type}
-                                            </span>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-gray-600 line-clamp-3">{item.description}</p>
-                                        <time className="mt-3 block text-xs text-gray-500">{formatDate(item.date)}</time>
-                                    </CardContent>
-                                </Card>
+                            <motion.li key={item.slug} layout layoutId={`card-${item.slug}`} className="group">
+                                <CardComponent item={item} onOpen={onOpen} typeLabels={typeLabels} baseRoute={baseRoute} key={item.slug} />
                             </motion.li>
                         ))}
                     </AnimatePresence>
