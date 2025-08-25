@@ -1,10 +1,15 @@
 import ProjectsGallery, { ProjectItem } from "@/components/projects-gallery";
 import { getAllProjects } from "@/lib/projects";
 
-const DemoProjectsPage = () => {
+export default async function ProjectsPage() {
     const projects = getAllProjects();
 
-    return <ProjectsGallery items={projects} baseRoute="/projects" />;
-};
+    // TODO make this less hacky
+    const items = projects.map(p => {
+        return { ...p.metadata, slug: p.slug }
+    })
 
-export default DemoProjectsPage
+    console.log(items)
+
+    return <ProjectsGallery items={items} baseRoute="/projects" />;
+};

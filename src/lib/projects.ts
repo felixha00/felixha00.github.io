@@ -3,91 +3,55 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
+import { slugify } from './utils';
+import { getMDXData } from '@/lib/mdx';
 
 const projectsPath = path.join(process.cwd(), 'content', 'projects');
 
-export type ProjectMeta = {
-    itemType: "project"
-    projectType?: string,
-    slug: string;
-    title: string;
-    summary: string;
-    date: string;
-    image?: string;
-    stack?: Array<string>
-};
+// export type ProjectMeta = {
+//     itemType: "project"
+//     projectType?: string,
+//     slug: string;
+//     title: string;
+//     summary: string;
+//     date: string;
+//     image?: string;
+//     stack?: Array<string>
+// };
 
-export function getAllProjects(): ProjectMeta[] {
-    const files = fs.readdirSync(projectsPath);
+export function getAllProjects() {
+    const projects = getMDXData(path.join(process.cwd(), 'content', 'projects'))
 
-    return files
-        .filter((file) => file.endsWith('.mdx'))
-        .map((file) => {
-            const fullPath = path.join(projectsPath, file);
-            const source = fs.readFileSync(fullPath, 'utf8');
-            const { data } = matter(source);
-            return {
+    // const files = fs.readdirSync(projectsPath);
+
+    return projects.map((project) => {
+        return {
+            ...project,
+            metadata: {
+                ...project.metadata,
+                projectType: project.metadata.type,
                 itemType: "project" as const,
-                projectType: data.type,
-                slug: file.replace(/\.mdx$/, ''),
-                title: data.title || 'Project',
-                summary: data.summary || '',
-                date: data.date || '',
-                image: data.image || '/img/default-bg.webp',
-                stack: data.stack || [],
-            };
-        })
-        .sort((a, b) => (a.date > b.date ? -1 : 1)); // Newest first
+            }
+        }
+        // const { metadata, slug } = project
+        // return {
+        //     itemType: "project" as const,
+        //     projectType: metadata.type,
+        //     slug: slugify(slug),
+        //     title: metadata.title || 'Project',
+        //     summary: metadata.summary || '',
+        //     date: metadata.date || '',
+        //     image: metadata.image || '/img/default-bg.webp',
+        //     stack: metadata.stack || [],
+        // }
+    }).sort((a, b) => (a.metadata.date > b.metadata.date ? -1 : 1));
 }
-
-
-
-// export async function getProjectSource(slug: string) {
-//     const fullPath = path.join(projectsPath, `${slug}.mdx`);
-//     const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-//     const matterResult = matter(fileContents);
-
-//     const processedContent = await remark()
-//     .use(html)
-//     .process(matterResult.content);
-
-//   const contentHtml = processedContent.toString();
 
 
 export function getProjectSource(slug: string) {
     const fullPath = path.join(projectsPath, `${slug}.mdx`);
     return fs.readFileSync(fullPath, 'utf8');
 }
-
-// return {
-//     slug,
-//     contentHtml,
-//     ...matterResult.data,
-//   };
-// }
-
-
-// export async function getPostData(id) {
-//   const fullPath = path.join(postsDirectory, `${id}.md`);
-//   const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-//   // Use gray-matter to parse the post metadata section
-//   const matterResult = matter(fileContents);
-
-//   // Use remark to convert markdown into HTML string
-//   const processedContent = await remark()
-//     .use(html)
-//     .process(matterResult.content);
-//   const contentHtml = processedContent.toString();
-
-//   // Combine the data with the id and contentHtml
-//   return {
-//     id,
-//     contentHtml,
-//     ...matterResult.data,
-//   };
-// }
 
 export function getProject(slug: string) {
     return path.join(projectsPath, `${slug}.mdx`)

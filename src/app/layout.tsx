@@ -20,6 +20,7 @@ import Nav from "@/components/nav";
 import { cookies, headers } from "next/headers"; // server-side headers
 import { AppProvider } from "@/providers/app-provider";
 import ScrollIntoViewComponent from "@/components/scroll-into-view-component";
+import { MDXProvider } from "@mdx-js/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -98,6 +99,7 @@ export default async function RootLayout({
             </CommandProvider>
           </AppProvider>
         </ThemeProvider>
+
       </body>
     </html >
   );

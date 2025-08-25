@@ -7,7 +7,6 @@ const components: MDXComponents = {
             {...props}
         />
     ),
-
 }
 
 export function useMDXComponents(componentsOverride?: MDXComponents): MDXComponents {
