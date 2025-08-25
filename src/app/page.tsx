@@ -1,63 +1,7 @@
 "use client";
 
-// components/Layout.js
-import { useEffect, useRef, useState } from "react";
-
-function Layout({ children }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    // Trigger animation after mount
-    setIsLoaded(true);
-  }, []);
-
-  const crtVariants = {
-    hidden: { scaleY: 0, opacity: 0, filter: "brightness(0%) contrast(0%)" },
-    visible: {
-      scaleY: 1,
-      opacity: 1,
-      filter: "brightness(100%) contrast(100%)",
-      transition: {
-        duration: 1.2,
-        ease: [0.6, 0.05, -0.01, 0.9],
-      },
-    },
-  };
-
-  const flickerVariants = {
-    flicker: {
-      opacity: [1, 0.6, 1, 0.8, 1],
-      transition: {
-        duration: 0.4,
-        repeat: 2,
-      },
-    },
-  };
-
-  return (
-    <motion.div
-      initial="hidden"
-      animate={isLoaded ? ["visible", "flicker"] : "hidden"}
-      variants={crtVariants}
-      style={{
-        minHeight: "100vh",
-        overflow: "hidden",
-        background: "#000",
-        color: "#0f0",
-        fontFamily: "'Courier New', monospace",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <motion.div variants={flickerVariants}>{children}</motion.div>
-    </motion.div>
-  );
-}
-
 import { AnimatePresence, motion } from 'motion/react';
-import HomeContent from "../content/home.mdx";
+import HomeContent from "@/content/home.mdx";
 import { useMDXComponents } from '@/components/mdx-components';
 import { useCommand } from '@/providers/command-provider';
 import dynamic from 'next/dynamic';

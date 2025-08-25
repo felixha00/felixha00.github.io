@@ -13,6 +13,7 @@ import {
     Plus,
     Fingerprint,
     X,
+    Layers2,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ const INITIAL_SECTIONS = [
     { key: "hardware", label: "Hardware", icon: <Cpu className="size-3" /> },
     { key: "design", label: "Graphic Design", icon: <Palette className="size-3" /> },
     { key: "content", label: "Content Creation", icon: <Video className="size-3" /> },
+    { key: "projects", label: "Projects", icon: <Layers2 className="size-3" /> },
 ];
 
 export default function SlidingTabs() {

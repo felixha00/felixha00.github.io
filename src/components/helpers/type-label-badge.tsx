@@ -16,7 +16,7 @@ const typeLabels: Record<
     frontend: { label: "Frontend", colorClass: "bg-blue-500 text-white" },
     backend: { label: "Backend", colorClass: "bg-green-500 text-white" },
     design: { label: "design", colorClass: "bg-ansi-magenta text-white" },
-    web: { label: "web", colorClass: "bg-ansi-cyan text-background" },
+    software: { label: "software", colorClass: "bg-ansi-cyan text-background" },
     research: { label: "Research", colorClass: "bg-yellow-500 text-black" },
 };
 
@@ -27,7 +27,7 @@ const TypeLabelBadge: React.FC<Props> = ({ type }) => {
     const colorClass = config?.colorClass ?? "bg-gray-400 text-white";
 
     return (
-        <MotionBadge className={`${colorClass} font-mono shadow`}>
+        <MotionBadge className={`${colorClass} font-mono tracking-tight shadow`}>
             {label}
         </MotionBadge>
     );

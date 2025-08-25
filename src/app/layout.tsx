@@ -21,15 +21,6 @@ import { cookies, headers } from "next/headers"; // server-side headers
 import { AppProvider } from "@/providers/app-provider";
 import ScrollIntoViewComponent from "@/components/scroll-into-view-component";
 
-const SECTIONS = [
-  { key: "home", label: "CLI", icon: <TerminalSquare className="size-3" /> },
-  { key: "experience", label: "Experience", icon: <BriefcaseBusiness className="size-3" /> },
-  { key: "software", label: "Software", icon: <FolderGit2 className="size-3" /> },
-  { key: "hardware", label: "Hardware", icon: <Cpu className="size-3" /> },
-  { key: "design", label: "Graphic Design", icon: <Palette className="size-3" /> },
-  { key: "content", label: "Content Creation", icon: <Video className="size-3" /> },
-];
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -84,15 +75,13 @@ export default async function RootLayout({
           <AppProvider ip={ip}>
             <CommandProvider>
               <NavigatorProvider>
-
-
-                <nav className="p-2 w-full flex flex-row items-stretch gap-4 fixed pointer-events-none z-50 pb-16">
+                <nav className="p-2 w-full flex flex-row items-stretch gap-4 fixed pointer-events-none z-50 pb-12">
                   {/* background gradient layer, non-interactive */}
                   <div className="bg-linear-to-b from-background from-25% to-transparent absolute inset-0 pointer-events-none" />
                   <Nav />
                 </nav>
 
-                <div className="pt-14 pb-[50px] flex flex-col grow">
+                <div className="pt-12 pb-[50px] flex flex-col grow">
                   {children}
                   <ScrollIntoViewComponent />
                 </div>
@@ -105,7 +94,6 @@ export default async function RootLayout({
                     <PromptFooter />
                   </div>
                 </footer>
-
               </NavigatorProvider>
             </CommandProvider>
           </AppProvider>

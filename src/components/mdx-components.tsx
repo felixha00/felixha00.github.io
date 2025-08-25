@@ -7,8 +7,9 @@ const components: MDXComponents = {
             {...props}
         />
     ),
+
 }
 
-export function useMDXComponents(): MDXComponents {
-    return components
+export function useMDXComponents(componentsOverride?: MDXComponents): MDXComponents {
+    return { ...components, ...componentsOverride }
 }
