@@ -22,10 +22,10 @@ import { Button } from "@/components/ui/button";
 const INITIAL_SECTIONS = [
     { key: "home", label: "Home", icon: <Fingerprint className="size-3" /> },
     { key: "experience", label: "Experience", icon: <BriefcaseBusiness className="size-3" /> },
-    { key: "software", label: "Software", icon: <FolderGit2 className="size-3" /> },
-    { key: "hardware", label: "Hardware", icon: <Cpu className="size-3" /> },
-    { key: "design", label: "Graphic Design", icon: <Palette className="size-3" /> },
-    { key: "content", label: "Content Creation", icon: <Video className="size-3" /> },
+    // { key: "software", label: "Software", icon: <FolderGit2 className="size-3" /> },
+    // { key: "hardware", label: "Hardware", icon: <Cpu className="size-3" /> },
+    // { key: "design", label: "Graphic Design", icon: <Palette className="size-3" /> },
+    // { key: "content", label: "Content Creation", icon: <Video className="size-3" /> },
     { key: "projects", label: "Projects", icon: <Layers2 className="size-3" /> },
 ];
 
@@ -98,7 +98,7 @@ export default function SlidingTabs() {
                                 {/* Close button for dynamic CLI tabs */}
                                 {isCustomTab && (
                                     <div
-                                        className="absolute right-1 z-20 cursor-pointer rounded hover:bg-muted p-0.5 cursor-pointer"
+                                        className="absolute right-1 z-20 cursor-pointer rounded hover:bg-muted p-0.5"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleRemoveTab(s.key);

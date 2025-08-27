@@ -51,7 +51,7 @@
   --breakpoint-3xl: 1792px;
   /* --radius: var(--radius); */
 
-  --font-heading: "Geist Mono", sans-serif;
+  --font-heading: "Figtree", sans-serif;
   --font-sans: "Geist", sans-serif;
 
   --color-ansi-black: var(--color-ansi-black);
@@ -161,6 +161,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading), serif;
+    @apply tracking-normal
   }
 }
 

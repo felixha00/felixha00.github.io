@@ -23,12 +23,12 @@ export default function Home() {
         transition={{ duration: 1 }}
         className={cn("rounded-2xl w-full text-center bg-muted/50 items-center justify-center content-center", false && "bg-linear-to-b from-muted to-transparent")}
       >
-        <div className='h-full w-full'>
+        {/* <div className='h-full w-full'>
           <ThreeLogo />
 
-          {/* <h1 className='absolute'>Felix Ha</h1>
-          <p className="text-lg text-muted-foreground mt-2">web + gfx + design — 🎓 McMaster University comp eng graduate '23 </p> */}
-        </div>
+          <h1 className='absolute'>Felix Ha</h1>
+          <p className="text-lg text-muted-foreground mt-2">web + gfx + design — 🎓 McMaster University comp eng graduate '23 </p>
+        </div> */}
 
       </motion.div>
 
@@ -46,7 +46,7 @@ export default function Home() {
           <AnimatePresence>
             {commandsHistory.map((entry, idx) => (
               <motion.div
-                key={idx} // better to use a unique id if available
+                key={`${entry.command}-${idx}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}

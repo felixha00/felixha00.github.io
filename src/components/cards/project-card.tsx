@@ -15,6 +15,7 @@ import {
 } from "react-icons/si";
 import { ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import STACK_ICONS from "@/components/helpers/stack-icons";
 
 const containerVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
@@ -80,17 +81,6 @@ const backgroundVariants: Variants = {
     exit: { opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } },
 };
 
-// Map stack IDs to icons + colors
-const stackIcons: Record<string, { icon: ReactNode }> = {
-    "next-js": { icon: <SiNextdotjs className="dark:text-white text-black" /> },
-    "react": { icon: <SiReact color="#61DAFB" /> },
-    "tailwind": { icon: <SiTailwindcss color="#06B6D4" /> },
-    "typescript": { icon: <SiTypescript className="text-blue-600" /> },
-    "javascript": { icon: <SiJavascript className="text-yellow-400" /> },
-    "node-js": { icon: <SiNodedotjs className="text-green-600" /> },
-    "electron": { icon: <SiElectron color="#47848F" /> }
-};
-
 
 export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
     return (
@@ -133,7 +123,8 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
                 />
             </motion.div>
 
-            <motion.div layoutId={`image-${item.slug}`} className="relative p-6 bg-black bg-cover hover-brightness">
+            {/* image container */}
+            <motion.div layoutId={`image-${item.slug}`} className="relative p-6 bg-black bg-cover hover-brightness border ">
                 {/* bg-[url('/img/default-bg.webp')] */}
                 <motion.div variants={itemVariants} className="absolute right-6 bottom-0 z-[1] mb-[-0.5rem]">
                     {item.projectType &&
@@ -143,6 +134,7 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
                     }
                 </motion.div>
 
+                {/* image */}
                 <div className="aspect-video bg-background relative">
                     <Image src={item.image || "/img/default-bg.webp"} alt={item.title} fill className="object-cover" />
                 </div>
@@ -150,7 +142,7 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
 
             <MotionCardHeader variants={itemVariants} className="p-6 pb-0">
                 <div className="flex items-center justify-between gap-2">
-                    <CardTitle className="text-foreground font-mono tracking-tight">
+                    <CardTitle className="font-heading">
                         <Link href={`${baseRoute}/${item.slug}`}>{item.title}</Link>
                     </CardTitle>
                 </div>
@@ -171,12 +163,12 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
                 {item.stack && item.stack.length > 0 && (
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-wrap gap-2"
+                        className="flex flex-wrap gap-1"
                     >
                         {item.stack.map((tech: string) => (
-                            <Tooltip>
-                                <TooltipTrigger key={tech} className="p-1 rounded bg-background/50 hover-brightness">
-                                    {stackIcons[tech]?.icon || (
+                            <Tooltip key={tech}>
+                                <TooltipTrigger className="p-2 rounded bg-background/50 hover-brightness [&>svg]:!text-foreground border">
+                                    {STACK_ICONS[tech]?.icon || (
                                         <span className="text-xs font-mono">{tech}</span>
                                     )}
                                 </TooltipTrigger>

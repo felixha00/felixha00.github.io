@@ -51,7 +51,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-
+      <head>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+        </style>
+      </head>
       <body
         className={cn(`${geistSans.variable} ${geistMono.variable} antialiased max-h-screen min-h-screen flex flex-col`, false && `bg-[url(/bg-thing.svg)] bg-no-repeat bg-center bg-size-[80vw] bg-fixed`)}
       >
