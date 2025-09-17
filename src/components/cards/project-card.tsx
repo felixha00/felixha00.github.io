@@ -4,16 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components//ui/card"
 import Link from "next/link";
 import { Minus, Square, Wrench, X } from "lucide-react";
 import TypeLabelBadge from "@/components/helpers/type-label-badge";
-import {
-    SiNextdotjs,
-    SiReact,
-    SiTailwindcss,
-    SiTypescript,
-    SiJavascript,
-    SiNodedotjs,
-    SiElectron,
-} from "react-icons/si";
-import { ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import STACK_ICONS from "@/components/helpers/stack-icons";
 
@@ -31,9 +21,6 @@ const containerVariants: Variants = {
     exit: { opacity: 0, y: -10 },
 };
 
-const MotionCard = motion.create(Card);
-const MotionCardHeader = motion.create(CardHeader);
-
 const itemVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     show: {
@@ -41,6 +28,10 @@ const itemVariants: Variants = {
     },
     exit: { opacity: 0, y: -10 },
 };
+
+const MotionCard = motion.create(Card);
+const MotionCardHeader = motion.create(CardHeader);
+
 
 export type ProjectItem = {
     slug: string;
@@ -89,21 +80,21 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
             initial="hidden"
             animate="show"
             exit="exit"
-            className="group h-full rounded relative flex flex-col gap-0 p-0 bg-card/50 border shadow-md"
+            className="group h-full rounded relative flex flex-col gap-0 p-0 bg-card/50 border shadow-md my-inset-shadow"
         >
             <div className="flex items-center justify-between bg-foreground/10 p-1 border-b select-none">
-                <span className="text-xs flex flex-row items-center gap-2 font-mono truncate max-w-[70%] px-1">
+                <span className="text-xs flex flex-row items-center gap-2 font-mono truncate max-w-[70%] px-1 ">
                     <Wrench size={10} className="shrink-0" />
                     {item.itemType}
                 </span>
-                <div className="flex gap-1">
-                    <button className="hover:bg-foreground/20 p-1 rounded-sm">
+                <div className="flex gap-1 [&>button]:transition-colors [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:size-5">
+                    <button className="hover:bg-foreground/20 rounded-sm">
                         <Minus size={12} />
                     </button>
-                    <button className="hover:bg-foreground/20 p-1 rounded-sm">
-                        <Square size={10} />
+                    <button className="hover:bg-foreground/20 rounded-sm">
+                        <Square size={9} />
                     </button>
-                    <button className="hover:bg-red-500 hover:text-white p-1 rounded-sm">
+                    <button className="hover:bg-foreground/20 rounded-sm">
                         <X size={12} />
                     </button>
                 </div>
@@ -124,31 +115,32 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
             </motion.div>
 
             {/* image container */}
-            <motion.div layoutId={`image-${item.slug}`} className="relative p-6 bg-black bg-cover hover-brightness border ">
-                {/* bg-[url('/img/default-bg.webp')] */}
-                <motion.div variants={itemVariants} className="absolute right-6 bottom-0 z-[1] mb-[-0.5rem]">
-                    {item.projectType &&
-                        (<span className="cursor-pointer hover-opacity">
-                            <TypeLabelBadge type={item.projectType} />
-                        </span>)
-                    }
+            <Link href={`${baseRoute}/${item.slug}`}>
+                <motion.div layoutId={`image-${item.slug}`} className="relative p-6 bg-background bg-cover hover-brightness border ">
+                    {/* bg-[url('/img/default-bg.webp')] */}
+                    <motion.div variants={itemVariants} className="absolute right-6 bottom-0 z-[1] mb-[-0.5rem]">
+                        {item.projectType &&
+                            (<span className="cursor-pointer hover-opacity">
+                                <TypeLabelBadge type={item.projectType} />
+                            </span>)
+                        }
+                    </motion.div>
+
+                    {/* image */}
+                    <div className="aspect-video bg-background relative">
+                        <Image src={item.image || "/img/default-bg.webp"} alt={item.title} fill className="object-cover" />
+                    </div>
                 </motion.div>
-
-                {/* image */}
-                <div className="aspect-video bg-background relative">
-                    <Image src={item.image || "/img/default-bg.webp"} alt={item.title} fill className="object-cover" />
-                </div>
-            </motion.div>
-
+            </Link>
             <MotionCardHeader variants={itemVariants} className="p-6 pb-0">
                 <div className="flex items-center justify-between gap-2">
-                    <CardTitle className="font-heading">
+                    <CardTitle className="font-heading text-lg">
                         <Link href={`${baseRoute}/${item.slug}`}>{item.title}</Link>
                     </CardTitle>
                 </div>
             </MotionCardHeader>
 
-            <CardContent className="flex flex-col grow gap-2 p-6">
+            <CardContent className="flex flex-col grow gap-2 p-6 pt-2">
                 <motion.p variants={itemVariants} className="text-sm line-clamp-3">
                     {item.summary}
                 </motion.p>
@@ -165,18 +157,43 @@ export default function ProjectCard({ item, onOpen, baseRoute, typeLabels }) {
                         variants={itemVariants}
                         className="flex flex-wrap gap-1"
                     >
-                        {item.stack.map((tech: string) => (
-                            <Tooltip key={tech}>
-                                <TooltipTrigger className="p-2 rounded bg-background/50 hover-brightness [&>svg]:!text-foreground border">
-                                    {STACK_ICONS[tech]?.icon || (
-                                        <span className="text-xs font-mono">{tech}</span>
-                                    )}
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    {tech}
-                                </TooltipContent>
-                            </Tooltip>
-                        ))}
+                        {item.stack.map((tech: string) => {
+                            const stackItem = STACK_ICONS[tech];
+
+                            const iconNode = stackItem?.icon || (
+                                <span className="text-xs font-mono">{tech}</span>
+                            );
+                            const stackName = stackItem.name
+
+                            return (
+                                <Tooltip key={tech}>
+                                    <TooltipTrigger asChild>
+                                        {stackItem?.link ? (
+                                            <Link
+                                                href={stackItem.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-1.5 rounded bg-background/50 hover-brightness 
+                                           [&>svg]:!text-foreground [&>svg]:size-3 border 
+                                           cursor-pointer inline-flex items-center justify-center"
+                                            >
+                                                {iconNode}
+                                            </Link>
+                                        ) : (
+                                            <div
+                                                className="p-1.5 rounded bg-background/50 [&>svg]:!text-foreground 
+                                           [&>svg]:size-3 border inline-flex items-center justify-center"
+                                            >
+                                                {iconNode}
+                                            </div>
+                                        )}
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {stackName} ↗
+                                    </TooltipContent>
+                                </Tooltip>
+                            );
+                        })}
                     </motion.div>
                 )}
             </CardContent>

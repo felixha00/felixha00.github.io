@@ -1,5 +1,10 @@
 import ProjectsGallery, { ProjectItem } from "@/components/projects-gallery";
 import { getAllProjects } from "@/lib/projects";
+import { Metadata, ResolvingMetadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Projects"
+}
 
 export default async function ProjectsPage() {
     const projects = getAllProjects();
@@ -8,8 +13,6 @@ export default async function ProjectsPage() {
     const items = projects.map(p => {
         return { ...p.metadata, slug: p.slug }
     })
-
-    console.log(items)
 
     return <ProjectsGallery items={items} baseRoute="/projects" />;
 };

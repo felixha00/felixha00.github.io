@@ -3,33 +3,35 @@
 import { useRef, useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Kbd, KbdKey } from "./ui/shadcn-io/kbd";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { History, Keyboard } from "lucide-react";
 import { useNavigator } from "@/providers/client-navigator-context";
-import { Status, StatusIndicator } from "./ui/shadcn-io/status";
 import { useCommand } from "@/providers/command-provider";
 import { useAppContext } from "@/providers/app-provider";
 import Prompt from "@/components/helpers/prompt"
+import { usePathname } from "next/navigation";
+import { Keyboard, History } from "lucide-react";
+import { CommandsHistory } from "@/app/page";
+import { Separator } from "./ui/separator";
+import { ScrollArea } from "./ui/scroll-area";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 
 const ALL_COMMANDS = [
     { cmd: "help", desc: "Show available commands" },
     { cmd: "clear", desc: "Clear the terminal output" },
-    { cmd: "works", desc: "Open the Works page" },
-    { cmd: "works experience", desc: "Go to Experience section" },
-    { cmd: "works software", desc: "Go to Software Projects" },
-    { cmd: "works hardware", desc: "Go to Hardware Projects" },
-    { cmd: "works design", desc: "Go to Graphic Design" },
-    { cmd: "works content", desc: "Go to Content Creation" },
+    // { cmd: "works", desc: "Open the Works page" },
+    // { cmd: "works experience", desc: "Go to Experience section" },
+    // { cmd: "works software", desc: "Go to Software Projects" },
+    // { cmd: "works hardware", desc: "Go to Hardware Projects" },
+    // { cmd: "works design", desc: "Go to Graphic Design" },
+    // { cmd: "works content", desc: "Go to Content Creation" },
 
-    { cmd: "theme light", desc: "Switch to light theme" },
-    { cmd: "theme dark", desc: "Switch to dark theme" },
-    { cmd: "theme system", desc: "Switch to dark theme" },
+    // { cmd: "theme light", desc: "Switch to light theme" },
+    // { cmd: "theme dark", desc: "Switch to dark theme" },
+    // { cmd: "theme system", desc: "Switch to dark theme" },
 
-    { cmd: "goto home", desc: "Go to Home page" },
-    { cmd: "goto cli", desc: "Go to CLI page" },
+    // { cmd: "cd home", desc: "Go to Home page" },
+    // { cmd: "goto cli", desc: "Go to CLI page" },
 
-    { cmd: "play {url}", desc: "Play a YouTube video by URL" },
+    // { cmd: "play {url}", desc: "Play a YouTube video by URL" },
 ];
 
 type Props = {
@@ -42,9 +44,10 @@ const PromptFooter = ({ onClear }: Props) => {
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number>(-1);
     const inputRef = useRef<HTMLInputElement>(null);
-    const { runCommand } = useCommand();
+    const { commandsHistory, runCommand } = useCommand();
 
-    const { userAgent, platform, isMobile } = useNavigator();
+    const { isMobile } = useNavigator()
+    const pn = usePathname()
     const { ip } = useAppContext()
 
     useEffect(() => {
@@ -96,39 +99,70 @@ const PromptFooter = ({ onClear }: Props) => {
         }
     }
 
-    return (
-        <div className="bg-muted/50 backdrop-blur-lg flex-col grow items-center p-2 border text-sm gap-2 font-mono">
-            <div className="flex items-center gap-2">
-                <Prompt userName={ip} />
-                <div className="relative flex-1">
-                    <input
-                        ref={inputRef}
-                        value={value}
-                        onChange={(e) => {
-                            setValue(e.target.value);
-                        }}
-                        onKeyDown={onKeyDown}
-                        placeholder="Type a command… (try: works)"
-                        className="w-full bg-transparent outline-none placeholder:text-muted-foreground/50 text-left"
-                    />
+    const [isOpen, setIsOpen] = useState(false)
 
-                    {hint && hint !== value && (
-                        <span className="pointer-events-none absolute left-0 top-0 text-muted-foreground select-none">
-                            <span className="invisible">{value}</span>
-                            <span className="opacity-60">{hint.slice(value.length)}</span>
-                        </span>
-                    )}
+    return (
+        <>
+            {/* <Sheet>
+                <SheetTrigger>Open</SheetTrigger>
+                <SheetContent side="bottom" className="absolute w-full h-64">
+                    <SheetHeader className="hidden">
+                        <SheetTitle>Are you absolutely sure?</SheetTitle>
+                        <SheetDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers.
+                        </SheetDescription>
+                    </SheetHeader>
+                </SheetContent>
+            </Sheet> */}
+
+            <div className="bg-background flex-col grow items-center border text-sm gap-2 font-mono">
+                {/* {isOpen && <>
+                    <ScrollArea className="bg-muted/25 h-32 p-2 grow shrink-0 flex flex-col max-w-full" id="commands-history">
+                        <div className="font-mono prose leading-tight prose-neutral dark:prose-invert prose-sm prose-code:font-mono prose-img:rounded">
+                            <CommandsHistory commandsHistory={commandsHistory} />
+                        </div>
+                    </ScrollArea>
+                    <Separator />
+                </>} */}
+
+
+                <div className="flex items-center gap-2 p-2 bg-muted/50" style={{ zIndex: 60 }}>
+                    <Prompt userName={ip} dir={pn} />
+                    <div className="relative flex-1 transition-all">
+                        <input
+                            ref={inputRef}
+                            value={value}
+                            onFocus={() => setIsOpen(true)}
+                            onBlur={() => {
+                                // Delay to allow clicks on items before closing
+                                setTimeout(() => setIsOpen(false), 150);
+                            }}
+                            onChange={(e) => {
+                                setValue(e.target.value);
+                            }}
+                            onKeyDown={onKeyDown}
+                            placeholder="Type a command… (try: works)"
+                            className="w-full bg-transparent outline-none placeholder:text-muted-foreground/50 text-left"
+                        />
+
+                        {hint && hint !== value && (
+                            <span className="pointer-events-none absolute left-0 top-0 text-muted-foreground select-none">
+                                <span className="invisible">{value}</span>
+                                <span className="opacity-60">{hint.slice(value.length)}</span>
+                            </span>
+                        )}
+                    </div>
+                    <Button
+                        variant={"secondary"}
+                        size="sm"
+                        className="pr-1 pl-2 gap-2"
+                        onClick={() => { executeCommand(value); setValue(""); }}
+                    >
+                        Run<Kbd><KbdKey>⤶</KbdKey></Kbd>
+                    </Button>
                 </div>
-                <Button
-                    variant={"secondary"}
-                    size="sm"
-                    className="pr-1 pl-2 gap-2"
-                    onClick={() => { executeCommand(value); setValue(""); }}
-                >
-                    Run<Kbd className=""><KbdKey>⤶</KbdKey></Kbd>
-                </Button>
-            </div>
-            {/* {!isMobile && (
+                {/* {!isMobile && (
                 <div className="flex flex-wrap gap-4 text-tiny text-muted-foreground">
                     <div className="flex items-center gap-1">
                         <History size={14} /> <span>Navigate history:</span>
@@ -145,8 +179,8 @@ const PromptFooter = ({ onClear }: Props) => {
                     </div>
                 </div>
             )} */}
-
-        </div>
+            </div>
+        </>
     );
 };
 

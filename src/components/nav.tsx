@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import GithubAvatar from "./github-avatar";
-import SlidingTabs from "./tabs-nav";
+import TabsNavigation from "./tabs-nav";
 
 import React from 'react'
 import { useCommand } from "@/providers/command-provider";
@@ -14,12 +14,12 @@ const Nav = (props: Props) => {
     return (
         <div className="flex flex-row items-stretch gap-2 w-full pointer-events-auto z-50">
             <Link href={'/'}>
-                <Button variant="outline" className="h-full p-0 aspect-square rounded-full cursor-pointer shrink-0 size-9 inset-shadow-xs inset-shadow-foreground/50">
+                <Button variant="outline" className="h-full !bg-background p-0 aspect-square rounded-full cursor-pointer shrink-0 size-9 inset-shadow-xs inset-shadow-foreground">
                     <GithubAvatar className="size-7" />
                 </Button>
             </Link>
             <div className="flex grow items-center text-sm">
-                <SlidingTabs />
+                <TabsNavigation />
             </div>
         </div>
     )

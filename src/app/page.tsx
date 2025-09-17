@@ -10,6 +10,23 @@ import { cn } from "@/lib/utils";
 import Prompt from "@/components/helpers/prompt";
 const ThreeLogo = dynamic(() => import("@/components/three-logo"), { ssr: false });
 
+export const CommandsHistory = ({ commandsHistory }) => {
+  return <AnimatePresence>
+    {commandsHistory.map((entry, idx) => (
+      <motion.div
+        key={`${entry.command}-${idx}`}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+      >
+        <div className="flex flex-row gap-2 items-center"><Prompt />{`${entry.command}`}</div>
+        <div>{entry.output}</div>
+      </motion.div>
+    ))}
+  </AnimatePresence>
+}
+
 export default function Home() {
   const { commandsHistory } = useCommand();
 
@@ -37,26 +54,13 @@ export default function Home() {
         initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -4 }}
-        transition={{ duration: 0.18, delay: 0.5 }}
+        transition={{ duration: 0.18 }}
         className='grow shrink-0 flex flex-col max-w-full font-mono prose leading-tight prose-neutral dark:prose-invert prose-sm prose-code:font-mono prose-img:rounded'
         id="cli-container"
       >
         <div className="grow flex flex-col justify-end overflow-y-auto">
           <HomeContent components={useMDXComponents()} />
-          <AnimatePresence>
-            {commandsHistory.map((entry, idx) => (
-              <motion.div
-                key={`${entry.command}-${idx}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-              >
-                <div className="flex flex-row gap-2"><Prompt />{`${entry.command}`}</div>
-                <div>{entry.output}</div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          <CommandsHistory commandsHistory={commandsHistory} />
         </div>
       </motion.div>
     </div >

@@ -3,6 +3,7 @@
 import { useMDXComponents } from "@/components/mdx-components";
 import { GH_REPO_URL, RAW_GH_REPO_URL } from "@/constants";
 import { useTheme } from "next-themes";
+import { usePathname, useRouter } from "next/navigation";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type CommandEntry = {
@@ -32,6 +33,8 @@ type CommandProviderProps = {
 export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) => {
     const [commandsHistory, setCommandsHistory] = useState<CommandEntry[]>([]);
     const { setTheme } = useTheme()
+    const r = useRouter()
+    const pn = usePathname()
 
     const getDefaultCmdOutput = async (cmd: string) => {
         const { default: MDX } = await import(`@/content/commands/${cmd}.mdx`);
@@ -50,7 +53,7 @@ export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) =>
             case "whoami":
                 const { default: MDX } = await import(`@/content/about.mdx`);
                 output = <>
-                    <code>@/content/about.mdx</code>
+                    {/* <code>@/content/about.mdx</code> */}
                     <MDX components={useMDXComponents()} />
                 </>;
                 break;
@@ -87,15 +90,35 @@ export const CommandProvider: React.FC<CommandProviderProps> = ({ children }) =>
                 const page = args[0];
 
                 if (!page) {
-                    output = <span style={{ color: "red" }}>Usage: cd &lt;page&gt;</span>;
                     break;
                 }
 
+                const resolvePath = (base: string, target: string) => {
+                    // If absolute path, start from root
+                    let parts = target.startsWith("/") ? target.split("/") : [...base.split("/"), ...target.split("/")];
+
+                    // Normalize: remove empty parts, handle "." and ".."
+                    const resolved: string[] = [];
+                    for (const part of parts) {
+                        if (!part || part === ".") continue;
+                        if (part === "..") {
+                            resolved.pop();
+                        } else {
+                            resolved.push(part);
+                        }
+                    }
+                    return "/" + resolved.join("/");
+                };
+
+                const targetPath = resolvePath(pn, page);
+
                 output = (
-                    <div>
-                        Navigating to <span style={{ color: "yellow" }}>{page}</span>...
-                    </div>
+                    <p>
+                        Navigating to <span style={{ color: "yellow" }}>{targetPath}</span>...
+                    </p>
                 );
+
+                r.push(targetPath);
                 break;
             case "apt":
                 if (args[0] === "list") {

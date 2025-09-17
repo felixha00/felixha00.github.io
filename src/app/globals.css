@@ -52,6 +52,8 @@
   /* --radius: var(--radius); */
 
   --font-heading: "Figtree", sans-serif;
+
+  /* --font-heading: var(--font-pp-editorial-new), sans-serif; */
   --font-sans: "Geist", sans-serif;
 
   --color-ansi-black: var(--color-ansi-black);
@@ -184,6 +186,14 @@
   h6 {
     @apply text-[1rem] md:text-[1.125rem] lg:text-[1.25rem] 3xl:text-[1.5rem] font-medium;
   }
+/* 
+  a[href^="https://"]:after{ 
+    content:"\2197";
+} */
+}
+
+@utility my-inset-shadow {
+  @apply inset-shadow-xs inset-shadow-foreground/20
 }
 
 @utility hover-opacity {
@@ -202,4 +212,19 @@
       content: none;
     }
   }
+}
+
+@keyframes focus-in {
+  0% {
+    filter: blur(24px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.animate-focus-in {
+  animation: focus-in 0.5s ease-in-out forwards;
 }

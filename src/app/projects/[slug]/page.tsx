@@ -1,5 +1,4 @@
 import { getAllProjects } from '@/lib/projects'
-import CustomMDX from '@/components/helpers/remote-mdx'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Badge } from "@/components/ui/badge"
@@ -13,6 +12,7 @@ import * as runtime from 'react/jsx-runtime'
 import { useMDXComponents } from '@/components/mdx-components'
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import remarkGfm from 'remark-gfm'
+import { Metadata, ResolvingMetadata } from 'next'
 
 type Props = { params: { slug: string } }
 
@@ -21,8 +21,55 @@ export async function generateStaticParams() {
     return projects.map((p) => ({ slug: p.slug }))
 }
 
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const { slug } = await params
+
+    const allProjects = getAllProjects()
+    const proj = allProjects.find((i) => i.slug === slug)
+    if (!proj) return {}
+
+    const { metadata } = proj
+
+    return {
+        title: metadata.title,
+        description: metadata.summary,
+        keywords: metadata.tags,
+        openGraph: {
+            title: metadata.title,
+            description: metadata.summary,
+            url: `/projects/${slug}`,
+            type: "article",
+            images: [
+                {
+                    url: metadata.image || "/img/default-bg.webp",
+                    alt: metadata.title,
+                },
+            ],
+        },
+        alternates: {
+            canonical: `/projects/${slug}`,
+        },
+        other: {
+            "script:ld+json": JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "CreativeWork",
+                name: metadata.title,
+                description: metadata.summary,
+                url: `/projects/${slug}`,
+                datePublished: metadata.date,
+                image: metadata.image || "/img/default-bg.webp",
+                keywords: metadata.tags,
+            }),
+        },
+    }
+}
+
+
 export default async function ProjectPage({ params }: Props) {
-    const { slug } = params
+    const { slug } = await params
 
     const allProjects = getAllProjects()
     const projIndex = allProjects.findIndex((i) => i.slug === slug)
@@ -42,6 +89,8 @@ export default async function ProjectPage({ params }: Props) {
     const prevProject = allProjects[(projIndex - 1 + allProjects.length) % allProjects.length]
     const nextProject = allProjects[(projIndex + 1) % allProjects.length]
 
+
+
     return (
         <>
             <Separator />
@@ -59,18 +108,28 @@ export default async function ProjectPage({ params }: Props) {
                 </Link>
             </div>
             <Separator />
+            <ImageZoom>
+                <div className="relative aspect-video w-full overflow-hidden hover-opacity">
+                    <Image
+                        alt={metadata.title + " image"}
+                        src={metadata.image || "/img/default-bg.webp"}
+                        fill
+                        className="object-cover object-center"
+                        priority
+                    />
+                </div>
+            </ImageZoom>
 
             <div className='relative'>
                 <div className="text-center p-12 relative">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{metadata.title}</h1>
-
                     <p className="text-lg md:text-xl text-muted-foreground mt-2">{metadata.summary}</p>
 
-                    <div className="flex flex-wrap justify-center gap-2 mt-12">
+                    <ul className="flex flex-wrap justify-center gap-2 mt-12">
                         {metadata.tags?.map((tag: string) => (
-                            <Badge key={tag} variant="secondary" className='!border bg-background/50 backdrop-blur-lg p-2 shadow-xl'>{tag}</Badge>
+                            <Badge key={tag} variant="secondary" className='!border bg-background/50 p-2 shadow-xl'>{tag}</Badge>
                         ))}
-                    </div>
+                    </ul>
 
                     <div className="mt-4 flex flex-col items-center sm:flex-row justify-center gap-4 text-sm text-muted-foreground">
                         <span>{metadata.date}</span>
@@ -97,24 +156,18 @@ export default async function ProjectPage({ params }: Props) {
 
 
                 {metadata.links &&
-                    <div className="flex w-full flex-wrap gap-0  items-center bg-background/50 backdrop-blur-lg">
-                        {/* <Button asChild>
-                            <div className="bg-muted/50 border rounded-none">
-                                Links
-                            </div>
-                        </Button> */}
-
+                    <div className="flex w-full flex-wrap gap-0  items-center bg-background/50">
                         {Object.entries(metadata.links).map(([label, url]) =>
                             url ? (
                                 <Link
                                     key={label}
                                     href={url}
                                     target="_blank"
-                                    className="flex flex-1" // <-- make the link itself grow
+                                    className="flex flex-1"
                                 >
                                     <Button
                                         variant="secondary"
-                                        className="hover:cursor-pointer group gap-1 rounded-none border flex-1" // <-- ensure button fills parent
+                                        className="hover:cursor-pointer group gap-1 rounded-none border flex-1"
                                     >
                                         {label} <ArrowUpRight className="transition-transform w-4 h-4" />
                                     </Button>
@@ -125,20 +178,6 @@ export default async function ProjectPage({ params }: Props) {
                 }
 
             </div>
-
-            <Separator />
-
-            <ImageZoom>
-                <div className="relative aspect-video w-full overflow-hidden hover-opacity">
-                    <Image
-                        alt={metadata.title + " image"}
-                        src={metadata.image || "/img/default-bg.webp"}
-                        fill
-                        className="object-cover object-center p-4"
-                        priority
-                    />
-                </div>
-            </ImageZoom>
 
             <Separator />
 

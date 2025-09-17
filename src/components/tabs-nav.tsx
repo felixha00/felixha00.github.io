@@ -14,22 +14,26 @@ import {
     Fingerprint,
     X,
     Layers2,
+    UserSquare2Icon,
+    FrameIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const INITIAL_SECTIONS = [
-    { key: "home", label: "Home", icon: <Fingerprint className="size-3" /> },
-    { key: "experience", label: "Experience", icon: <BriefcaseBusiness className="size-3" /> },
+    { key: "home", label: "Home", icon: <Fingerprint className="size-3" />, href: "/" },
+    { key: "bio", label: "Bio", icon: <UserSquare2Icon className="size-3" />, href: "/bio" },
     // { key: "software", label: "Software", icon: <FolderGit2 className="size-3" /> },
     // { key: "hardware", label: "Hardware", icon: <Cpu className="size-3" /> },
     // { key: "design", label: "Graphic Design", icon: <Palette className="size-3" /> },
     // { key: "content", label: "Content Creation", icon: <Video className="size-3" /> },
-    { key: "projects", label: "Projects", icon: <Layers2 className="size-3" /> },
+    { key: "projects", label: "Projects", icon: <Layers2 className="size-3" />, href: "/projects" },
+    { key: "Gallery", label: "Gallery", icon: <FrameIcon className="size-3" />, href: "/gallery" }
 ];
 
-export default function SlidingTabs() {
+export default function TabsNavigation() {
     const [sections, setSections] = useState(INITIAL_SECTIONS);
     const [activeTab, setActiveTab] = useState("home");
     const [hoverKey, setHoverKey] = useState<string | null>(null);
@@ -37,7 +41,7 @@ export default function SlidingTabs() {
 
     function handleAddTab() {
         const newKey = `tab${tabCount}`;
-        const newTab = { key: newKey, label: "CLI", icon: <TerminalSquare className="size-3" /> };
+        const newTab = { key: newKey, label: "CLI", icon: <TerminalSquare className="size-3" />, href: "#" };
         setSections((prev) => [...prev, newTab]);
         setActiveTab(newKey); // auto-select new tab
         setTabCount((c) => c + 1);
@@ -66,7 +70,7 @@ export default function SlidingTabs() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex grow">
             <ScrollArea className="rounded-md">
                 <div className="w-full relative h-10">
-                    <TabsList className="flex h-9 relative">
+                    <TabsList className="flex h-9 relative my-inset-shadow border">
                         {sections.map((s, idx) => {
                             const isCustomTab = s.key.startsWith("tab");
                             const isActive = activeTab === s.key;
@@ -87,12 +91,15 @@ export default function SlidingTabs() {
 
                                 {/* main tab trigger */}
                                 <TabsTrigger
+                                    asChild
                                     data-active={isActive}
                                     value={s.key}
                                     className={cn('flex items-center gap-2 px-2 relative z-10 data-[active=true]:inset-shadow-sm data-[active=true]:inset-shadow-background/50 cursor-pointer', isCustomTab && "pr-6")}
                                 >
-                                    {s.icon}
-                                    <span>{s.label}</span>
+                                    <Link href={s.href}>     {s.icon}
+                                        <span>{s.label}</span>
+                                    </Link>
+
                                 </TabsTrigger>
 
                                 {/* Close button for dynamic CLI tabs */}

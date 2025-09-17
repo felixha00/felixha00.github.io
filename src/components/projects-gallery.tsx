@@ -1,16 +1,13 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, stagger, Variants } from "motion/react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "./ui/badge";
 import ProjectCard from "./cards/project-card";
+import { notFound } from "next/navigation";
+
 
 export type ProjectItem = {
     slug: string;
@@ -27,6 +24,30 @@ export type ProjectsGalleryProps = {
     typeLabels?: Record<string, string>;
 };
 
+// const containerVariants: Variants = {
+//     hidden: { opacity: 0, y: 10 },
+//     show: {
+//         opacity: 1,
+//         y: 0,
+//         transition: {
+//             duration: 0.2,
+//             ease: "easeInOut",
+//             delayChildren: stagger(0.5)
+//         }
+//     },
+//     exit: { opacity: 0, y: -10 },
+// };
+
+// const itemVariants: Variants = {
+//     hidden: { opacity: 0, y: 16 },
+//     show: {
+//         opacity: 1,
+//         y: 0,
+//         transition: { duration: 0.3, ease: "easeOut" },
+//     },
+//     exit: { opacity: 0, y: -16, transition: { duration: 0.2 } },
+// };
+
 const containerVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     show: {
@@ -35,12 +56,19 @@ const containerVariants: Variants = {
         transition: {
             duration: 0.2,
             ease: "easeInOut",
-            delayChildren: stagger(0.1)
+            delayChildren: stagger(0.05)
         }
     },
     exit: { opacity: 0, y: -10 },
 };
 
+const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 10 },
+    show: {
+        opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeInOut" }
+    },
+    exit: { opacity: 0, y: -10 },
+};
 
 const uniqueTypes = (items: ProjectItem[]) =>
     Array.from(new Set(items.map((i) => i.projectType))).sort((a, b) => a.localeCompare(b));
@@ -50,6 +78,10 @@ export default function ProjectsGallery({
     baseRoute = "/projects",
     typeLabels = {},
 }: ProjectsGalleryProps) {
+    if (process.env.NODE_ENV === "production") {
+        notFound(); // returns 404
+    }
+
     const router = useRouter();
     const pathname = usePathname();
     const search = useSearchParams();
@@ -110,11 +142,8 @@ export default function ProjectsGallery({
 
     return (
         <div className="p-2 flex flex-col grow gap-2">
-            {/* <section className="mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 className="text-3xl sm:text-4xl font-bold">Projects</h1>
-                <p className="text-gray-600 mt-2">Filter, sort, and click a card to zoom into details.</p>
-
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-0 items-stretch">
+            {/* <section className="mx-auto w-full ">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-2 items-stretch">
                     <Input
                         placeholder="Search by title or description"
                         value={query}
@@ -146,15 +175,30 @@ export default function ProjectsGallery({
             </section> */}
 
             <section>
-                <motion.ul variants={containerVariants} initial="hidden"
-                    animate="show" className="grid grow gap-2 items-stretch grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4">
-                    <AnimatePresence>
-                        {filtered.map((item) => (
-                            <motion.li key={item.slug} layout layoutId={`card-${item.slug}`} className="group">
-                                <ProjectCard key={item.slug} item={item} onOpen={onOpen} typeLabels={typeLabels} baseRoute={baseRoute} />
-                            </motion.li>
-                        ))}
-                    </AnimatePresence>
+                <motion.ul
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
+                    exit="exit"
+                    className="grid grow gap-2 items-stretch grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4"
+                >
+
+                    {filtered.map((item) => (
+                        <motion.li
+                            key={item.slug}
+                            className="group"
+                            variants={itemVariants}
+                        >
+                            <ProjectCard
+                                key={item.slug}
+                                item={item}
+                                onOpen={onOpen}
+                                typeLabels={typeLabels}
+                                baseRoute={baseRoute}
+                            />
+                        </motion.li>
+                    ))}
+
                 </motion.ul>
             </section>
         </div>

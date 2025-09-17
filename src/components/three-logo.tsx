@@ -215,7 +215,7 @@ export default function ThreeLogo({
             </Canvas>
 
             {/* UI Overlay */}
-            <div className="pointer-events-auto absolute top-3 left-3 flex items-center gap-2 bg-black/50 backdrop-blur px-3 py-2 rounded-2xl shadow text-white">
+            <div className="pointer-events-auto absolute top-3 left-3 flex items-center gap-2 bg-black/50 px-3 py-2 rounded-2xl shadow text-white">
                 <button
                     className="text-sm px-2 py-1 rounded-xl bg-white/10 hover:bg-white/20"
                     onClick={() => setAsciiMode((v) => !v)}
