@@ -1,1 +1,1 @@
-export const GH_REPO_URL = "https://github.com/felixha00/felixha00.github.io/tree/v3"
+export const GH_REPO_URL = "https://github.com/felixha00/felixha00.github.io/tree/v3";

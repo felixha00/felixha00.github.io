@@ -1,0 +1,12 @@
+{
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "includes": ["./", "!./.next", "./src/components/ui"]
+  },
+  "linter": {
+    "enabled": true
+  }
+}

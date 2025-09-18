@@ -1,31 +1,38 @@
 "use client";
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from "motion/react";
 import HomeContent from "@/content/home.mdx";
-import { useMDXComponents } from '@/components/mdx-components';
-import { useCommand } from '@/providers/command-provider';
-import dynamic from 'next/dynamic';
+import { useMDXComponents } from "@/components/mdx-components";
+import { useCommand } from "@/providers/command-provider";
+import dynamic from "next/dynamic";
 import { useAppContext } from "@/providers/app-provider";
 import { cn } from "@/lib/utils";
 import Prompt from "@/components/helpers/prompt";
-const ThreeLogo = dynamic(() => import("@/components/three-logo"), { ssr: false });
+const ThreeLogo = dynamic(() => import("@/components/three-logo"), {
+  ssr: false,
+});
 
 export const CommandsHistory = ({ commandsHistory }) => {
-  return <AnimatePresence>
-    {commandsHistory.map((entry, idx) => (
-      <motion.div
-        key={`${entry.command}-${idx}`}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.2, ease: "easeInOut" }}
-      >
-        <div className="flex flex-row gap-2 items-center"><Prompt />{`${entry.command}`}</div>
-        <div>{entry.output}</div>
-      </motion.div>
-    ))}
-  </AnimatePresence>
-}
+  return (
+    <AnimatePresence>
+      {commandsHistory.map((entry, idx) => (
+        <motion.div
+          key={`${entry.command}-${idx}`}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+        >
+          <div className="flex flex-row gap-2 items-center">
+            <Prompt />
+            {`${entry.command}`}
+          </div>
+          <div>{entry.output}</div>
+        </motion.div>
+      ))}
+    </AnimatePresence>
+  );
+};
 
 export default function Home() {
   const { commandsHistory } = useCommand();
@@ -38,7 +45,10 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -4 }}
         transition={{ duration: 1 }}
-        className={cn("rounded-2xl w-full text-center bg-muted/50 items-center justify-center content-center", false && "bg-linear-to-b from-muted to-transparent")}
+        className={cn(
+          "rounded-2xl w-full text-center bg-muted/50 items-center justify-center content-center",
+          false && "bg-linear-to-b from-muted to-transparent",
+        )}
       >
         {/* <div className='h-full w-full'>
           <ThreeLogo />
@@ -46,7 +56,6 @@ export default function Home() {
           <h1 className='absolute'>Felix Ha</h1>
           <p className="text-lg text-muted-foreground mt-2">web + gfx + design — 🎓 McMaster University comp eng graduate '23 </p>
         </div> */}
-
       </motion.div>
 
       {/* command history */}
@@ -55,7 +64,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -4 }}
         transition={{ duration: 0.18 }}
-        className='grow shrink-0 flex flex-col max-w-full font-mono prose leading-tight prose-neutral dark:prose-invert prose-sm prose-code:font-mono prose-img:rounded'
+        className="grow shrink-0 flex flex-col max-w-full font-mono prose leading-tight prose-neutral dark:prose-invert prose-sm prose-code:font-mono prose-img:rounded"
         id="cli-container"
       >
         <div className="grow flex flex-col justify-end overflow-y-auto">
@@ -63,6 +72,6 @@ export default function Home() {
           <CommandsHistory commandsHistory={commandsHistory} />
         </div>
       </motion.div>
-    </div >
+    </div>
   );
 }

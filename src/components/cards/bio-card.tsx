@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const BioCard = (props: Props) => {
-    return (
-        <div>BioCard</div>
-    )
-}
+  return <div>BioCard</div>;
+};
 
-export default BioCard
+export default BioCard;

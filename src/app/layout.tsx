@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider";
 
 import "./globals.css";
 
@@ -15,45 +15,44 @@ import { AppProvider } from "@/providers/app-provider";
 import ScrollIntoViewComponent from "@/components/scroll-into-view-component";
 import TransitionOverlay from "@/components/helpers/transition-overlay";
 
-import localFont from 'next/font/local'
+import localFont from "next/font/local";
 
 export const ppEditorialNew = localFont({
   src: [
     {
-      path: '../fonts/PPEditorialNew-Ultralight.otf',
-      weight: '200',
-      style: 'normal',
+      path: "../fonts/PPEditorialNew-Ultralight.otf",
+      weight: "200",
+      style: "normal",
     },
     {
-      path: '../fonts/PPEditorialNew-UltralightItalic.otf',
-      weight: '200',
-      style: 'italic',
+      path: "../fonts/PPEditorialNew-UltralightItalic.otf",
+      weight: "200",
+      style: "italic",
     },
     {
-      path: '../fonts/PPEditorialNew-Regular.otf',
-      weight: '400',
-      style: 'normal',
+      path: "../fonts/PPEditorialNew-Regular.otf",
+      weight: "400",
+      style: "normal",
     },
     {
-      path: '../fonts/PPEditorialNew-Italic.otf',
-      weight: '400',
-      style: 'italic',
+      path: "../fonts/PPEditorialNew-Italic.otf",
+      weight: "400",
+      style: "italic",
     },
     {
-      path: '../fonts/PPEditorialNew-Ultrabold.otf',
-      weight: '800',
-      style: 'normal',
+      path: "../fonts/PPEditorialNew-Ultrabold.otf",
+      weight: "800",
+      style: "normal",
     },
     {
-      path: '../fonts/PPEditorialNew-UltraboldItalic.otf',
-      weight: '800',
-      style: 'italic',
+      path: "../fonts/PPEditorialNew-UltraboldItalic.otf",
+      weight: "800",
+      style: "italic",
     },
   ],
-  variable: '--font-pp-editorial-new',
-  display: 'swap',
-})
-
+  variable: "--font-pp-editorial-new",
+  display: "swap",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,29 +70,32 @@ export const metadata: Metadata = {
     default: "felix-ha@portfolio",
     template: "%s | felix-ha@portfolio",
   },
-}
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   // Get the user's IP address
-  let ip = (await headers()).get("x-forwarded-for") || "0.0.0.0"
+  let ip = (await headers()).get("x-forwarded-for") || "0.0.0.0";
   if (ip?.substring(0, 7) == "::ffff:") {
-    ip = ip?.substring(7)
+    ip = ip?.substring(7);
   }
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap&family=Anton');
+          @import
+          url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap&family=Anton');
         </style>
       </head>
       <body
-        className={cn(`${geistSans.variable} ${geistMono.variable} ${ppEditorialNew.variable} antialiased max-h-screen min-h-screen flex flex-col`, false && `bg-[url(/bg-thing.svg)] bg-no-repeat bg-center bg-size-[80vw] bg-fixed`)}
+        className={cn(
+          `${geistSans.variable} ${geistMono.variable} ${ppEditorialNew.variable} antialiased max-h-screen min-h-screen flex flex-col`,
+          false && `bg-[url(/bg-thing.svg)] bg-no-repeat bg-center bg-size-[80vw] bg-fixed`,
+        )}
       >
         <ThemeProvider
           attribute="class"
@@ -137,12 +139,11 @@ export default async function RootLayout({
                   {/* visual shadow */}
                   <div className="-z-1 bg-linear-to-t from-background from-0% to-transparent w-full pointer-events-none absolute inset-0" />
                 </footer>
-
               </NavigatorProvider>
             </CommandProvider>
           </AppProvider>
         </ThemeProvider>
       </body>
-    </html >
+    </html>
   );
 }

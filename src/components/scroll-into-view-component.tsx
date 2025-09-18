@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import { useCommand } from '@/providers/command-provider';
-import React, { useEffect, useRef } from 'react'
+import { useCommand } from "@/providers/command-provider";
+import React, { useEffect, useRef } from "react";
 
-type Props = {}
+type Props = {};
 
 const ScrollIntoViewComponent = (props: Props) => {
-    const { commandsHistory } = useCommand();
+  const { commandsHistory } = useCommand();
 
-    useEffect(() => {
-        const container = document.getElementById("cli-container");
-        if (!container) return;
+  useEffect(() => {
+    const container = document.getElementById("cli-container");
+    if (!container) return;
 
-        const observer = new ResizeObserver(() => {
-            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-        });
-        observer.observe(container);
+    const observer = new ResizeObserver(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    });
+    observer.observe(container);
 
-        // Trigger once immediately in case no images are present
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Trigger once immediately in case no images are present
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 
-        return () => observer.disconnect();
-    }, [commandsHistory]);
+    return () => observer.disconnect();
+  }, [commandsHistory]);
 
-    // useEffect(() => {
-    //     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    // }, [commandsHistory]);
+  // useEffect(() => {
+  //     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [commandsHistory]);
 
-    const bottomRef = useRef<HTMLDivElement | null>(null);
-    return <div ref={bottomRef} />
-}
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  return <div ref={bottomRef} />;
+};
 
-export default ScrollIntoViewComponent
+export default ScrollIntoViewComponent;
