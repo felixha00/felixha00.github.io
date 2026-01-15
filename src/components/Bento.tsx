@@ -16,7 +16,7 @@ const BENTO_ITEMS = [
         title: "Visual & Brand",
     },
     {
-        title: "Ventures",
+        title: "Business & Ventures",
     },
 ];
 

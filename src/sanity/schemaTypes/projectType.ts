@@ -4,7 +4,7 @@ const MAIN_CATEGORIES = [
     { title: "Software & Web" },
     { title: "Hardware & Tangibles" },
     { title: "Visual & Brand" },
-    { title: "Ventures" },
+    { title: "Business & Ventures" },
 ];
 
 export const projectType = defineType({
