@@ -69,10 +69,10 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className=" flex flex-col bg-neutral-50 dark:bg-neutral-950 p-4 flex-1 pt-15">
+    <main className=" flex flex-col p-4 flex-1 pt-15">
       <div className="grid grid-cols-4 gap-4 flex-1">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white/10 h-full p-4 relative border border-white/20">Item {i + 1}
+          <div key={i} className="bg-foreground/10 h-full p-4 relative border border-border">Item {i + 1}
             <div className='absolute -top-px -left-px border-t border-l border-white/50 size-2'></div>
 
             {/* Top Right */}
