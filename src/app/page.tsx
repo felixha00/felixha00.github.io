@@ -69,9 +69,26 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="w-screen min-h-screen bg-neutral-50 dark:bg-neutral-950 overflow-x-hidden p-4">
+    <main className=" flex flex-col bg-neutral-50 dark:bg-neutral-950 p-4 flex-1 pt-15">
+      <div className="grid grid-cols-4 gap-4 flex-1">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="bg-white/10 h-full p-4 relative border border-white/20">Item {i + 1}
+            <div className='absolute -top-px -left-px border-t border-l border-white/50 size-2'></div>
+
+            {/* Top Right */}
+            <div className='absolute -top-px -right-px border-t border-r border-white/50 size-2'></div>
+
+            {/* Bottom Left */}
+            <div className='absolute -bottom-px -left-px border-b border-l border-white/50 size-2'></div>
+
+            {/* Bottom Right */}
+            <div className='absolute -bottom-px -right-px border-b border-r border-white/50 size-2'></div>
+          </div>
+        ))}
+      </div>
+
       {/* <CharacterBackground /> */}
-      <LogoScene />
+      {/* <LogoScene /> */}
       {/* <Bento /> */}
     </main>
   );
