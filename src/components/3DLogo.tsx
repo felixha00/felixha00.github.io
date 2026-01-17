@@ -7,9 +7,10 @@ import * as THREE from "three";
 
 function Model({ url }: { url: string }) {
     const { scene } = useGLTF(url);
+    // Ref for the group that handles the interactive rotation
+    const groupRef = useRef<THREE.Group>(null);
 
     useLayoutEffect(() => {
-
         // resizes model to 10 units
         const box = new THREE.Box3().setFromObject(scene);
         const size = new THREE.Vector3();
@@ -21,7 +22,7 @@ function Model({ url }: { url: string }) {
 
         scene.scale.setScalar(scaleFactor);
 
-        // material 
+        // material
         scene.traverse((child) => {
             if ((child as THREE.Mesh).isMesh) {
                 const mesh = child as THREE.Mesh;
@@ -37,12 +38,36 @@ function Model({ url }: { url: string }) {
         });
     }, [scene]);
 
+    useFrame((state) => {
+        if (!groupRef.current) return;
+        const { x, y } = state.pointer;
+
+        // rotate model based on mouse position
+        const targetRotationY = x * (Math.PI / 12);
+        const targetRotationX = -y * (Math.PI / 12);
+
+        groupRef.current.rotation.y = THREE.MathUtils.lerp(
+            groupRef.current.rotation.y,
+            targetRotationY,
+            0.1
+        );
+        groupRef.current.rotation.x = THREE.MathUtils.lerp(
+            groupRef.current.rotation.x,
+            targetRotationX,
+            0.1
+        );
+    });
+
     return (
-        <primitive
-            object={scene}
-            // my glb file is modeled flat so i need to rotate it
-            rotation={[Math.PI / 2, 0, 0]}
-        />
+        // Wrap primitive in a group so we can rotate the group based on mouse
+        // while preserving the primitive's internal rotation correction
+        <group ref={groupRef}>
+            <primitive
+                object={scene}
+                // my glb file is modeled flat so i need to rotate it
+                rotation={[Math.PI / 2, 0, 0]}
+            />
+        </group>
     );
 }
 
@@ -56,6 +81,8 @@ function MovingLight() {
         const angle = mx * Math.PI;
         const radius = 15;
 
+        // Optional: You can keep the light moving or fix it.
+        // If you want the light to stay static while model moves, remove this useFrame logic.
         lightRef.current.position.set(
             Math.sin(angle) * radius,
             my * 10,
@@ -81,7 +108,9 @@ function MovingLight() {
 
 export default function LogoScene() {
     return (
-        <div className="">
+        <div
+            className="absolute top-1/2 left-1/2 -translate-1/2 w-full h-full"
+        >
             <Canvas
                 shadows
                 dpr={[1, 2]} // perf cap

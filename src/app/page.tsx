@@ -71,7 +71,7 @@ export default function Page() {
   return (
     <main className="w-screen min-h-screen bg-neutral-50 dark:bg-neutral-950 overflow-x-hidden p-4">
       {/* <CharacterBackground /> */}
-      {/* <LogoScene /> */}
+      <LogoScene />
       {/* <Bento /> */}
     </main>
   );
