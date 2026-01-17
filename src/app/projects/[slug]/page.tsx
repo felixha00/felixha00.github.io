@@ -25,7 +25,7 @@ export async function generateMetadata(props: PageProps) {
     if (!project) return {};
 
     return {
-        title: `${project.title} | My Portfolio`,
+        title: `${project.title}`,
         description: project.summary,
         openGraph: {
             title: project.title,
@@ -37,7 +37,7 @@ export async function generateMetadata(props: PageProps) {
 
 export default async function ProjectPage(props: PageProps) {
     const params = await props.params;
-    const project = await client.fetch<SanityProject>(PROJECT_QUERY, params);
+    const project = await client.fetch(PROJECT_QUERY, params);
 
     if (!project) {
         notFound();

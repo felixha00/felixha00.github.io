@@ -33,13 +33,11 @@ export const projectType = defineType({
             title: 'Category',
             type: 'string',
             options: {
-                // 2. Map your array to the format Sanity expects: { title: string, value: string }
                 list: MAIN_CATEGORIES.map((item) => ({
                     title: item.title,
                     value: item.title
                 })),
-                // Optional: Render as radio buttons instead of a dropdown
-                // layout: 'radio' 
+                layout: 'radio'
             },
             validation: (rule) => rule.required(), // Optional: make it mandatory
         }),
@@ -68,6 +66,7 @@ export const projectType = defineType({
             name: 'date',
             title: 'Date',
             type: 'date',
+            options: { dateFormat: 'YYYY-MM' },
         }),
         defineField({
             name: 'url',

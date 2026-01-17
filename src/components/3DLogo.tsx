@@ -81,7 +81,7 @@ function MovingLight() {
 
 export default function LogoScene() {
     return (
-        <div className="h-screen w-full bg-zinc-900">
+        <div className="">
             <Canvas
                 shadows
                 dpr={[1, 2]} // perf cap

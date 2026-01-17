@@ -1,3 +1,4 @@
+import LogoScene from "@/components/3DLogo";
 import Bento from "@/components/Bento";
 import CharacterBackground from "@/components/CharacterBackground";
 
@@ -68,10 +69,10 @@ export const metadata = {
 
 export default function Page() {
   return (
-    // Full screen, no padding, dark background defaults
     <main className="w-screen min-h-screen bg-neutral-50 dark:bg-neutral-950 overflow-x-hidden p-4">
       {/* <CharacterBackground /> */}
-      <Bento />
+      {/* <LogoScene /> */}
+      {/* <Bento /> */}
     </main>
   );
 }
