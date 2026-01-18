@@ -4,6 +4,8 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "next-themes";
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,16 +36,23 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <SmoothScroll>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-[200vh]`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
         >
+
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
-            {children}
+            <Theme grayColor="gray">
+              <Navbar />
+
+              {children}
+
+              {/* gradient overlay footer */}
+              <div className='z-50 fixed bottom-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-t from-background to-100% to-transparent'></div>
+            </Theme>
           </ThemeProvider>
         </body>
       </SmoothScroll>

@@ -70,6 +70,9 @@ export const metadata = {
 export default function Page() {
   return (
     <main className=" flex flex-col p-4 flex-1 pt-15">
+      {/* <div className="flex w-full bg-foreground/10 mb-4 aspect-[2] rounded">
+
+      </div> */}
       <div className="grid grid-cols-4 gap-4 flex-1">
         {[...Array(4)].map((_, i) => (
           <div key={i} className="bg-foreground/10 h-full p-4 relative border border-border">Item {i + 1}
