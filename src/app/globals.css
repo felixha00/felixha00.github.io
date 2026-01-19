@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tailwindcss-radix-colors/dist/gray.css";
 @import "tailwindcss-radix-colors/dist/graya.css";
 
@@ -106,5 +107,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+:root {
+  .prose {
+    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:tracking-tight leading-tight max-w-none;
   }
 }

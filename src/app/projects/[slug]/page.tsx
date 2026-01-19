@@ -8,6 +8,20 @@ import { client } from "@/sanity/lib/client";
 import { PortableText } from "next-sanity";
 import { Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
 import { getCategoryConfig } from "@/config/const";
+import ProjectContentTabs from "@/components/ProjectContentTabs";
+
+const getRawGithubUrl = (url: string) => {
+    if (!url) return null;
+    if (url.includes("raw.githubusercontent.com")) return url;
+    return url
+        .replace("github.com", "raw.githubusercontent.com")
+        .replace("/blob/", "/");
+};
+
+interface PageProps {
+    params: Promise<{ slug: string }>;
+}
+
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -46,6 +60,23 @@ export default async function ProjectPage(props: PageProps) {
         notFound();
     }
 
+    let readmeContent: string | null = null;
+
+    if (project.readmeUrl) {
+        try {
+            const rawUrl = getRawGithubUrl(project.readmeUrl);
+            console.log("!! rawurl", rawUrl)
+            if (rawUrl) {
+                const res = await fetch(rawUrl, { next: { revalidate: 3600 } }); // Cache for 1 hour
+                if (res.ok) {
+                    readmeContent = await res.text();
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch README", error);
+        }
+    }
+
     return (
         <main className="flex-1 max-w-4xl w-4xl mx-auto px-4 py-16 overflow-x-hidden border-border border-x space-y-4">
             {/* Header Section */}
@@ -54,6 +85,11 @@ export default async function ProjectPage(props: PageProps) {
                     <Badge color={catConfig?.theme}>
                         {catConfig?.title}
                     </Badge>
+                    {project.for && <Badge color={"gray"} highContrast>
+                        {/* <p className="flex flex-row gap-2"> <img src={urlFor(project.for.logo).url()} className="dark:invert" /></p> */}
+                        {project.for?.name}
+                    </Badge>}
+
                     {project.date && (
                         <span className="text-muted-foreground text-sm py-0.5">
                             {new Date(project.date).getFullYear()}
@@ -82,20 +118,19 @@ export default async function ProjectPage(props: PageProps) {
                             </a>
                         </Button>
                     )}
+                    {project.links?.length !== 0 && <Separator orientation={"vertical"} decorative className="h-auto" />}
                     {project.links?.map((link, index: number) => (
-                        <>
-                            {index === 0 && <Separator orientation={"vertical"} decorative className="h-auto" />}
-                            <Button key={link._key} size={"3"} color={catConfig?.theme} variant="soft">
-                                <a
-                                    key={link._key}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {link.label}
-                                </a>
-                            </Button>
-                        </>
+                        <Button key={link._key} size={"3"} color={catConfig?.theme} variant="soft">
+                            <a
+                                key={link._key}
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {link.label}
+                            </a>
+                        </Button>
+
                     ))}
                 </div>
                 {/* <div className="absolute w-full -z-10 bottom-0 aspect-[2] opacity-100">
@@ -122,47 +157,42 @@ export default async function ProjectPage(props: PageProps) {
                     />
                 </div>
             )}
+            {project.stack && project.stack.length > 0 && (
+                <div className="flex flex-col gap-2">
+                    <h3>Tech Stack</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {project.stack.map((tech) => (
+                            <Badge key={tech} size={"3"} color={catConfig?.theme}>
+                                {tech}
+                            </Badge>
+                        ))}
+                    </div>
+                </div>
+            )}
 
+            {project.tags && project.tags.length > 0 && (
+                <div>
+                    <h3 className="font-bold mb-3 uppercase text-sm">Tags</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag) => (
+                            <span key={tag} className="text-gray-500 text-sm">
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
             <Inset className="border border-accent -mx-4"></Inset>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-                {/* Main Content */}
-                <div className="md:col-span-8 prose prose-lg max-w-none">
-                    {project.content && (
-                        <PortableText value={project.content}
-                        />
-                    )}
+            <Inset clip={"padding-box"} className="-mx-4 -mt-4">
+                <div className="prose max-w-none">
+                    <ProjectContentTabs
+                        sanityContent={project.content}
+                        readmeContent={readmeContent}
+                    />
                 </div>
 
-                {/* Side: Tags & Stack */}
-                <aside className="md:col-span-4 space-y-8">
-                    {project.stack && project.stack.length > 0 && (
-                        <div className="flex flex-col gap-2">
-                            <h3>Tech Stack</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {project.stack.map((tech) => (
-                                    <Badge key={tech} size={"3"}>
-                                        {tech}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {project.tags && project.tags.length > 0 && (
-                        <div>
-                            <h3 className="font-bold mb-3 uppercase text-sm">Tags</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {project.tags.map((tag) => (
-                                    <span key={tag} className="text-gray-500 text-sm">
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </aside>
-            </div>
+            </Inset>
         </main>
     );
 }

@@ -29,7 +29,12 @@ export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug]
   tags,
   stack,
   links,
-  content
+  content,
+  readmeUrl,
+  for->{
+    name,
+    logo,
+  }
 }`;
 
 export const PROFILE_QUERY = groq`*[_type == "profile"][0] {

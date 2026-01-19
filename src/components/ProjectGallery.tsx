@@ -135,7 +135,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
     );
 
     return (
-        <Flex direction="column" gap="6" width="100%">
+        <Flex className="gap-4 flex-col h-full flex-1 grow">
 
             {/* --- Filter & Search Bar --- */}
             <Flex
@@ -171,7 +171,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                 </Flex>
 
                 {/* Search */}
-                <Box minWidth="250px">
+                {/* <Box minWidth="250px">
                     <TextField.Root
                         placeholder="Search projects..."
                         value={searchQuery}
@@ -194,44 +194,44 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                             </TextField.Slot>
                         )}
                     </TextField.Root>
-                </Box>
+                </Box> */}
             </Flex>
 
             {/* --- Results Grid --- */}
-            <div ref={containerRef} className="min-h-[400px]">
+            <div ref={containerRef} className="flex flex-1 flex-col">
                 {filteredProjects.length === 0 ? (
                     // Empty State
-                    <Flex
-                        direction="column"
-                        align="center"
-                        justify="center"
-                        height="300px"
-                        className="text-gray-500 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl"
-                    >
-                        <Flex
-                            align="center"
-                            justify="center"
-                            className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4"
-                        >
-                            <LuFilter className="w-6 h-6 opacity-40" />
-                        </Flex>
-                        <Heading size="4" mb="2">No projects found</Heading>
-                        <Text color="gray">
-                            Try adjusting your search or category filters.
-                        </Text>
-                        <Button
-                            variant="outline"
-                            className="mt-4"
-                            onClick={() => {
-                                setSearchQuery("");
-                                setActiveCategory("all");
-                                updateUrl("q", null);
-                                updateUrl("cat", null);
-                            }}
-                        >
-                            Clear all filters
-                        </Button>
-                    </Flex>
+                    null
+                    // <Flex
+                    //     direction="column"
+                    //     align="center"
+                    //     justify="center"
+                    //     height="300px"
+                    // >
+                    //     <Flex
+                    //         align="center"
+                    //         justify="center"
+                    //         className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4"
+                    //     >
+                    //         <LuFilter className="w-6 h-6 opacity-40" />
+                    //     </Flex>
+                    //     <Heading size="4" mb="2">No projects found</Heading>
+                    //     <Text color="gray">
+                    //         Try adjusting your search or category filters.
+                    //     </Text>
+                    //     <Button
+                    //         variant="outline"
+                    //         className="mt-4"
+                    //         onClick={() => {
+                    //             setSearchQuery("");
+                    //             setActiveCategory("all");
+                    //             updateUrl("q", null);
+                    //             updateUrl("cat", null);
+                    //         }}
+                    //     >
+                    //         Clear all filters
+                    //     </Button>
+                    // </Flex>
                 ) : (
                     <Grid
                         columns={{ initial: "1", md: "2", lg: "3" }}
@@ -244,7 +244,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                     </Grid>
                 )}
             </div>
-        </Flex>
+        </Flex >
     );
 }
 

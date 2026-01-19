@@ -29,6 +29,14 @@ export const projectType = defineType({
             validation: (rule) => rule.required(),
         }),
         defineField({
+            name: 'for',
+            title: 'For (Client / Entity)',
+            description: 'Who was this project created for?',
+            type: 'reference',
+            to: [{ type: 'entity' }],
+            validation: (rule) => rule.required(),
+        }),
+        defineField({
             name: 'category',
             title: 'Category',
             type: 'string',
@@ -124,6 +132,12 @@ export const projectType = defineType({
             title: 'Content',
             type: 'array',
             of: [{ type: 'block' }],
+        }),
+        defineField({
+            name: 'readmeUrl',
+            title: 'README URL (GitHub, etc.)',
+            description: 'Paste the link to the raw file (e.g., https://raw.githubusercontent.com/...) or the blob link.',
+            type: 'url',
         }),
     ],
     preview: {
