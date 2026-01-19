@@ -1,98 +1,144 @@
-import LogoScene from "@/components/3DLogo";
-import Bento from "@/components/Bento";
-import CharacterBackground from "@/components/CharacterBackground";
+"use client";
 
-export const metadata = {
-  title: "home | felix ha",
-  description: "",
-};
-
-// mocking
-// const sanityData: BentoItem[] = [
-//   {
-//     id: "box-1",
-//     initialLayout: { x: 0, y: 0, w: 2, h: 2 },
-//     content: (
-//       <div className="flex flex-col h-full justify-center items-center text-center">
-//         <span className="text-4xl mb-4">✨</span>
-//         <p className="text-neutral-500 font-medium">
-//           Drag from top edge. <br /> Resize from bottom right.
-//         </p>
-//       </div>
-//     ),
-//   },
-//   {
-//     id: "box-2",
-//     initialLayout: { x: 2, y: 0, w: 2, h: 1 },
-//     content: (
-//       <div className="w-full h-full bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600 font-bold text-xl">
-//         Analytics
-//       </div>
-//     ),
-//   },
-//   {
-//     id: "box-3",
-//     initialLayout: { x: 2, y: 1, w: 1, h: 1 },
-//     content: (
-//       <div className="w-full h-full bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 font-bold text-xl">
-//         $$$
-//       </div>
-//     ),
-//   },
-//   {
-//     id: "box-4",
-//     initialLayout: { x: 3, y: 1, w: 1, h: 3 },
-//     content: (
-//       <div className="relative w-full h-full overflow-hidden rounded-xl">
-//         <img
-//           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop"
-//           alt="Abstract"
-//           className="object-cover w-full h-full opacity-80 hover:opacity-100 transition-opacity"
-//         />
-//       </div>
-//     ),
-//   },
-//   {
-//     id: "box-5",
-//     initialLayout: { x: 0, y: 2, w: 3, h: 2 },
-//     content: (
-//       <div className="h-full flex flex-col">
-//         <div className="flex-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl p-4">
-//           <div className="h-2 w-1/3 bg-neutral-200 dark:bg-neutral-700 rounded mb-2" />
-//           <div className="h-2 w-2/3 bg-neutral-200 dark:bg-neutral-700 rounded mb-2" />
-//           <div className="h-2 w-1/2 bg-neutral-200 dark:bg-neutral-700 rounded" />
-//         </div>
-//       </div>
-//     ),
-//   },
-// ];
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { Button, Flex, Heading, IconButton, } from "@radix-ui/themes";
+import clsx from "clsx";
+import Link from "next/link";
+import { ArrowRight } from 'lucide-react';
+import { MAIN_CATEGORIES } from "@/config/const";
 
 export default function Page() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parent controls the "Entrance" animation for all children
+  // Safe because it runs inside an effect, not during render
+  useGSAP(
+    () => {
+      gsap.from(".anim-card", {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
+      });
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <main className=" flex flex-col p-4 flex-1 pt-15">
-      {/* <div className="flex w-full bg-foreground/10 mb-4 aspect-[2] rounded">
-
-      </div> */}
-      <div className="grid grid-cols-4 gap-4 flex-1">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-foreground/10 h-full p-4 relative border border-border">Item {i + 1}
-            <div className='absolute -top-px -left-px border-t border-l border-white/50 size-2'></div>
-
-            {/* Top Right */}
-            <div className='absolute -top-px -right-px border-t border-r border-white/50 size-2'></div>
-
-            {/* Bottom Left */}
-            <div className='absolute -bottom-px -left-px border-b border-l border-white/50 size-2'></div>
-
-            {/* Bottom Right */}
-            <div className='absolute -bottom-px -right-px border-b border-r border-white/50 size-2'></div>
-          </div>
+    <main className="h-full flex grow flex-col">
+      <main
+        ref={containerRef}
+        className="grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-2 p-4 flex-1 pt-16 h-full gap-4 perspective-1000 overflow-hidden"
+      >
+        {MAIN_CATEGORIES.map((section, i) => (
+          <SectionCard key={section.slug} section={section} index={i} />
         ))}
+      </main>
+      <div className="bg-background border border-border p-4">
+        <Button color="gray" variant="classic" highContrast>All Projects</Button>
       </div>
-
-      {/* <CharacterBackground /> */}
-      {/* <LogoScene /> */}
-      {/* <Bento /> */}
     </main>
+
+
+  );
+}
+
+function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[number]; index: number }) {
+  const { icon: Icon } = section
+  const cardRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+
+  // 1. Direct Event Handler (No contextSafe needed)
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current || !spotlightRef.current || !contentRef.current) return;
+
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Spotlight
+    gsap.to(spotlightRef.current, {
+      opacity: 1,
+      x: x,
+      y: y,
+      duration: 0.2,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!spotlightRef.current || !contentRef.current) return;
+
+    // Reset Spotlight
+    gsap.to(spotlightRef.current, {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  };
+
+  return (
+    <Link
+      href={`/projects?q=${section.slug}`}
+      className="anim-card block h-full w-full relative group perspective-1000"
+    >
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="h-full w-full relative"
+      >
+        <div
+          ref={contentRef}
+          className="h-full w-full flex border border-border bg-background relative overflow-hidden transform-style-3d will-change-transform"
+          style={{ containerType: "size" }}
+        >
+          {/* Spotlight Gradient */}
+          <div
+            ref={spotlightRef}
+            className="absolute -translate-x-1/2 -translate-y-1/2 w-100 h-100 bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,transparent_70%)] opacity-0 pointer-events-none blur-xl"
+            style={{ top: 0, left: 0 }}
+          />
+
+
+          <Heading
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter opacity-10"
+            style={{
+              fontSize: '120cqh',
+              lineHeight: 1,
+            }}
+          >
+            {section.slug}
+          </Heading>
+
+          <div className="self-end flex w-full pointer-events-none select-none p-4 z-1 bg-linear-to-t from-background to-transparent items-center gap-2 flex-row">
+            <Icon className="size-6" />
+            <Heading
+              className={clsx([
+                // index === 1 && "justify-end",,
+              ])}
+            >
+
+              {section.title}
+            </Heading>
+            <Flex flexGrow={"1"} />
+            <IconButton color={section.theme} variant="classic" radius="full">
+              <ArrowRight />
+            </IconButton>
+          </div>
+
+          <div className="absolute -top-px -left-px border-t border-l border-white/50 size-2 z-20" />
+          <div className="absolute -top-px -right-px border-t border-r border-white/50 size-2 z-20" />
+          <div className="absolute -bottom-px -left-px border-b border-l border-white/50 size-2 z-20" />
+          <div className="absolute -bottom-px -right-px border-b border-r border-white/50 size-2 z-20" />
+        </div>
+      </div>
+    </Link>
   );
 }

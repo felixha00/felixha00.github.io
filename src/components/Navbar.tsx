@@ -8,10 +8,11 @@ import RollingText from './RollingText';
 import { TextRoll } from './motion-primitives/TextRoll';
 import { Button } from '@radix-ui/themes';
 import { TbMenu2 } from "react-icons/tb";
-import { LuMenu } from "react-icons/lu";
+import { LuGlobe, LuMenu } from "react-icons/lu";
 import { TextScramble } from './motion-primitives/TextScramble';
 import Sidebar from './Sidebar';
 import { Clock } from './Clock';
+import Link from 'next/link';
 gsap.registerPlugin(useGSAP);
 
 const Navbar = () => {
@@ -75,7 +76,7 @@ const Navbar = () => {
     }, { scope: containerRef, dependencies: [showLogo] });
 
     return (
-        <nav className='z-50 fixed top-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-b from-background to-100% to-transparent'>
+        <nav className='z-50 h-16 fixed top-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-b from-background to-100% to-transparent'>
             <div ref={containerRef} className='grid grid-cols-1 grid-rows-1 items-center'>
 
                 {/* Name */}
@@ -83,7 +84,9 @@ const Navbar = () => {
                     ref={nameRef}
                     className='col-start-1 row-start-1 text-2xl font-bold opacity-100 tracking-tight -translate-y-1'
                 >
-                    felix ha
+                    <Link href={"/"}>
+                        felix ha
+                    </Link>
                 </h1>
 
                 {/* Logo */}
@@ -92,19 +95,22 @@ const Navbar = () => {
                     className='col-start-1 row-start-1 opacity-0 relative'
                 >
                     {/* <div className='-top-10 -left-8 bg-radial from-background to-transparent to-70% absolute size-24'></div> */}
-                    <Image
-                        src="/logo-white.svg"
-                        alt="Logo"
-                        width={40}
-                        height={40}
-                        priority
-                    // className="mix-blend-difference"
-                    />
+                    <Link href={"/"}>
+                        <Image
+                            src="/logo-white.svg"
+                            alt="Logo"
+                            width={40}
+                            height={40}
+                            priority
+                        // className="mix-blend-difference"
+                        />
+                    </Link>
+
 
                 </div>
             </div>
             <Sidebar />
-            <div className='bg-white/10 h-11 p-4 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono'><Clock /></div>
+            <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<LuGlobe /><Clock /></div>
         </nav>
     );
 }

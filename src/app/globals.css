@@ -1,6 +1,18 @@
 @import "tailwindcss";
+@import "tailwindcss-radix-colors/dist/gray.css";
+@import "tailwindcss-radix-colors/dist/graya.css";
 
-@custom-variant dark (&:is(.dark *));
+/* @import "tailwindcss-radix-colors/dist/all.css"; */
+@layer components {
+  @import "@radix-ui/themes/styles.css";
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@custom-variant dark (&:is(.dark *)); 
 
 :root {
   --background: oklch(1 0 0);
@@ -95,9 +107,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }

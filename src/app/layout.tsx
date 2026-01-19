@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "next-themes";
 import { Theme } from "@radix-ui/themes";
-import "@radix-ui/themes/styles.css";
+// import "@radix-ui/themes/styles.css";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,20 +38,18 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
         >
-
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <Theme grayColor="gray">
+            <Theme grayColor="gray" radius="none" panelBackground="translucent" className="flex flex-col flex-1 h-full">
               <Navbar />
-
               {children}
 
               {/* gradient overlay footer */}
-              <div className='z-50 fixed bottom-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-t from-background to-100% to-transparent'></div>
+              <div className='z-0 fixed bottom-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-t from-background to-100% to-transparent'></div>
             </Theme>
           </ThemeProvider>
         </body>
