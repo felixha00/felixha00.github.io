@@ -85,7 +85,7 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
 
   return (
     <Link
-      href={`/projects?q=${section.slug}`}
+      href={`/projects?cat=${section.slug}`}
       className="anim-card block h-full w-full relative group perspective-1000"
     >
       <div

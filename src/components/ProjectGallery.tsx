@@ -1,11 +1,18 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect, useMemo, act } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { LuArrowUpRight, LuCalendar, LuLayers } from "react-icons/lu";
+import {
+    LuArrowUpRight,
+    LuCalendar,
+    LuLayers,
+    LuX,
+    LuFilter
+} from "react-icons/lu";
 import { urlFor } from "@/sanity/lib/image";
 import {
     AspectRatio,
@@ -16,11 +23,22 @@ import {
     Text,
     Heading,
     Badge,
-    Grid
+    Grid,
+    TextField,
+    Button,
+    IconButton,
+    Separator
 } from "@radix-ui/themes";
-import { useSearchParams } from "next/navigation";
-import { Layers } from "lucide-react";
-import { getCategoryTitle } from "@/config/const";
+import { getCategoryConfig } from "@/config/const";
+import { Layers, Search } from "lucide-react";
+
+// Constants
+const MAIN_CATEGORIES = [
+    { title: "Software & Web", value: "sfw" },
+    { title: "Hardware & Tangibles", value: "hdw" },
+    { title: "Visual & Brand", value: "viz" },
+    { title: "Business & Ventures", value: "biz" },
+];
 
 export interface Project {
     _id: string;
@@ -39,57 +57,194 @@ interface ProjectGalleryProps {
 
 export default function ProjectGallery({ projects }: ProjectGalleryProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const sp = useSearchParams();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
+    // -- State --
+    // Initialize from URL params if available
+    const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+    const [activeCategory, setActiveCategory] = useState(searchParams.get("cat") || "all");
+
+    // -- Filtering Logic --
+    const filteredProjects = useMemo(() => {
+        return projects.filter((project) => {
+            // 1. Category Filter
+            const matchesCategory = activeCategory === "all" || project.category === activeCategory;
+
+            // 2. Search Filter (Title, Summary, or Stack)
+            const query = searchQuery.toLowerCase();
+            const matchesSearch =
+                project.title?.toLowerCase().includes(query) ||
+                project.summary?.toLowerCase().includes(query) ||
+                project.stack?.some(s => s.toLowerCase().includes(query));
+
+            return matchesCategory && matchesSearch;
+        });
+    }, [projects, activeCategory, searchQuery]);
+
+    // -- URL Synchronization --
+    // Updates URL without refreshing when filters change
+    const updateUrl = (key: string, value: string | null) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (value && value !== "all") {
+            params.set(key, value);
+        } else {
+            params.delete(key);
+        }
+        router.replace(`?${params.toString()}`, { scroll: false });
+    };
+
+    const handleCategoryChange = (val: string) => {
+        setActiveCategory(val);
+        updateUrl("cat", val);
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setSearchQuery(val);
+        updateUrl("q", val);
+    };
+
+    const clearSearch = () => {
+        setSearchQuery("");
+        updateUrl("q", null);
+    };
+
+    // -- Animations --
     useGSAP(
         () => {
             if (!containerRef.current) return;
 
             const cards = containerRef.current.querySelectorAll(".project-card");
 
-            gsap.fromTo(
+            gsap.set(cards, { y: 20, opacity: 0, scale: 0.95 });
+            gsap.to(
                 cards,
-                { y: 40, opacity: 0, scale: 0.95 },
                 {
                     y: 0,
                     opacity: 1,
                     scale: 1,
-                    duration: 0.6,
-                    stagger: 0.1,
-                    ease: "power3.out",
+                    duration: 0.4,
+                    stagger: 0.05,
+                    ease: "power2.out",
+                    clearProps: "all"
                 }
             );
         },
-        { scope: containerRef, dependencies: [projects] }
+        { scope: containerRef, dependencies: [filteredProjects] }
     );
 
-    if (projects.length === 0) {
-        return (
-            <Flex
-                direction="column"
-                align="center"
-                justify="center"
-                height="256px"
-                className="text-gray-500" // Optional utility for generic gray text
-            >
-                <Layers className="w-12 h-12 mb-4 opacity-20" />
-                <Text>No projects found yet.</Text>
-            </Flex>
-        );
-    }
-
-    // Using Radix Grid for layout
     return (
-        <Grid
-            ref={containerRef}
-            columns={{ initial: "1", md: "2", lg: "3" }}
-            gap="4"
-            width="auto"
-        >
-            {projects.map((project) => (
-                <ProjectCard key={project._id} project={project} />
-            ))}
-        </Grid>
+        <Flex direction="column" gap="6" width="100%">
+
+            {/* --- Filter & Search Bar --- */}
+            <Flex
+                direction={{ initial: "column", md: "row" }}
+                justify="between"
+                align={{ initial: "stretch", md: "center" }}
+                gap="4"
+                className="z-30 bg-background p-4 border shadow-sm"
+            >
+                {/* Categories */}
+                <Flex gap="2" wrap="wrap">
+                    <Button
+                        variant={activeCategory === "all" ? "classic" : "outline"}
+                        onClick={() => handleCategoryChange("all")}
+                        size="2"
+                        highContrast
+                        color="gray"
+                    >
+                        All
+                    </Button>
+                    {MAIN_CATEGORIES.map((cat) => (
+                        <Button
+                            key={cat.value}
+                            variant={activeCategory === cat.value ? "classic" : "soft"}
+                            onClick={() => handleCategoryChange(cat.value)}
+                            size="2"
+                            color={activeCategory === cat.value ? "gray" : "gray"}
+                            highContrast={activeCategory === cat.value}
+                        >
+                            {cat.title}
+                        </Button>
+                    ))}
+                </Flex>
+
+                {/* Search */}
+                <Box minWidth="250px">
+                    <TextField.Root
+                        placeholder="Search projects..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        variant="surface"
+                    >
+                        <TextField.Slot>
+                            <Search className="w-4 h-4" />
+                        </TextField.Slot>
+                        {searchQuery && (
+                            <TextField.Slot>
+                                <IconButton
+                                    size="1"
+                                    variant="ghost"
+                                    onClick={clearSearch}
+                                    aria-label="Clear search"
+                                >
+                                    <LuX className="w-4 h-4" />
+                                </IconButton>
+                            </TextField.Slot>
+                        )}
+                    </TextField.Root>
+                </Box>
+            </Flex>
+
+            {/* --- Results Grid --- */}
+            <div ref={containerRef} className="min-h-[400px]">
+                {filteredProjects.length === 0 ? (
+                    // Empty State
+                    <Flex
+                        direction="column"
+                        align="center"
+                        justify="center"
+                        height="300px"
+                        className="text-gray-500 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl"
+                    >
+                        <Flex
+                            align="center"
+                            justify="center"
+                            className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4"
+                        >
+                            <LuFilter className="w-6 h-6 opacity-40" />
+                        </Flex>
+                        <Heading size="4" mb="2">No projects found</Heading>
+                        <Text color="gray">
+                            Try adjusting your search or category filters.
+                        </Text>
+                        <Button
+                            variant="outline"
+                            className="mt-4"
+                            onClick={() => {
+                                setSearchQuery("");
+                                setActiveCategory("all");
+                                updateUrl("q", null);
+                                updateUrl("cat", null);
+                            }}
+                        >
+                            Clear all filters
+                        </Button>
+                    </Flex>
+                ) : (
+                    <Grid
+                        columns={{ initial: "1", md: "2", lg: "3" }}
+                        gap="4"
+                        width="auto"
+                    >
+                        {filteredProjects.map((project) => (
+                            <ProjectCard key={project._id} project={project} />
+                        ))}
+                    </Grid>
+                )}
+            </div>
+        </Flex>
     );
 }
 
@@ -97,7 +252,7 @@ function ProjectCard({ project }: { project: Project }) {
     return (
         <Link
             href={`/projects/${project.slug}`}
-            className="project-card group flex w-full opacity-0 will-change-transform no-underline"
+            className="project-card group flex w-full will-change-transform no-underline"
         >
             <Card size="2" className="w-full h-full transition-shadow shadow-xs hover:shadow-lg">
                 <Inset clip="padding-box" side="top" pb="current" className="relative">
@@ -105,7 +260,7 @@ function ProjectCard({ project }: { project: Project }) {
                     <AspectRatio ratio={16 / 9}>
                         {/* <div className="absolute z-10 p-4 bg-[#0a0a0a] -bottom-8 rounded-tr-xl">
                             <Badge className="bottom-0 bg-muted/50" variant="outline" color="gold" highContrast>
-                                {getCategoryTitle(project.category) || "Project"}
+                                {getCategoryConfig(project.category) || "Project"}
                             </Badge>
                         </div> */}
                         <Box position="relative" width="100%" height="100%" style={{ overflow: "hidden" }}>
@@ -121,17 +276,6 @@ function ProjectCard({ project }: { project: Project }) {
                                     <Layers className="h-12 w-12 text-gray-300" />
                                 </Flex>
                             )}
-
-                            {/* Floating Action Button */}
-                            <Box position="absolute" top="3" right="3" style={{ zIndex: 20 }}>
-                                <Flex
-                                    align="center"
-                                    justify="center"
-                                    className="rounded-full bg-white/90 p-2 backdrop-blur-sm transition-all duration-300 group-hover:bg-blue-600 group-hover:text-white dark:bg-black/80"
-                                >
-                                    <LuArrowUpRight className="h-5 w-5" />
-                                </Flex>
-                            </Box>
                         </Box>
                     </AspectRatio>
                 </Inset>
@@ -141,7 +285,7 @@ function ProjectCard({ project }: { project: Project }) {
                     {/* Header: Category & Date */}
                     <Flex justify="between" align="center">
                         <Badge variant="soft" color="gold">
-                            {getCategoryTitle(project.category) || "Project"}
+                            {getCategoryConfig(project.category)?.title || "Project"}
                         </Badge>
                         {project.date && (
                             <Flex align="center" gap="1">

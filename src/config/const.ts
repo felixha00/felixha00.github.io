@@ -27,7 +27,7 @@ export const MAIN_CATEGORIES = [
     },
 ];
 
-export const getCategoryTitle = (value: string) => {
+export const getCategoryConfig = (value: string) => {
     const category = MAIN_CATEGORIES.find(c => c.slug === value);
-    return category ? category.title : value;
+    return category
 }

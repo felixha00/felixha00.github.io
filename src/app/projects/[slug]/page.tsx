@@ -6,8 +6,8 @@ import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "next-sanity";
-import { AspectRatio, Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
-import { getCategoryTitle } from "@/config/const";
+import { Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
+import { getCategoryConfig } from "@/config/const";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -40,6 +40,7 @@ export async function generateMetadata(props: PageProps) {
 export default async function ProjectPage(props: PageProps) {
     const params = await props.params;
     const project = await client.fetch(PROJECT_QUERY, params);
+    const catConfig = getCategoryConfig(project.category)
 
     if (!project) {
         notFound();
@@ -50,8 +51,8 @@ export default async function ProjectPage(props: PageProps) {
             {/* Header Section */}
             <header className="flex flex-col space-y-4 relative items-start">
                 <div className="flex flex-wrap gap-2 items-center">
-                    <Badge color="gold">
-                        {getCategoryTitle(project.category)}
+                    <Badge color={catConfig?.theme}>
+                        {catConfig?.title}
                     </Badge>
                     {project.date && (
                         <span className="text-muted-foreground text-sm py-0.5">
@@ -71,29 +72,30 @@ export default async function ProjectPage(props: PageProps) {
                 {/* Project Links */}
                 <div className="flex flex-wrap gap-4">
                     {project.url && (
-                        <Button size={"3"} color="gray" highContrast>
+                        <Button size={"3"} color={catConfig?.theme} highContrast>
                             <a
                                 href={project.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                            // className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
                             >
                                 Visit Project
                             </a>
                         </Button>
                     )}
-                    <Separator orientation={"vertical"} decorative className="h-auto" />
-                    {project.links?.map((link) => (
-                        <Button key={link._key} size={"3"} color="gray" variant="soft">
-                            <a
-                                key={link._key}
-                                href={link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {link.label}
-                            </a>
-                        </Button>
+                    {project.links?.map((link, index: number) => (
+                        <>
+                            {index === 0 && <Separator orientation={"vertical"} decorative className="h-auto" />}
+                            <Button key={link._key} size={"3"} color={catConfig?.theme} variant="soft">
+                                <a
+                                    key={link._key}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {link.label}
+                                </a>
+                            </Button>
+                        </>
                     ))}
                 </div>
                 {/* <div className="absolute w-full -z-10 bottom-0 aspect-[2] opacity-100">
@@ -106,14 +108,17 @@ export default async function ProjectPage(props: PageProps) {
             <Inset className="border border-accent -mx-4"></Inset>
 
             {project.image && (
-                <div className="relative w-full h-100 md:h-150 overflow-hidden">
+                // 1. Remove h-100 md:h-150. Keep w-full.
+                <div className="relative w-full overflow-hidden">
                     <Image
-                        src={urlFor(project.image).width(1600).height(900).url()}
+                        src={urlFor(project.image).width(1600).url()}
                         alt={project.image.alt || project.title}
-                        fill
-                        className="object-cover"
+                        width={1600}
+                        height={900}
+                        className="w-full h-auto object-cover"
+
                         priority
-                    // sizes="(max-w: 768px) 100vw, 1200px"
+                        sizes="(max-width: 768px) 100vw, 1200px"
                     />
                 </div>
             )}
