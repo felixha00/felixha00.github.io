@@ -13,7 +13,11 @@ export const PROJECTS_QUERY = groq`*[_type == "project"] | order(date desc) {
   image,
   date,
   stack,
-  category
+  category,
+  for->{
+    name,
+    logo,
+  }
 }`;
 
 // get a specific project by slug
@@ -34,6 +38,12 @@ export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug]
   for->{
     name,
     logo,
+  },
+  attachments[] {
+    title,
+    "url": asset->url,
+    "extension": asset->extension,
+    "size": asset->size
   }
 }`;
 

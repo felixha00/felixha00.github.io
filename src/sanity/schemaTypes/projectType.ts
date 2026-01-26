@@ -47,7 +47,7 @@ export const projectType = defineType({
                 })),
                 layout: 'radio'
             },
-            validation: (rule) => rule.required(), // Optional: make it mandatory
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'summary',
@@ -60,7 +60,7 @@ export const projectType = defineType({
             title: 'Main Image',
             type: 'image',
             options: {
-                hotspot: true, // Allows cropping/focal point
+                hotspot: true,
             },
             fields: [
                 defineField({
@@ -127,6 +127,29 @@ export const projectType = defineType({
                 }
             ],
         }),
+        // new field for file uploads
+        defineField({
+            name: 'attachments',
+            title: 'Attachments / Downloads',
+            description: 'Upload PDFs, ZIPs, etc. capable of generating a public URL.',
+            type: 'array',
+            of: [
+                {
+                    type: 'file',
+                    options: {
+                        storeOriginalFilename: true,
+                    },
+                    fields: [
+                        defineField({
+                            name: 'title',
+                            title: 'Title',
+                            type: 'string',
+                            description: 'Text to display for the download link',
+                        }),
+                    ],
+                },
+            ],
+        }),
         defineField({
             name: 'content',
             title: 'Content',
@@ -136,7 +159,7 @@ export const projectType = defineType({
         defineField({
             name: 'readmeUrl',
             title: 'README URL (GitHub, etc.)',
-            description: 'Paste the link to the raw file (e.g., https://raw.githubusercontent.com/...) or the blob link.',
+            description: 'Paste the link to the raw file or blob.',
             type: 'url',
         }),
     ],

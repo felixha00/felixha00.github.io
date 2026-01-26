@@ -65,7 +65,6 @@ export default async function ProjectPage(props: PageProps) {
     if (project.readmeUrl) {
         try {
             const rawUrl = getRawGithubUrl(project.readmeUrl);
-            console.log("!! rawurl", rawUrl)
             if (rawUrl) {
                 const res = await fetch(rawUrl, { next: { revalidate: 3600 } }); // Cache for 1 hour
                 if (res.ok) {
@@ -86,7 +85,6 @@ export default async function ProjectPage(props: PageProps) {
                         {catConfig?.title}
                     </Badge>
                     {project.for && <Badge color={"gray"} highContrast>
-                        {/* <p className="flex flex-row gap-2"> <img src={urlFor(project.for.logo).url()} className="dark:invert" /></p> */}
                         {project.for?.name}
                     </Badge>}
 
@@ -132,6 +130,19 @@ export default async function ProjectPage(props: PageProps) {
                         </Button>
 
                     ))}
+                    {project.attachments?.map((att, index: number) => (
+                        <Button key={att._key} size={"3"} color={catConfig?.theme} variant="soft">
+                            <a
+                                key={att._key}
+                                href={att.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {att.title}
+                            </a>
+                        </Button>
+
+                    ))}
                 </div>
                 {/* <div className="absolute w-full -z-10 bottom-0 aspect-[2] opacity-100">
                     <Image className="object-cover translate-y-4 scale-x-105" alt="accent" src="/img/1.webp" fill />
@@ -143,7 +154,6 @@ export default async function ProjectPage(props: PageProps) {
             <Inset className="border border-accent -mx-4"></Inset>
 
             {project.image && (
-                // 1. Remove h-100 md:h-150. Keep w-full.
                 <div className="relative w-full overflow-hidden">
                     <Image
                         src={urlFor(project.image).width(1600).url()}
@@ -151,18 +161,20 @@ export default async function ProjectPage(props: PageProps) {
                         width={1600}
                         height={900}
                         className="w-full h-auto object-cover"
-
                         priority
                         sizes="(max-width: 768px) 100vw, 1200px"
                     />
                 </div>
             )}
+
+            <Separator className="-mx-4 w-screen"></Separator>
+
             {project.stack && project.stack.length > 0 && (
-                <div className="flex flex-col gap-2">
-                    <h3>Tech Stack</h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                    {/* <h3 className="font-bold uppercase text-sm font-mono">Tags</h3> */}
                     <div className="flex flex-wrap gap-2">
                         {project.stack.map((tech) => (
-                            <Badge key={tech} size={"3"} color={catConfig?.theme}>
+                            <Badge highContrast key={tech} size={"1"} color={catConfig?.theme}>
                                 {tech}
                             </Badge>
                         ))}
@@ -170,14 +182,15 @@ export default async function ProjectPage(props: PageProps) {
                 </div>
             )}
 
+
             {project.tags && project.tags.length > 0 && (
                 <div>
                     <h3 className="font-bold mb-3 uppercase text-sm">Tags</h3>
                     <div className="flex flex-wrap gap-2">
                         {project.tags.map((tag) => (
-                            <span key={tag} className="text-gray-500 text-sm">
+                            <Badge key={tag} className="text-gray-500 text-sm">
                                 #{tag}
-                            </span>
+                            </Badge>
                         ))}
                     </div>
                 </div>

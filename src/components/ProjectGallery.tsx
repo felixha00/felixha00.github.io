@@ -6,13 +6,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import {
-    LuArrowUpRight,
-    LuCalendar,
-    LuLayers,
-    LuX,
-    LuFilter
-} from "react-icons/lu";
 import { urlFor } from "@/sanity/lib/image";
 import {
     AspectRatio,
@@ -24,13 +17,12 @@ import {
     Heading,
     Badge,
     Grid,
-    TextField,
     Button,
-    IconButton,
-    Separator
 } from "@radix-ui/themes";
 import { getCategoryConfig } from "@/config/const";
-import { Layers, Search } from "lucide-react";
+import { Calendar, Layers, Search } from "lucide-react";
+import ProjectCard from "./ProjectCard";
+import { Project } from "../../sanity.types";
 
 // Constants
 const MAIN_CATEGORIES = [
@@ -39,17 +31,6 @@ const MAIN_CATEGORIES = [
     { title: "Visual & Brand", value: "viz" },
     { title: "Business & Ventures", value: "biz" },
 ];
-
-export interface Project {
-    _id: string;
-    title: string;
-    slug: string;
-    summary: string;
-    image: any;
-    date: string;
-    stack: string[];
-    category: string;
-}
 
 interface ProjectGalleryProps {
     projects: Project[];
@@ -60,18 +41,14 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // -- State --
-    // Initialize from URL params if available
     const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
     const [activeCategory, setActiveCategory] = useState(searchParams.get("cat") || "all");
 
-    // -- Filtering Logic --
+    // Filtering Logic 
     const filteredProjects = useMemo(() => {
         return projects.filter((project) => {
-            // 1. Category Filter
             const matchesCategory = activeCategory === "all" || project.category === activeCategory;
 
-            // 2. Search Filter (Title, Summary, or Stack)
             const query = searchQuery.toLowerCase();
             const matchesSearch =
                 project.title?.toLowerCase().includes(query) ||
@@ -82,8 +59,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
         });
     }, [projects, activeCategory, searchQuery]);
 
-    // -- URL Synchronization --
-    // Updates URL without refreshing when filters change
+    // updates URL without refreshing when filters change
     const updateUrl = (key: string, value: string | null) => {
         const params = new URLSearchParams(searchParams.toString());
         if (value && value !== "all") {
@@ -110,7 +86,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
         updateUrl("q", null);
     };
 
-    // -- Animations --
+    //  animations 
     useGSAP(
         () => {
             if (!containerRef.current) return;
@@ -137,7 +113,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
     return (
         <Flex className="gap-4 flex-col h-full flex-1 grow">
 
-            {/* --- Filter & Search Bar --- */}
+            {/* Filter & Search Bar */}
             <Flex
                 direction={{ initial: "column", md: "row" }}
                 justify="between"
@@ -245,81 +221,5 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                 )}
             </div>
         </Flex >
-    );
-}
-
-function ProjectCard({ project }: { project: Project }) {
-    return (
-        <Link
-            href={`/projects/${project.slug}`}
-            className="project-card group flex w-full will-change-transform no-underline"
-        >
-            <Card size="2" className="w-full h-full transition-shadow shadow-xs hover:shadow-lg">
-                <Inset clip="padding-box" side="top" pb="current" className="relative">
-
-                    <AspectRatio ratio={16 / 9}>
-                        {/* <div className="absolute z-10 p-4 bg-[#0a0a0a] -bottom-8 rounded-tr-xl">
-                            <Badge className="bottom-0 bg-muted/50" variant="outline" color="gold" highContrast>
-                                {getCategoryConfig(project.category) || "Project"}
-                            </Badge>
-                        </div> */}
-                        <Box position="relative" width="100%" height="100%" style={{ overflow: "hidden" }}>
-                            {project.image ? (
-                                <Image
-                                    src={urlFor(project.image).width(768).height(432).fit("crop").url()}
-                                    alt={project.title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 ease-out"
-                                />
-                            ) : (
-                                <Flex align="center" justify="center" width="100%" height="100%" style={{ backgroundColor: "var(--gray-3)" }}>
-                                    <Layers className="h-12 w-12 text-gray-300" />
-                                </Flex>
-                            )}
-                        </Box>
-                    </AspectRatio>
-                </Inset>
-
-                {/* Content Layout using Flex and Box */}
-                <Flex direction="column" gap="3" height="100%">
-                    {/* Header: Category & Date */}
-                    <Flex justify="between" align="center">
-                        <Badge variant="soft" color="gold">
-                            {getCategoryConfig(project.category)?.title || "Project"}
-                        </Badge>
-                        {project.date && (
-                            <Flex align="center" gap="1">
-                                <LuCalendar className="w-3 h-3 text-gray-500" />
-                                <Text size="1" color="gray">
-                                    {new Date(project.date).getFullYear()}
-                                </Text>
-                            </Flex>
-                        )}
-                    </Flex>
-
-                    {/* Title & Summary */}
-                    <Box>
-                        <Heading
-                            size="5"
-                            mb="1"
-                        >
-                            {project.title}
-                        </Heading>
-                        <Text as="p" size="2" color="gray" className="line-clamp-2">
-                            {project.summary}
-                        </Text>
-                    </Box>
-
-                    {/* Stack Badges */}
-                    <div className="flex-wrap flex gap-1">
-                        {project.stack?.map((tech) => (
-                            <Badge key={tech} variant="soft" color="gray" highContrast={false}>
-                                {tech}
-                            </Badge>
-                        ))}
-                    </div>
-                </Flex>
-            </Card>
-        </Link>
     );
 }

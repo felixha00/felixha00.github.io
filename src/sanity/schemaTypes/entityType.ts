@@ -20,7 +20,8 @@ export const entityType = defineType({
                 list: [
                     { title: 'Personal', value: 'personal' },
                     { title: 'Client', value: 'cliebnt' },
-                    { title: 'Business', value: 'business' }
+                    { title: 'Business', value: 'business' },
+                    { title: 'Academic', value: 'academic' }
                 ],
                 layout: 'radio'
             },

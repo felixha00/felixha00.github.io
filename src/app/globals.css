@@ -6,6 +6,10 @@
 /* @import "tailwindcss-radix-colors/dist/all.css"; */
 @layer components {
   @import "@radix-ui/themes/styles.css";
+
+  .rt-Badge {
+    @apply font-mono;
+  }
 }
 
 @theme inline {
