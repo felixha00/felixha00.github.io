@@ -118,8 +118,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                 direction={{ initial: "column", md: "row" }}
                 justify="between"
                 align={{ initial: "stretch", md: "center" }}
-                gap="4"
-                className="z-30 bg-background p-4 border shadow-sm"
+                className="z-30 bg-background border shadow-sm"
             >
                 {/* Categories */}
                 <Flex gap="2" wrap="wrap">

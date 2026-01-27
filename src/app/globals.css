@@ -127,4 +127,8 @@
   .tr-clipped-corner {
     clip-path: polygon(0 0, calc(100% - 1.5rem) 0, 100% 50%, 100% 100%, 0 100%);
   }
+
+  .hover-outline {
+    @apply border border-border hover:border-muted-foreground transition-colors
+  }
 }

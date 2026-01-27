@@ -3,17 +3,16 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Button, Flex, Heading, IconButton, } from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, IconButton, } from "@radix-ui/themes";
 import clsx from "clsx";
 import Link from "next/link";
 import { ArrowRight } from 'lucide-react';
 import { MAIN_CATEGORIES } from "@/config/const";
+import { cn } from "@/lib/utils";
 
 export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Parent controls the "Entrance" animation for all children
-  // Safe because it runs inside an effect, not during render
   useGSAP(
     () => {
       gsap.from(".anim-card", {
@@ -37,7 +36,7 @@ export default function Page() {
           <SectionCard key={section.slug} section={section} index={i} />
         ))}
       </main>
-      <div className="bg-background border border-border p-4">
+      <div className="bg-background border border-border p-4 z-50">
         <Button color="gray" variant="classic" highContrast>All Projects</Button>
       </div>
     </main>
@@ -52,7 +51,6 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
   const contentRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
 
-  // 1. Direct Event Handler (No contextSafe needed)
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current || !spotlightRef.current || !contentRef.current) return;
 
@@ -60,7 +58,7 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Spotlight
+    // spotlight
     gsap.to(spotlightRef.current, {
       opacity: 1,
       x: x,
@@ -74,7 +72,7 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
   const handleMouseLeave = () => {
     if (!spotlightRef.current || !contentRef.current) return;
 
-    // Reset Spotlight
+    // reset spotlight
     gsap.to(spotlightRef.current, {
       opacity: 0,
       duration: 0.5,
@@ -96,35 +94,30 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
       >
         <div
           ref={contentRef}
-          className="h-full w-full flex border border-border bg-background relative overflow-hidden transform-style-3d will-change-transform"
+          className="h-full w-full flex border border-border bg-background relative overflow-hidden transform-style-3d will-change-transform group-hover:border-muted-foreground transition-colors"
           style={{ containerType: "size" }}
         >
-          {/* Spotlight Gradient */}
+          {/* spotlight gradient */}
           <div
             ref={spotlightRef}
             className="absolute -translate-x-1/2 -translate-y-1/2 w-100 h-100 bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,transparent_70%)] opacity-0 pointer-events-none blur-xl"
             style={{ top: 0, left: 0 }}
           />
 
-
           <Heading
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter opacity-10 md:rotate-90 font-custom"
-            style={{
-              fontSize: '120cqw',
-              lineHeight: 1,
-            }}
+            className={cn("bottom-0 md:-bottom-1/12 -left-1/2 md:left-0", "absolute transition-colors right-0 uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter font-custom md:[writing-mode:vertical-rl] text-[100cqh] leading-[0.8em] md:text-[100cqw] md:leading-[1.2em] group-hover:text-muted-foreground text-muted")}
           >
-            {section.slug}
+            {section.slug}{section.slug}{section.slug}
           </Heading>
 
-          <div className="self-end flex w-full pointer-events-none select-none p-4 z-1 bg-linear-to-t from-background to-transparent items-center gap-2 flex-row">
-            <Icon className="size-6" />
+          <div className="self-start flex w-full pointer-events-none select-none p-4 z-1 bg-linear-to-b from-background to-transparent from-25% items-start gap-2 flex-row">
+            {/* <Icon className="size-full" /> */}
             <Heading
               className={clsx([
                 // index === 1 && "justify-end",,
+                "text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl"
               ])}
             >
-
               {section.title}
             </Heading>
             <Flex flexGrow={"1"} />
@@ -138,6 +131,16 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
           <div className="absolute -bottom-px -left-px border-b border-l border-white/50 size-2 z-20" />
           <div className="absolute -bottom-px -right-px border-b border-r border-white/50 size-2 z-20" />
         </div>
+        <Box
+          className="absolute bottom-0 left-0 right-0 h-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex"
+          style={{
+            background: `linear-gradient(to top, var(--${section.theme}-a6), transparent)`
+          }}
+        >
+        </Box>
+        <Box className="absolute p-4 bottom-0 left-0 right-0">
+          <Icon />
+        </Box>
       </div>
     </Link>
   );
