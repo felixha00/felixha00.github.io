@@ -6,10 +6,12 @@ import { useMemo } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
 import Link from "next/link";
+import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
+// import { InfiniteSlider } from "./fluff/InfiniteSliderGSAP";
 
 export default function ProjectCard({ project }: { project: Project }) {
 
-    const cfg = useMemo(() => getCategoryConfig(project.category!), [project])
+    const { icon: Icon, ...cfg } = useMemo(() => getCategoryConfig(project.category!)!, [project])
 
     return (
         <Link
@@ -18,41 +20,42 @@ export default function ProjectCard({ project }: { project: Project }) {
         >
             <Card size="2" className="w-full h-full transition-shadow shadow-xs hover:shadow-lg">
                 <Inset clip="padding-box" side="top" pb="current" className="relative">
-
                     <AspectRatio ratio={16 / 9}>
-                        {/* <div className="absolute z-10 p-4 bg-[#0a0a0a] -bottom-8 rounded-tr-xl">
-                            <Badge className="bottom-0 bg-muted/50" variant="outline" color="gold" highContrast>
-                                {cfg?.title || "Project"}
-                            </Badge>
-                        </div> */}
+                        <div className="absolute border-l z-10 p-4 pr-7 tr-clipped-corner -bottom-6.5 bg-(--color-panel)">
+                            <div className="flex flex-row">
+                                <Badge variant="soft" color="gray" className={"group-hover:rt-high-contrast"}>
+                                    {project.for?.name}
+                                </Badge>
+                                <Badge variant="soft" color={cfg?.theme}>
+                                    <Icon size="10" /> {cfg?.title || "Project"}
+                                </Badge>
+                            </div>
+                        </div>
                         <Box position="relative" width="100%" height="100%" style={{ overflow: "hidden" }}>
                             {project.image ? (
                                 <Image
                                     src={urlFor(project.image).width(768).height(432).fit("crop").url()}
                                     alt={project.title || "Project Image"}
                                     fill
-                                    className="object-cover transition-transform duration-700 ease-out grayscale-0 group-hover:grayscale-100"
+                                    className="object-cover duration-500 ease-out group-hover:brightness-25 group-hover:blur-md"
                                 />
                             ) : (
                                 <Flex align="center" justify="center" width="100%" height="100%" style={{ backgroundColor: "var(--gray-3)" }}>
                                     <Layers className="h-12 w-12 text-gray-300" />
                                 </Flex>
                             )}
+                            <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ containerType: "size", lineHeight: 1.2 }}>
+                                <InfiniteSlider speed={24}>
+                                    <h1 className="font-custom tracking-tighter font-medium uppercase text-[100cqh] box">{project.title}</h1>
+                                </InfiniteSlider>
+                            </div>
                         </Box>
                     </AspectRatio>
                 </Inset>
 
                 <Flex direction="column" gap="3" height="100%">
                     {/* header */}
-                    <Flex justify="between" align="center">
-                        <div className="flex flex-row gap-2">
-                            <Badge variant="soft" color={cfg?.theme}>
-                                {cfg?.title || "Project"}
-                            </Badge>
-                            <Badge variant="solid" color="gray" highContrast>
-                                {project.for?.name}
-                            </Badge>
-                        </div>
+                    <Flex justify="end" align="center">
                         {project.date && (
                             <Flex align="center" gap="1">
                                 <Calendar className="size-3" />

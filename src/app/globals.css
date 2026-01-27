@@ -15,6 +15,7 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-custom: var(--font-custom);
 }
 
 @custom-variant dark (&:is(.dark *)); 
@@ -117,5 +118,13 @@
 :root {
   .prose {
     @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:tracking-tight leading-tight max-w-none;
+  }
+
+  .tl-clipped-corner {
+    clip-path: polygon(1rem 0, 100% 0, 100% 100%, 0 100%, 0 1rem);
+  }
+
+  .tr-clipped-corner {
+    clip-path: polygon(0 0, calc(100% - 1.5rem) 0, 100% 50%, 100% 100%, 0 100%);
   }
 }

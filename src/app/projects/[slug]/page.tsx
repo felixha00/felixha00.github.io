@@ -81,12 +81,14 @@ export default async function ProjectPage(props: PageProps) {
             {/* Header Section */}
             <header className="flex flex-col space-y-4 relative items-start">
                 <div className="flex flex-wrap gap-2 items-center">
-                    <Badge color={catConfig?.theme}>
-                        {catConfig?.title}
-                    </Badge>
-                    {project.for && <Badge color={"gray"} highContrast>
-                        {project.for?.name}
-                    </Badge>}
+                    <div className="flex flex-row items-center">
+                        {project.for && <Badge color={"gray"} highContrast>
+                            {project.for?.name}
+                        </Badge>}
+                        <Badge color={catConfig?.theme}>
+                            {catConfig?.title}
+                        </Badge>
+                    </div>
 
                     {project.date && (
                         <span className="text-muted-foreground text-sm py-0.5">

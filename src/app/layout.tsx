@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { Theme } from "@radix-ui/themes";
 // import "@radix-ui/themes/styles.css";
 import "./globals.css";
+import localFont from 'next/font/local'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,6 +16,19 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Configure the local font
+const displayFont = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Saint-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-custom', // Define a CSS variable name
+  display: 'swap',
 });
 
 
@@ -36,7 +50,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <SmoothScroll>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+          className={`${geistSans.variable} ${geistMono.variable} ${displayFont.variable} antialiased flex flex-col min-h-screen`}
         >
           <ThemeProvider
             attribute="class"
@@ -44,7 +58,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Theme grayColor="gray" radius="none" panelBackground="translucent" className="flex flex-col flex-1 h-full">
+            <Theme grayColor="gray" radius="none" panelBackground="solid" className="flex flex-col flex-1 h-full">
               <Navbar />
               {children}
 

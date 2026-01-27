@@ -31,7 +31,7 @@ export default function Page() {
     <main className="h-full flex grow flex-col">
       <main
         ref={containerRef}
-        className="grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-2 p-4 flex-1 pt-16 h-full gap-4 perspective-1000 overflow-hidden"
+        className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 pt-16 h-full gap-4 perspective-1000 overflow-hidden"
       >
         {MAIN_CATEGORIES.map((section, i) => (
           <SectionCard key={section.slug} section={section} index={i} />
@@ -108,9 +108,9 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
 
 
           <Heading
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter opacity-10"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter opacity-10 md:rotate-90 font-custom"
             style={{
-              fontSize: '120cqh',
+              fontSize: '120cqw',
               lineHeight: 1,
             }}
           >
