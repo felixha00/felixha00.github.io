@@ -8,6 +8,7 @@ import { routes } from '@/config/routes'
 import Link from 'next/link' // 1. Import Link
 import { Triangle } from 'lucide-react'
 import { SiVercel } from 'react-icons/si'
+import Dither from '@/components/Dither'
 
 const Sidebar = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -130,6 +131,17 @@ const Sidebar = () => {
             >
                 <div className='grid grid-cols-1 md:grid-cols-2 w-full'>
                     <div className='bg-muted hidden md:block' style={{ containerType: "size" }}>
+                        <Dither
+                            waveColor={[0.5, 0.5, 0.5]}
+                            disableAnimation={false}
+                            enableMouseInteraction
+                            mouseRadius={0.3}
+                            colorNum={4}
+                            waveAmplitude={0.3}
+                            waveFrequency={3}
+                            waveSpeed={0.05}
+
+                        />
                         {/* <h1 className='text-[150cqw] font-saint items-center flex flex-col'>
                             {activeLetter}
                         </h1> */}

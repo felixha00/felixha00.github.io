@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Box, Button, Flex, Heading, IconButton, } from "@radix-ui/themes";
+import { AspectRatio, Box, Button, Flex, Heading, IconButton, } from "@radix-ui/themes";
 import clsx from "clsx";
 import Link from "next/link";
 import { ArrowRight } from 'lucide-react';
@@ -30,7 +30,10 @@ export default function Page() {
   return (
     <main className="h-full flex grow flex-col">
       <div className="flex grow items-center justify-center flex-col">
-        {/* <Image src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" alt="Waving Hand" width="25" height="25" unoptimized /> */}
+        {/* <AspectRatio ratio={1} className="size-64">
+          <Image src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" alt="Waving Hand" fill unoptimized />
+        </AspectRatio> */}
+
         <h1>I'm Felix</h1>
       </div>
       {/* <main
