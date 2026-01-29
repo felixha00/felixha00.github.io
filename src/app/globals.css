@@ -10,12 +10,22 @@
   .rt-Badge {
     @apply font-mono;
   }
+
+  .rt-Button {
+    @apply rounded-full
+  }
+
+  /* .rt-IconButton {
+    @apply rounded-full
+  } */
 }
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-custom: var(--font-custom);
+  --font-saint: var(--font-saint);
+  --font-redaction: var(--font-redaction);
+  /* TODO: Add the rest of the redaction fonts later */
 }
 
 @custom-variant dark (&:is(.dark *)); 

@@ -13,6 +13,7 @@ import { TextScramble } from './motion-primitives/TextScramble';
 import Sidebar from './Sidebar';
 import { Clock } from './Clock';
 import Link from 'next/link';
+import { Globe } from 'lucide-react';
 gsap.registerPlugin(useGSAP);
 
 const Navbar = () => {
@@ -43,22 +44,19 @@ const Navbar = () => {
         const ease = "power2.out";
 
         if (showLogo) {
-            // Animate Name OUT
             tl.to(nameRef.current, {
-                y: -15, // Move UP
+                y: -15,
                 autoAlpha: 0,
                 filter: 'blur(10px)',
                 duration: duration,
                 ease: ease,
             })
-                // Animate Logo IN
                 .fromTo(logoRef.current,
-                    { y: 15, autoAlpha: 0, filter: 'blur(10px)' }, // Start from DOWN
+                    { y: 15, autoAlpha: 0, filter: 'blur(10px)' },
                     { y: 0, autoAlpha: 1, filter: 'blur(0px)', duration: duration, ease: ease },
                     "<"
                 );
         } else {
-            // Animate Logo OUT
             tl.to(logoRef.current, {
                 y: -15,
                 autoAlpha: 0,
@@ -66,7 +64,6 @@ const Navbar = () => {
                 duration: duration,
                 ease: ease,
             })
-                // Animate Name IN
                 .fromTo(nameRef.current,
                     { y: 15, autoAlpha: 0, filter: 'blur(8px)' },
                     { y: 0, autoAlpha: 1, filter: 'blur(0px)', duration: duration, ease: ease },
@@ -77,12 +74,12 @@ const Navbar = () => {
 
     return (
         <nav className='z-50 h-16 fixed top-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-b from-background to-100% to-transparent'>
-            <div ref={containerRef} className='grid grid-cols-1 grid-rows-1 items-center'>
-
+            <div ref={containerRef} className='grid grid-cols-1 grid-rows-1 items-center z-100 mix-blend-difference'>
                 {/* Name */}
+
                 <h1
                     ref={nameRef}
-                    className='col-start-1 row-start-1 text-2xl font-bold opacity-100 tracking-tight -translate-y-1'
+                    className='col-start-1 row-start-1 text-2xl font-bold opacity-100 tracking-tight -translate-y-1 mix-blend-difference text-white'
                 >
                     <Link href={"/"}>
                         felix ha
@@ -94,7 +91,6 @@ const Navbar = () => {
                     ref={logoRef}
                     className='col-start-1 row-start-1 opacity-0 relative'
                 >
-                    {/* <div className='-top-10 -left-8 bg-radial from-background to-transparent to-70% absolute size-24'></div> */}
                     <Link href={"/"}>
                         <Image
                             src="/logo-white.svg"
@@ -102,7 +98,6 @@ const Navbar = () => {
                             width={40}
                             height={40}
                             priority
-                        // className="mix-blend-difference"
                         />
                     </Link>
 
@@ -110,8 +105,8 @@ const Navbar = () => {
                 </div>
             </div>
             <Sidebar />
-            <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<LuGlobe /><Clock /></div>
-        </nav>
+            <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div>
+        </nav >
     );
 }
 

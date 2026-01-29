@@ -1,7 +1,7 @@
 import { getCategoryConfig } from "@/config/const";
 import { urlFor } from "@/sanity/lib/image";
-import { Card, Inset, AspectRatio, Flex, Badge, Text, Heading, Box } from "@radix-ui/themes";
-import { Layers, Calendar } from "lucide-react";
+import { Card, Inset, AspectRatio, Flex, Badge, Text, Heading, Box, Button, IconButton } from "@radix-ui/themes";
+import { Layers, Calendar, ExternalLink } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
@@ -24,14 +24,21 @@ export default function ProjectCard({ project }: { project: Project }) {
             className="project-card group flex w-full will-change-transform no-underline hover-outline"
         >
             <Card size="2" className="w-full h-full transition-shadow shadow-xs hover:shadow-lg">
+                <IconButton className="absolute z-50 bg-background/20 text-muted-foreground hover:bg-muted border border-border top-0 right-0" size="3" radius="none" variant="solid"><ExternalLink /></IconButton>
                 <Inset clip="padding-box" side="top" pb="current" className="relative">
                     <AspectRatio ratio={16 / 9}>
                         <div className="absolute border-l z-10 p-4 pr-7 tr-clipped-corner -bottom-6.5 bg-(--color-panel)">
                             <div className="flex flex-row">
-                                <Badge color="gray" className={cn(isHovered && "rt-high-contrast", "transition-colors")}>
+                                {/* <Badge color="gray" className={cn(isHovered && "rt-high-contrast", "transition-colors")}>
                                     {project.for?.name}
                                 </Badge>
                                 <Badge variant="soft" color={cfg?.theme} className={cn(isHovered && "rt-high-contrast", "transition-colors")}>
+                                    <Icon size="10" /> {cfg?.title || "Project"}
+                                </Badge> */}
+                                <Badge color="gray">
+                                    {project.for?.name || "Personal"}
+                                </Badge>
+                                <Badge variant="soft" color={cfg?.theme}>
                                     <Icon size="10" /> {cfg?.title || "Project"}
                                 </Badge>
                             </div>
@@ -42,23 +49,23 @@ export default function ProjectCard({ project }: { project: Project }) {
                                     src={urlFor(project.image).width(768).height(432).fit("crop").url()}
                                     alt={project.title || "Project Image"}
                                     fill
-                                    className="object-cover duration-500 ease-out group-hover:blur-md group-hover:scale-105"
+                                    className="object-cover duration-500 group-hover:scale-105"
                                 />
                             ) : (
                                 <Flex align="center" justify="center" width="100%" height="100%" style={{ backgroundColor: "var(--gray-3)" }}>
                                     <Layers className="h-12 w-12 text-gray-300" />
                                 </Flex>
                             )}
-                            <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500  mix-blend-difference " style={{ containerType: "size", lineHeight: 1.2 }}>
+                            <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference" style={{ containerType: "size", lineHeight: 1.2 }}>
                                 <InfiniteSlider speed={24}>
-                                    <h1 className="font-custom tracking-tighter font-medium uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
+                                    <h1 className="font-saint tracking-tighter font-medium uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
                                 </InfiniteSlider>
                             </div>
                         </Box>
                     </AspectRatio>
                 </Inset>
 
-                <Flex direction="column" gap="3" height="100%">
+                <Flex direction="column" gap="2" height="100%">
                     {/* header */}
                     <Flex justify="end" align="center">
                         {project.date && (
@@ -84,8 +91,10 @@ export default function ProjectCard({ project }: { project: Project }) {
                         </Text>
                     </Box>
 
+                    {/* <Flex className="grow" /> */}
+
                     {/* badges */}
-                    <div className="flex-wrap flex gap-1">
+                    <div className="flex flex-wrap gap-1 shrink-0">
                         {project.stack?.map((tech) => (
                             <Badge key={tech} variant="soft" color="gray" highContrast={false}>
                                 {tech}

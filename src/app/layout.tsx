@@ -6,7 +6,8 @@ import { ThemeProvider } from "next-themes";
 import { Theme } from "@radix-ui/themes";
 // import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import localFont from 'next/font/local'
+import { fontRedaction, fontSaint } from "@/lib/fonts";
+// import { saint } from "@/lib/fonts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,18 +19,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Configure the local font
-const displayFont = localFont({
-  src: [
-    {
-      path: '../../public/fonts/Saint-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-custom', // Define a CSS variable name
-  display: 'swap',
-});
+// // Configure the local font
+// const saint = localFont({
+//   src: [
+//     {
+//       path: '../../public/fonts/Saint-Regular.woff2',
+//       weight: '400',
+//       style: 'normal',
+//     },
+//   ],
+//   variable: '--font-saint', // Define a CSS variable name
+//   display: 'swap',
+// });
 
 
 export const metadata: Metadata = {
@@ -50,7 +51,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <SmoothScroll>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${displayFont.variable} antialiased flex flex-col min-h-screen`}
+          className={`${geistSans.variable} ${geistMono.variable} ${fontSaint.variable} ${fontRedaction.variable} antialiased flex flex-col min-h-screen`}
         >
           <ThemeProvider
             attribute="class"

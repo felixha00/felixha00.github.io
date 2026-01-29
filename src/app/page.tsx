@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ArrowRight } from 'lucide-react';
 import { MAIN_CATEGORIES } from "@/config/const";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,17 +29,21 @@ export default function Page() {
 
   return (
     <main className="h-full flex grow flex-col">
-      <main
+      <div className="flex grow items-center justify-center flex-col">
+        {/* <Image src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" alt="Waving Hand" width="25" height="25" unoptimized /> */}
+        <h1>I'm Felix</h1>
+      </div>
+      {/* <main
         ref={containerRef}
         className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 pt-16 h-full gap-4 perspective-1000 overflow-hidden"
       >
         {MAIN_CATEGORIES.map((section, i) => (
           <SectionCard key={section.slug} section={section} index={i} />
         ))}
-      </main>
-      <div className="bg-background border border-border p-4 z-50">
+      </main> */}
+      {/* <div className="bg-background border border-border p-4 z-10">
         <Button color="gray" variant="classic" highContrast>All Projects</Button>
-      </div>
+      </div> */}
     </main>
 
 
@@ -105,7 +110,7 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
           />
 
           <Heading
-            className={cn("bottom-0 md:-bottom-1/12 -left-1/2 md:left-0", "absolute transition-colors right-0 uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter font-custom md:[writing-mode:vertical-rl] text-[100cqh] leading-[0.8em] md:text-[100cqw] md:leading-[1.2em] group-hover:text-muted-foreground text-muted")}
+            className={cn("bottom-0 md:-bottom-1/12 -left-1/2 md:left-0", "absolute transition-colors right-0 uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter font-saint md:[writing-mode:vertical-rl] text-[100cqh] leading-[0.8em] md:text-[100cqw] md:leading-[1.2em] group-hover:text-muted-foreground text-muted")}
           >
             {section.slug}{section.slug}{section.slug}
           </Heading>

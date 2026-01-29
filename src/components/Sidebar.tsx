@@ -1,20 +1,27 @@
-import { Button, Flex, TextField, Text, Theme } from '@radix-ui/themes'
-import React, { useRef, useState } from 'react'
-import { LuX } from 'react-icons/lu'
+import { Button } from '@radix-ui/themes'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { TbTopologyRing2 } from 'react-icons/tb'
-import { TextScramble } from './motion-primitives/TextScramble' // Assuming this path exists
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { cn } from '@/lib/utils'
+import { routes } from '@/config/routes'
+import Link from 'next/link' // 1. Import Link
+import { Triangle } from 'lucide-react'
+import { SiVercel } from 'react-icons/si'
 
-type Props = {}
-
-const Sidebar = (props: Props) => {
+const Sidebar = () => {
     const [isHovered, setIsHovered] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeLetter, setActiveLetter] = useState(routes[0].label[0]);
 
-    // Refs for GSAP targeting
     const container = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const sidebarRef = useRef<HTMLElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
+
+    // 2. Update ref type to Anchor element since we are using Links now
+    const firstItemRef = useRef<HTMLAnchorElement>(null);
+
     const tl = useRef<gsap.core.Timeline>(null);
 
     useGSAP(() => {
@@ -22,100 +29,126 @@ const Sidebar = (props: Props) => {
             .to(overlayRef.current, {
                 display: 'block',
                 opacity: 1,
-                duration: 0.3,
-                ease: "power2.out"
+                duration: 0.2,
+                ease: "power3.inOut"
             })
             .to(sidebarRef.current, {
-                x: '0%',
+                display: 'flex',
+                opacity: 1,
+                duration: 0.2,
+                ease: "power3.out",
+            }, "-=0.1")
+            .to('.sidebar-item', {
+                opacity: 1,
+                filter: 'blur(0px)',
+                duration: 0.3,
+                stagger: 0.056,
+                ease: "power2.out"
+            }, "-=0.2");
 
-                duration: 0.5,
-                ease: "power2.out",
-            }, "-=0.3")
-            .fromTo(".sidebar-item",
-                { x: 50, opacity: 0 },
-                { x: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "back.out(1.2)" },
-                "-=0.3"
-            );
-
-        // Set initial state (hidden) without CSS quirks
-        gsap.set(sidebarRef.current, { x: '100%' });
         gsap.set(overlayRef.current, { opacity: 0, display: 'none' });
+        gsap.set(sidebarRef.current, { opacity: 0, display: 'none' });
+        gsap.set('.sidebar-item', {
+            opacity: 0,
+            filter: 'blur(10px)'
+        });
 
     }, { scope: container });
 
-    const toggleMenu = () => {
-        if (tl.current?.isActive()) return; // Prevent spamming
+    const toggleMenu = useCallback(() => {
+        setIsOpen((prev) => {
+            if (!prev) {
+                tl.current?.play();
+                document.body.style.overflow = 'hidden';
+                setActiveLetter(routes[0].label[0]);
+            } else {
+                tl.current?.reverse();
+                document.body.style.overflow = '';
+            }
+            return !prev;
+        });
+    }, []);
 
-        if (tl.current?.progress() === 0 || tl.current?.reversed()) {
-            tl.current?.play();
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (isOpen && e.key === 'Escape') {
+                toggleMenu();
+            }
+            if ((e.metaKey || e.ctrlKey) && e.key === 'm') {
+                e.preventDefault();
+                toggleMenu();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, toggleMenu]);
+
+    useEffect(() => {
+        if (isOpen) {
+            setTimeout(() => {
+                firstItemRef.current?.focus();
+            }, 100);
         } else {
-            tl.current?.reverse();
+            if (document.body.style.overflow === '') {
+                triggerRef.current?.focus();
+            }
         }
-    };
+    }, [isOpen]);
 
     return (
         <div ref={container}>
-            {/* --- TRIGGER BUTTON --- */}
             <Button
+                ref={triggerRef}
                 color='gray'
                 highContrast
-                radius='none'
-                className='group font-mono relative overflow-hidden z-50'
+                radius='full'
+                aria-expanded={isOpen}
+                aria-controls="main-sidebar"
+                aria-label={isOpen ? "Close Menu" : "Open Menu (Ctrl+M)"}
+                className='group font-mono relative overflow-hidden z-100'
                 onClick={toggleMenu}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
             >
-                <TextScramble className='hidden md:block' duration={0.4} trigger={isHovered}>
-                    MENU
-                </TextScramble>
-                <TbTopologyRing2 className="transition-transform duration-300 group-hover:-rotate-90" />
+                {isOpen ? "CLOSE" : "MENU"}
+                <SiVercel className={cn("size-3 transition-transform duration-300", isOpen ? "scale-y-[1]" : "scale-y-[-1]")} />
             </Button>
 
-            {/* --- OVERLAY BACKDROP --- */}
             <div
                 ref={overlayRef}
                 onClick={toggleMenu}
-                className="fixed inset-0 backdrop-blur-sm z-40 hidden"
+                aria-hidden="true"
+                className="fixed inset-0 z-40 hidden bg-background"
             />
 
-            {/* --- SIDEBAR ASIDE --- */}
             <aside
+                id="main-sidebar"
                 ref={sidebarRef}
-                className="fixed top-0 right-0 h-full w-full max-w-112.5 bg-background border border-border z-50 p-6 flex flex-col translate-x-full"
-                style={{ willChange: 'transform' }} // Optimize for GPU
+                role="dialog"
+                aria-modal="true"
+                className='fixed inset-0 z-50 hidden bg-background'
+                style={{ containerType: "size" }}
             >
-
-                {/* Header */}
-                <Flex justify="between" align="center" mb="6" className="sidebar-item">
-                    <Flex direction="column">
-                        <Text size="5" weight="bold">Edit profile</Text>
-                        <Text size="2" color="gray">Make changes to your profile.</Text>
-                    </Flex>
-                    <Button
-                        variant="ghost"
-                        color="gray"
-                        onClick={toggleMenu}
-                        className="hover:bg-gray-100 rounded-full h-8 w-8 p-0"
-                    >
-                        <LuX size={20} />
-                    </Button>
-                </Flex>
-
-                {/* Form Content */}
-                <Flex direction="column" gap="5" className="flex-1">
-
-                </Flex>
-
-                {/* Footer Actions */}
-                <Flex gap="3" mt="6" justify="end" className="sidebar-item pt-6 border-t border-gray-100">
-                    <Button variant="soft" color="gray" onClick={toggleMenu}>
-                        Cancel
-                    </Button>
-                    <Button onClick={toggleMenu} className="cursor-pointer">
-                        Save Changes
-                    </Button>
-                </Flex>
-
+                <div className='grid grid-cols-1 md:grid-cols-2 w-full'>
+                    <div className='bg-muted hidden md:block' style={{ containerType: "size" }}>
+                        {/* <h1 className='text-[150cqw] font-saint items-center flex flex-col'>
+                            {activeLetter}
+                        </h1> */}
+                    </div>
+                    <div className="flex flex-col justify-center items-center flex-1">
+                        {routes.map((item, index) => (
+                            <Link
+                                key={index}
+                                href={item.path}
+                                ref={index === 0 ? firstItemRef : null}
+                                onClick={toggleMenu}
+                                onMouseEnter={() => setActiveLetter(item.label[0])}
+                                className='sidebar-item leading-none font-bold cursor-pointer text-muted-foreground hover:text-foreground focus:text-foreground outline-none transition-colors text-5xl'
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
             </aside>
         </div>
     )

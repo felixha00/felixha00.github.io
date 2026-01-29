@@ -197,9 +197,8 @@ export default async function ProjectPage(props: PageProps) {
                     </div>
                 </div>
             )}
-            <Inset className="border border-accent -mx-4"></Inset>
-
-            <Inset clip={"padding-box"} className="-mx-4 -mt-4">
+            <Separator className="border border-accent -mx-4 w-screen"></Separator>
+            {/* <Inset clip={"padding-box"} className="-mx-4 -mt-4">
                 <div className="prose max-w-none">
                     <ProjectContentTabs
                         sanityContent={project.content}
@@ -207,7 +206,7 @@ export default async function ProjectPage(props: PageProps) {
                     />
                 </div>
 
-            </Inset>
+            </Inset> */}
         </main>
     );
 }

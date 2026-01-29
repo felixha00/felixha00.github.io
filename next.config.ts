@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.sanity.io",
       },
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com"
+      }
     ],
   }
 };
