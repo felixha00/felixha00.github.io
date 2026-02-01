@@ -1,11 +1,13 @@
 import { useRef, useEffect, forwardRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useGLTF, Float } from '@react-three/drei'; // 1. Import helper
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
 import * as THREE from 'three';
 
 import './Dither.css';
 
+// ... [Keep waveVertexShader, waveFragmentShader, ditherFragmentShader as they are] ...
 const waveVertexShader = `
 precision highp float;
 varying vec2 vUv;
@@ -133,6 +135,7 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 }
 `;
 
+// ... [Keep RetroEffectImpl, WrappedRetro, RetroEffect as they are] ...
 class RetroEffectImpl extends Effect {
   constructor() {
     const uniforms = new Map([
@@ -163,6 +166,13 @@ const RetroEffect = forwardRef((props, ref) => {
   return <WrappedRetro ref={ref} colorNum={colorNum} pixelSize={pixelSize} />;
 });
 RetroEffect.displayName = 'RetroEffect';
+
+// function LogoModel() {
+//   const { scene } = useGLTF('/logo.glb');
+//   const ref = useRef();
+
+//   return <primitive ref={ref} object={scene} scale={[1, 0, 1]} rotation={[Math.PI / 2, 0, 0]} />;
+// }
 
 function DitheredWaves({
   waveSpeed,
@@ -235,7 +245,19 @@ function DitheredWaves({
 
   return (
     <>
-      <mesh ref={mesh} scale={[viewport.width, viewport.height, 1]}>
+      {/* 3. Add Lights (Required for 3D models to be visible) */}
+      {/* <ambientLight intensity={1.5} />
+      <directionalLight position={[5, 5, 5]} intensity={2} /> */}
+
+      {/* 
+        Background Wave Mesh 
+        Note: Positioned at Z = -1 to sit behind the logo
+      */}
+      <mesh
+        ref={mesh}
+        position={[0, 0, -0.001]}
+        scale={[viewport.width, viewport.height, 1]}
+      >
         <planeGeometry args={[1, 1]} />
         <shaderMaterial
           vertexShader={waveVertexShader}
@@ -244,13 +266,21 @@ function DitheredWaves({
         />
       </mesh>
 
+      {/* 4. Add the Logo inside Float for a gentle hover effect */}
+      {/* <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+        <LogoModel scale={[1, 1, 1]} />
+      </Float> */}
+
+      {/* <LogoModel scale={1} /> */}
+
       <EffectComposer>
         <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
       </EffectComposer>
 
+      {/* Invisible Mouse Tracker Mesh */}
       <mesh
         onPointerMove={handlePointerMove}
-        position={[0, 0, 0.01]}
+        position={[0, 0, 0.01]} // Stays in front for interaction
         scale={[viewport.width, viewport.height, 1]}
         visible={false}
       >

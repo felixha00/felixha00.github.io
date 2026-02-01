@@ -9,6 +9,7 @@ import { PortableText } from "next-sanity";
 import { Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
 import { getCategoryConfig } from "@/config/const";
 import ProjectContentTabs from "@/components/ProjectContentTabs";
+import GridBackground from "@/components/fluff/GridBackground";
 
 const getRawGithubUrl = (url: string) => {
     if (!url) return null;
@@ -207,6 +208,7 @@ export default async function ProjectPage(props: PageProps) {
                 </div>
 
             </Inset> */}
+            <GridBackground />
         </main>
     );
 }

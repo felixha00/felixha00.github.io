@@ -1,19 +1,42 @@
-"use client";
+"use client"
 
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { AspectRatio, Box, Button, Flex, Heading, IconButton, } from "@radix-ui/themes";
-import clsx from "clsx";
-import Link from "next/link";
-import { ArrowRight } from 'lucide-react';
+import { AspectRatio, Flex, Heading, IconButton, Box } from "@radix-ui/themes";
 import { MAIN_CATEGORIES } from "@/config/const";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import GridBackground from "@/components/fluff/GridBackground";
+import { cn } from "@/lib/utils";
+import clsx from "clsx";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
+  useGSAP(
+    () => {
+      const tl = gsap.timeline();
+      tl.from(".hero-text", {
+        x: 100,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        filter: "blur(10px)"
+      })
+        .from(".hero-icon", {
+          x: -100,
+          opacity: 0,
+          duration: 1,
+          // ease: "back.out(1.7)", // Added a slight bounce for the hand
+        }, "0.1");
+    },
+    { scope: heroRef }
+  );
+
+  // Animation for the Grid Cards (Existing)
   useGSAP(
     () => {
       gsap.from(".anim-card", {
@@ -22,6 +45,7 @@ export default function Page() {
         duration: 1,
         stagger: 0.15,
         ease: "power3.out",
+        delay: 0.5, // Optional: Wait for hero to start before showing cards
       });
     },
     { scope: containerRef }
@@ -29,27 +53,41 @@ export default function Page() {
 
   return (
     <main className="h-full flex grow flex-col">
-      <div className="flex grow items-center justify-center flex-col">
-        {/* <AspectRatio ratio={1} className="size-64">
-          <Image src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" alt="Waving Hand" fill unoptimized />
-        </AspectRatio> */}
+      <div
+        id="hero-div"
+        ref={heroRef}
+        className="hero-div flex grow items-center justify-center relative h-screen gap-6 overflow-hidden"
+      >
+        <GridBackground className="mt-16 border-muted/50 border m-4" />
 
-        <h1>I'm Felix</h1>
+        {/* Added 'hero-text' class for GSAP targeting */}
+        <h1 className="hero-text italic font-normal font-redaction-20 text-9xl">
+          hi there!
+        </h1>
+
+        {/* Added 'hero-icon' class for GSAP targeting */}
+        <div className="hero-icon size-24 md:size-36 shrink-0 mb-10">
+          <AspectRatio ratio={1}>
+            <Image
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png"
+              alt="Waving Hand"
+              fill
+              unoptimized
+              className="object-contain"
+            />
+          </AspectRatio>
+        </div>
       </div>
-      {/* <main
+
+      <div
         ref={containerRef}
-        className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 pt-16 h-full gap-4 perspective-1000 overflow-hidden"
+        className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 min-h-screen gap-4 perspective-1000 overflow-hidden"
       >
         {MAIN_CATEGORIES.map((section, i) => (
           <SectionCard key={section.slug} section={section} index={i} />
         ))}
-      </main> */}
-      {/* <div className="bg-background border border-border p-4 z-10">
-        <Button color="gray" variant="classic" highContrast>All Projects</Button>
-      </div> */}
+      </div>
     </main>
-
-
   );
 }
 

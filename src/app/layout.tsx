@@ -6,7 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { Theme } from "@radix-ui/themes";
 // import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import { fontRedaction, fontSaint } from "@/lib/fonts";
+import { fontRedaction, fontSaint, fontRedaction10, fontRedaction20, fontRedaction35, fontRedaction50, fontRedaction70, fontRedaction100 } from "@/lib/fonts";
 // import { saint } from "@/lib/fonts";
 
 const geistSans = Geist({
@@ -51,7 +51,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <SmoothScroll>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${fontSaint.variable} ${fontRedaction.variable} antialiased flex flex-col min-h-screen`}
+          className={`${geistSans.variable} ${geistMono.variable} ${fontSaint.variable} ${fontRedaction.variable} ${fontRedaction10.variable} ${fontRedaction20.variable} ${fontRedaction35.variable} ${fontRedaction50.variable} ${fontRedaction70.variable} ${fontRedaction100.variable} antialiased flex flex-col min-h-screen`}
         >
           <ThemeProvider
             attribute="class"
@@ -59,7 +59,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Theme grayColor="gray" radius="none" panelBackground="solid" className="flex flex-col flex-1 h-full">
+            <Theme grayColor="gray" radius="none" panelBackground="solid" className="flex flex-col flex-1 h-full bg-background">
               <Navbar />
               {children}
 

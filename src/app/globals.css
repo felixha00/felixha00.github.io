@@ -1,3 +1,4 @@
+@import url('https://fonts.cdnfonts.com/css/cmu-serif');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @import "tailwindcss-radix-colors/dist/gray.css";
@@ -24,8 +25,16 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-saint: var(--font-saint);
+  --font-cmu: "CMU Serif", serif;
+  
+  /* Redaction Family */
   --font-redaction: var(--font-redaction);
-  /* TODO: Add the rest of the redaction fonts later */
+  --font-redaction-10: var(--font-redaction-10);
+  --font-redaction-20: var(--font-redaction-20);
+  --font-redaction-35: var(--font-redaction-35);
+  --font-redaction-50: var(--font-redaction-50);
+  --font-redaction-70: var(--font-redaction-70);
+  --font-redaction-100: var(--font-redaction-100);
 }
 
 @custom-variant dark (&:is(.dark *)); 
