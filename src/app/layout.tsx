@@ -9,6 +9,7 @@ import "./globals.css";
 import { fontRedaction, fontSaint, fontRedaction10, fontRedaction20, fontRedaction35, fontRedaction50, fontRedaction70, fontRedaction100 } from "@/lib/fonts";
 // import { saint } from "@/lib/fonts";
 import { GeistPixelSquare, GeistPixelGrid, GeistPixelCircle, GeistPixelTriangle, GeistPixelLine } from 'geist/font/pixel';
+import MiniSidebar from "@/components/fluff/MiniSidebar";
 
 
 const geistSans = Geist({
@@ -56,7 +57,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} ${fontSaint.variable} ${fontRedaction.variable} ${fontRedaction10.variable} ${fontRedaction20.variable} ${fontRedaction35.variable} ${fontRedaction50.variable} ${fontRedaction70.variable} ${fontRedaction100.variable}
            
           ${GeistPixelSquare.variable} ${GeistPixelLine.variable} ${GeistPixelCircle.variable} ${GeistPixelTriangle.variable} ${GeistPixelGrid.variable} 
-          antialiased flex flex-col min-h-screen`}
+          antialiased`}
         >
           <ThemeProvider
             attribute="class"
@@ -64,10 +65,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Theme grayColor="gray" radius="none" panelBackground="solid" className="flex flex-col flex-1 h-full bg-background">
+            <Theme grayColor="gray" radius="none" panelBackground="solid">
               <Navbar />
-              {children}
-
+              <div className="flex flex-col min-h-screen relative ml-8">
+                <MiniSidebar />
+                {children}
+              </div>
               {/* gradient overlay footer */}
               <div className='z-0 fixed bottom-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-t from-background to-100% to-transparent'></div>
             </Theme>

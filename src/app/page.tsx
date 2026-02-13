@@ -63,15 +63,16 @@ export default function Page() {
         <GridBackground className="mt-16 border-muted border m-4" />
 
 
-        <div>
+        {/* <div>
           <LogoScene />
-        </div>
+        </div> */}
         <div className="text-center font-geist-pixel-square">
-          <Balancer>
-            <h1 className="text-9xl">
-              Hi there!
-            </h1>
-          </Balancer>
+
+          <h1 className="text-9xl">
+
+            <Balancer>Hi there!</Balancer>
+          </h1>
+
         </div>
 
 
