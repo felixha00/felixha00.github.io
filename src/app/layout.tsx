@@ -67,7 +67,7 @@ export default function RootLayout({
           >
             <Theme grayColor="gray" radius="none" panelBackground="solid">
               <Navbar />
-              <div className="flex flex-col min-h-screen relative ml-8">
+              <div className="flex flex-col min-h-screen relative ml-8 mb-4">
                 <MiniSidebar />
                 {children}
               </div>

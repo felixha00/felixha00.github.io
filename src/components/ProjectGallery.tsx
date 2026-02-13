@@ -208,7 +208,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                 ) : (
                     <Grid
                         columns={{ initial: "1", md: "2", lg: "3" }}
-                        gap={"2"}
+                        className="gap-1"
                     >
                         {filteredProjects.map((project) => (
                             <ProjectCard key={project._id} project={project} />

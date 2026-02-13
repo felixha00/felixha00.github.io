@@ -17,7 +17,7 @@ const GridBackground: React.FC<GridBackgroundProps> = ({
 }) => {
     return (
         <div
-            className={`absolute inset-0 -z-10 pointer-events-none overflow-hidden ${className}`}
+            className={`absolute inset-0 -z-1 pointer-events-none overflow-hidden ${className}`}
             aria-hidden="true"
         >
             <svg

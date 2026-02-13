@@ -94,11 +94,11 @@ export default function HomePage({ profile }: { profile: any }) {
 
 
 
-            <div className="grid grid-cols-2 gap-4 px-4">
-                <PageSection title="Featured Projects" className="col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
+                <PageSection title="Featured Projects" className="col-span-1 md:col-span-2">
                 </PageSection>
                 <PageSection title="About" className="col-span-1">
-                    <div className="prose p-8">
+                    <div className="prose">
                         <ReactMarkdown>
                             {profile.shortBio}
                         </ReactMarkdown>
@@ -108,14 +108,14 @@ export default function HomePage({ profile }: { profile: any }) {
                 </PageSection>
             </div>
 
-            <div
+            {/* <div
                 ref={containerRef}
                 className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 min-h-screen gap-4 perspective-1000 overflow-hidden"
             >
                 {MAIN_CATEGORIES.map((section, i) => (
                     <SectionCard key={section.slug} section={section} index={i} />
                 ))}
-            </div>
+            </div> */}
         </main>
     );
 }

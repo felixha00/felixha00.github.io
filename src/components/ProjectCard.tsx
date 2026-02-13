@@ -9,6 +9,7 @@ import Link from "next/link";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import { useHoverDirty } from "react-use";
 import { cn } from "@/lib/utils";
+import GridBackground from "./fluff/GridBackground";
 // import { InfiniteSlider } from "./fluff/InfiniteSliderGSAP";
 
 export default function ProjectCard({ project }: { project: Project }) {
@@ -23,19 +24,13 @@ export default function ProjectCard({ project }: { project: Project }) {
             href={`/projects/${project.slug}`}
             className="project-card group flex w-full will-change-transform no-underline hover-outline"
         >
-            <Card size="2" className="w-full h-full transition-shadow shadow-xs hover:shadow-lg">
+            <Card size="2" className="relative w-full h-full before:bg-background">
                 {/* <IconButton highContrast color="gray" className="absolute z-40 top-0 right-0" size="3" radius="none" variant="classic"><ExternalLink /></IconButton> */}
-
+                <GridBackground />
                 <Inset clip="padding-box" side="top" pb="current" className="relative">
                     <AspectRatio ratio={16 / 9}>
-                        <div className="absolute border-l z-10 p-4 pr-7 tr-clipped-corner -bottom-6.5 bg-(--color-panel)">
+                        {/* <div className="absolute border-l z-10 p-4 round -bottom-6.5 bg-background">
                             <div className="flex flex-row">
-                                {/* <Badge color="gray" className={cn(isHovered && "rt-high-contrast", "transition-colors")}>
-                                    {project.for?.name}
-                                </Badge>
-                                <Badge variant="soft" color={cfg?.theme} className={cn(isHovered && "rt-high-contrast", "transition-colors")}>
-                                    <Icon size="10" /> {cfg?.title || "Project"}
-                                </Badge> */}
                                 <Badge color="gray">
                                     {project.for?.name || "Personal"}
                                 </Badge>
@@ -43,7 +38,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                                     <Icon size="10" /> {cfg?.title || "Project"}
                                 </Badge>
                             </div>
-                        </div>
+                        </div> */}
                         <Box position="relative" width="100%" height="100%" style={{ overflow: "hidden" }}>
                             {project.image ? (
                                 <Image
@@ -68,7 +63,15 @@ export default function ProjectCard({ project }: { project: Project }) {
 
                 <Flex direction="column" gap="2" height="100%">
                     {/* header */}
-                    <Flex justify="end" align="center">
+                    <Flex justify="between" align="center">
+                        <div className="flex flex-row">
+                            <Badge color="gray">
+                                {project.for?.name || "Personal"}
+                            </Badge>
+                            <Badge variant="soft" color={cfg?.theme}>
+                                <Icon size="10" /> {cfg?.title || "Project"}
+                            </Badge>
+                        </div>
                         {project.date && (
                             <Flex align="center" gap="1">
                                 <Calendar className="size-3" />
@@ -101,7 +104,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                         ))}
                     </div>
                 </Flex>
-            </Card>
-        </Link>
+            </Card >
+        </Link >
     );
 }
