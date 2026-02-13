@@ -4,16 +4,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import RollingText from './RollingText';
-import { TextRoll } from './motion-primitives/TextRoll';
-import { Button } from '@radix-ui/themes';
-import { TbMenu2 } from "react-icons/tb";
-import { LuGlobe, LuMenu } from "react-icons/lu";
-import { TextScramble } from './motion-primitives/TextScramble';
 import Sidebar from './Sidebar';
-import { Clock } from './Clock';
 import Link from 'next/link';
-import { Globe } from 'lucide-react';
+
 gsap.registerPlugin(useGSAP);
 
 const Navbar = () => {
@@ -100,12 +93,10 @@ const Navbar = () => {
                             priority
                         />
                     </Link>
-
-
                 </div>
             </div>
             <Sidebar />
-            <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div>
+            {/* <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div> */}
         </nav >
     );
 }

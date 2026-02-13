@@ -109,7 +109,7 @@ function MovingLight() {
 export default function LogoScene() {
     return (
         <div
-            className="absolute top-1/2 left-1/2 -translate-1/2 w-full h-full"
+            className=""
         >
             <Canvas
                 shadows

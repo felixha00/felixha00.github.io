@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { AspectRatio, Flex, Heading, IconButton, Box } from "@radix-ui/themes";
+import { Flex, Heading, IconButton, Box } from "@radix-ui/themes";
 import { MAIN_CATEGORIES } from "@/config/const";
 import Image from "next/image";
 import GridBackground from "@/components/fluff/GridBackground";
@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import clsx from "clsx";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Balancer from 'react-wrap-balancer'
+import LogoScene from "@/components/3DLogo";
 
 export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,15 +60,22 @@ export default function Page() {
         ref={heroRef}
         className="hero-div flex grow items-center justify-center relative h-screen gap-6 overflow-hidden"
       >
-        <GridBackground className="mt-16 border-muted/50 border m-4" />
+        <GridBackground className="mt-16 border-muted border m-4" />
 
-        {/* Added 'hero-text' class for GSAP targeting */}
-        <h1 className="hero-text italic font-normal font-redaction-20 text-9xl">
-          hi there!
-        </h1>
 
-        {/* Added 'hero-icon' class for GSAP targeting */}
-        <div className="hero-icon size-24 md:size-36 shrink-0 mb-10">
+        <div>
+          <LogoScene />
+        </div>
+        <div className="text-center font-geist-pixel-square">
+          <Balancer>
+            <h1 className="text-9xl">
+              Hi there!
+            </h1>
+          </Balancer>
+        </div>
+
+
+        {/* <div className="hero-icon size-24 md:size-36 shrink-0 mb-10">
           <AspectRatio ratio={1}>
             <Image
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png"
@@ -76,8 +85,10 @@ export default function Page() {
               className="object-contain"
             />
           </AspectRatio>
-        </div>
+        </div> */}
       </div>
+
+
 
       <div
         ref={containerRef}
@@ -161,7 +172,7 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
             <Heading
               className={clsx([
                 // index === 1 && "justify-end",,
-                "text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl"
+                "text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-geist-pixel-line group-hover:font-geist-pixel-square"
               ])}
             >
               {section.title}

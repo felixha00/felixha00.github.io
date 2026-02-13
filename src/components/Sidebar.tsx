@@ -158,7 +158,7 @@ const Sidebar = () => {
                                 onMouseEnter={() => setActiveLetter(item.label[0])}
                                 className='sidebar-item leading-none cursor-pointer text-muted-foreground hover:text-foreground focus:text-foreground outline-none transition-colors py-1'
                             >
-                                <h1 className='font-redaction-20 hover:font-redaction text-5xl'>{item.label}</h1>
+                                <h1 className='font-geist-pixel-line hover:font-geist-pixel-square font-bold text-5xl'>{item.label}</h1>
                             </Link>
                         ))}
                         <GridBackground rows={6} />

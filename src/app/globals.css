@@ -16,6 +16,10 @@
     @apply rounded-full
   }
 
+  .rt-Heading {
+    @apply font-geist-pixel-square 
+  }
+
   /* .rt-IconButton {
     @apply rounded-full
   } */
@@ -23,9 +27,16 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
+  --font-heading: var(--font-geist-pixel-square);
   --font-mono: var(--font-geist-mono);
   --font-saint: var(--font-saint);
   --font-cmu: "CMU Serif", serif;
+
+  --font-geist-pixel-square: var(--font-geist-pixel-square);
+  --font-geist-pixel-grid: var(--font-geist-pixel-grid);
+  --font-geist-pixel-circle: var(--font-geist-pixel-circle);
+  --font-geist-pixel-triangle: var(--font-geist-pixel-triangle);
+  --font-geist-pixel-line: var(--font-geist-pixel-line);
   
   /* Redaction Family */
   --font-redaction: var(--font-redaction);
@@ -132,6 +143,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  } */
 }
 
 :root {

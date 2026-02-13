@@ -58,7 +58,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                             )}
                             <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference" style={{ containerType: "size", lineHeight: 1.2 }}>
                                 <InfiniteSlider speed={24}>
-                                    <h1 className="font-saint tracking-tighter font-medium uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
+                                    <h1 className="font-saint tracking-tighter font-bold uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
                                 </InfiniteSlider>
                             </div>
                         </Box>
@@ -79,10 +79,8 @@ export default function ProjectCard({ project }: { project: Project }) {
                     </Flex>
 
                     {/* title and summary */}
-                    <Box>
-                        <Heading
-                            size="5"
-                            mb="1"
+                    <Box className="flex flex-col gap-2">
+                        <Heading className="font-bold"
                         >
                             {project.title}
                         </Heading>
