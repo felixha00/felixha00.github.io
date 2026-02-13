@@ -1,14 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
-import { PortableText } from "next-sanity";
 import { Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
 import { getCategoryConfig } from "@/config/const";
-import ProjectContentTabs from "@/components/ProjectContentTabs";
 import GridBackground from "@/components/fluff/GridBackground";
 
 const getRawGithubUrl = (url: string) => {

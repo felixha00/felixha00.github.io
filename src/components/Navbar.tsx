@@ -66,7 +66,7 @@ const Navbar = () => {
     }, { scope: containerRef, dependencies: [showLogo] });
 
     return (
-        <nav className='z-50 h-16 fixed top-0 left-8 right-0 p-4 flex items-center justify-between bg-linear-to-b from-background to-100% to-transparent'>
+        <nav className='z-50 h-16 fixed top-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-b from-background to-100% to-transparent'>
             <div ref={containerRef} className='grid grid-cols-1 grid-rows-1 items-center z-100 mix-blend-difference'>
                 {/* Name */}
 

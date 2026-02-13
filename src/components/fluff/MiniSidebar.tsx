@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import gsap from "gsap";
+import { IconButton } from "@radix-ui/themes";
+import { ArrowUp } from "lucide-react";
 
 export default function MiniSidebar() {
     const pathname = usePathname();
@@ -52,7 +54,7 @@ export default function MiniSidebar() {
     const ticksCount = Math.ceil(docHeight / tickInterval) + 1;
 
     return (
-        <aside className="fixed left-0 top-0 h-screen z-50 bg-background border-r border-border w-8 min-w-8 flex flex-col items-center select-none overflow-hidden">
+        <aside className="fixed left-0 top-0 h-screen z-40 bg-background border-r border-border w-8 min-w-8 flex flex-col items-center select-none overflow-hidden">
 
             <div
                 ref={rulerRef}
@@ -84,6 +86,10 @@ export default function MiniSidebar() {
                     </div>
                 ))}
             </div>
+            {/* 
+            <nav className="relative mb-auto p-2">
+                <IconButton size={"1"} color="gray" radius="full" variant="classic"><ArrowUp className="size-4" /></IconButton>
+            </nav> */}
 
             <nav className="relative flex flex-col-reverse items-center gap-2 pb-4 pt-12 w-full bg-linear-to-t from-background via-background/95 to-transparent mt-auto z-50">
                 {items.map((item, index) => {

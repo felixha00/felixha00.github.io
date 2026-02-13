@@ -24,7 +24,8 @@ export default function ProjectCard({ project }: { project: Project }) {
             className="project-card group flex w-full will-change-transform no-underline hover-outline"
         >
             <Card size="2" className="w-full h-full transition-shadow shadow-xs hover:shadow-lg">
-                <IconButton className="absolute z-50 bg-background/20 text-muted-foreground hover:bg-muted border border-border top-0 right-0" size="3" radius="none" variant="solid"><ExternalLink /></IconButton>
+                {/* <IconButton highContrast color="gray" className="absolute z-40 top-0 right-0" size="3" radius="none" variant="classic"><ExternalLink /></IconButton> */}
+
                 <Inset clip="padding-box" side="top" pb="current" className="relative">
                     <AspectRatio ratio={16 / 9}>
                         <div className="absolute border-l z-10 p-4 pr-7 tr-clipped-corner -bottom-6.5 bg-(--color-panel)">
@@ -56,9 +57,9 @@ export default function ProjectCard({ project }: { project: Project }) {
                                     <Layers className="h-12 w-12 text-gray-300" />
                                 </Flex>
                             )}
-                            <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference" style={{ containerType: "size", lineHeight: 1.2 }}>
+                            <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference" style={{ containerType: "size", lineHeight: 1 }}>
                                 <InfiniteSlider speed={24}>
-                                    <h1 className="font-saint tracking-tighter font-bold uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
+                                    <h1 className="font-geist-pixel-line tracking-tighter font-bold uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
                                 </InfiniteSlider>
                             </div>
                         </Box>

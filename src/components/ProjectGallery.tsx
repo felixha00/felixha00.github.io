@@ -93,13 +93,12 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 
             const cards = containerRef.current.querySelectorAll(".project-card");
 
-            gsap.set(cards, { y: 20, opacity: 0, scale: 0.95 });
+            gsap.set(cards, { y: 20, opacity: 0 });
             gsap.to(
                 cards,
                 {
                     y: 0,
                     opacity: 1,
-                    scale: 1,
                     duration: 0.4,
                     stagger: 0.05,
                     ease: "power2.out",

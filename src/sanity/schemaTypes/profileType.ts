@@ -25,14 +25,40 @@ export const profileType = defineType({
         defineField({
             name: 'shortBio',
             title: 'Short Bio',
-            type: 'text',
-            rows: 4,
+            type: 'markdown',
         }),
         defineField({
             name: 'fullBio',
             title: 'Full Bio',
             type: 'array',
             of: [{ type: 'block' }],
+        }),
+        defineField({
+            name: 'achievements',
+            title: 'Achievements',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    name: 'achievement',
+                    fields: [
+                        { name: 'title', type: 'string', title: 'Achievement Title' },
+                        { name: 'year', type: 'string', title: 'Year' },
+                        {
+                            name: 'description',
+                            type: 'array',
+                            title: 'Description',
+                            of: [{ type: 'block' }]
+                        },
+                    ],
+                    preview: {
+                        select: {
+                            title: 'title',
+                            subtitle: 'year'
+                        }
+                    }
+                }
+            ]
         }),
         defineField({
             name: 'resume',
