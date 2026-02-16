@@ -34,6 +34,11 @@ export const profileType = defineType({
             of: [{ type: 'block' }],
         }),
         defineField({
+            name: 'achievementsSimple',
+            title: 'Achievements',
+            type: 'markdown',
+        }),
+        defineField({
             name: 'achievements',
             title: 'Achievements',
             type: 'array',

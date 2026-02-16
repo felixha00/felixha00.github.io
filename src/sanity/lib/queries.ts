@@ -57,7 +57,8 @@ export const PROFILE_QUERY = groq`*[_type == "profile"][0] {
     platform,
     url
   },
-  fullBio
+  fullBio,
+  achievementsSimple,
 }`;
 
 export const EXPERIENCES_QUERY = groq`*[_type == "experience"] | order(isCurrent desc, startDate desc) {

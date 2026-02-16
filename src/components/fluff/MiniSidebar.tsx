@@ -4,8 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import gsap from "gsap";
-import { IconButton } from "@radix-ui/themes";
-import { ArrowUp } from "lucide-react";
 
 export default function MiniSidebar() {
     const pathname = usePathname();
@@ -86,10 +84,6 @@ export default function MiniSidebar() {
                     </div>
                 ))}
             </div>
-            {/* 
-            <nav className="relative mb-auto p-2">
-                <IconButton size={"1"} color="gray" radius="full" variant="classic"><ArrowUp className="size-4" /></IconButton>
-            </nav> */}
 
             <nav className="relative flex flex-col-reverse items-center gap-2 pb-4 pt-12 w-full bg-linear-to-t from-background via-background/95 to-transparent mt-auto z-50">
                 {items.map((item, index) => {

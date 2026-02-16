@@ -151,7 +151,7 @@
 
 :root {
   .prose {
-    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:tracking-tight leading-snug max-w-none;
+    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:tracking-tight leading-tight max-w-none;
   }
 
   .tl-clipped-corner {

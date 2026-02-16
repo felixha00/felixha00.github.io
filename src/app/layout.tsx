@@ -7,7 +7,6 @@ import { Theme } from "@radix-ui/themes";
 // import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { fontRedaction, fontSaint, fontRedaction10, fontRedaction20, fontRedaction35, fontRedaction50, fontRedaction70, fontRedaction100 } from "@/lib/fonts";
-// import { saint } from "@/lib/fonts";
 import { GeistPixelSquare, GeistPixelGrid, GeistPixelCircle, GeistPixelTriangle, GeistPixelLine } from 'geist/font/pixel';
 import MiniSidebar from "@/components/fluff/MiniSidebar";
 
@@ -23,17 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 // // Configure the local font
-// const saint = localFont({
-//   src: [
-//     {
-//       path: '../../public/fonts/Saint-Regular.woff2',
-//       weight: '400',
-//       style: 'normal',
-//     },
-//   ],
-//   variable: '--font-saint', // Define a CSS variable name
-//   display: 'swap',
-// });
+
 
 
 export const metadata: Metadata = {

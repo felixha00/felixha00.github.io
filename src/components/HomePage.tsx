@@ -94,17 +94,23 @@ export default function HomePage({ profile }: { profile: any }) {
 
 
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
-                <PageSection title="Featured Projects" className="col-span-1 md:col-span-2">
-                </PageSection>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
+
                 <PageSection title="About" className="col-span-1">
-                    <div className="prose">
+                    <div className="prose p-8">
                         <ReactMarkdown>
                             {profile.shortBio}
                         </ReactMarkdown>
                     </div>
                 </PageSection>
                 <PageSection title="Achievements" className="col-span-1">
+                    <div className="prose p-8">
+                        <ReactMarkdown>
+                            {profile.achievementsSimple}
+                        </ReactMarkdown>
+                    </div>
+                </PageSection>
+                <PageSection title="Featured Projects" className="col-span-1">
                 </PageSection>
             </div>
 
