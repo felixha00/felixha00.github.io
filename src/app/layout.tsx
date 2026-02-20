@@ -54,7 +54,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Theme grayColor="gray" radius="none" panelBackground="solid">
+            <Theme grayColor="gray" radius="none" panelBackground="solid" >
               <Navbar />
               <div className="flex flex-col min-h-screen relative ml-8 mb-4">
                 <MiniSidebar />

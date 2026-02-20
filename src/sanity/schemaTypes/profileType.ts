@@ -39,32 +39,38 @@ export const profileType = defineType({
             type: 'markdown',
         }),
         defineField({
-            name: 'achievements',
-            title: 'Achievements',
+            name: 'featuredProjects',
+            title: 'Featured Projects',
             type: 'array',
-            of: [
-                {
-                    type: 'object',
-                    name: 'achievement',
-                    fields: [
-                        { name: 'title', type: 'string', title: 'Achievement Title' },
-                        { name: 'year', type: 'string', title: 'Year' },
-                        {
-                            name: 'description',
-                            type: 'array',
-                            title: 'Description',
-                            of: [{ type: 'block' }]
-                        },
-                    ],
-                    preview: {
-                        select: {
-                            title: 'title',
-                            subtitle: 'year'
-                        }
-                    }
-                }
-            ]
+            of: [{ type: 'reference', to: [{ type: 'project' }] }],
         }),
+        // defineField({
+        //     name: 'achievements',
+        //     title: 'Achievements',
+        //     type: 'array',
+        //     of: [
+        //         {
+        //             type: 'object',
+        //             name: 'achievement',
+        //             fields: [
+        //                 { name: 'title', type: 'string', title: 'Achievement Title' },
+        //                 { name: 'year', type: 'string', title: 'Year' },
+        //                 {
+        //                     name: 'description',
+        //                     type: 'array',
+        //                     title: 'Description',
+        //                     of: [{ type: 'block' }]
+        //                 },
+        //             ],
+        //             preview: {
+        //                 select: {
+        //                     title: 'title',
+        //                     subtitle: 'year'
+        //                 }
+        //             }
+        //         }
+        //     ]
+        // }),
         defineField({
             name: 'resume',
             title: 'Resume/CV PDF',
@@ -72,18 +78,23 @@ export const profileType = defineType({
             description: 'Upload your PDF resume here for download'
         }),
         defineField({
-            name: 'socialLinks',
-            title: 'Social Links',
-            type: 'array',
-            of: [
-                {
-                    type: 'object',
-                    fields: [
-                        { name: 'platform', type: 'string', title: 'Platform' },
-                        { name: 'url', type: 'url', title: 'URL' },
-                    ]
-                }
-            ]
+            name: 'links',
+            title: 'Links',
+            type: 'markdown',
         }),
+        // defineField({
+        //     name: 'socialLinks',
+        //     title: 'Social Links',
+        //     type: 'array',
+        //     of: [
+        //         {
+        //             type: 'object',
+        //             fields: [
+        //                 { name: 'platform', type: 'string', title: 'Platform' },
+        //                 { name: 'url', type: 'url', title: 'URL' },
+        //             ]
+        //         }
+        //     ]
+        // }),
     ],
 })

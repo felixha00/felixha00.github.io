@@ -3,26 +3,51 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Flex, Heading, IconButton, Box } from "@radix-ui/themes";
+import { Flex, Heading, IconButton, Box, Button, TextField, AspectRatio } from "@radix-ui/themes";
 import { MAIN_CATEGORIES } from "@/config/const";
-import Image from "next/image";
 import GridBackground from "@/components/fluff/GridBackground";
 import { cn } from "@/lib/utils";
 import clsx from "clsx";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Balancer from 'react-wrap-balancer'
-import LogoScene from "@/components/3DLogo";
 import PageSection from "@/components/PageSection";
 import ProjectCard from "@/components/ProjectCard";
-import { client } from "@/sanity/lib/client";
-import { PROFILE_QUERY } from "@/sanity/lib/queries";
 import ReactMarkdown from "react-markdown";
+import FaultyTerminal from '@/components/FaultyTerminal'
+import Marquee from "react-fast-marquee";
+import Dither from "./Dither";
+import LogoScene from "./fluff/3DLogoInteractive";
+import Image from "next/image";
+import { urlFor } from "@/sanity/lib/image";
+import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
+import remarkGfm from "remark-gfm";
 
-export default function HomePage({ profile }: { profile: any }) {
+{/* <FaultyTerminal
+                    className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+                    scale={2}
+                    gridMul={[2, 1]}
+                    digitSize={1.2}
+                    timeScale={0.5}
+                    pause={false}
+                    scanlineIntensity={0.5}
+                    glitchAmount={1}
+                    flickerAmount={1}
+                    noiseAmp={1}
+                    chromaticAberration={0}
+                    dither={0}
+                    curvature={0.1}
+                    tint="#ffffff"
+                    mouseReact
+                    mouseStrength={0.5}
+                    pageLoadAnimation
+                // brightness={0.6}
+                /> */}
+
+export default function HomePage({ profile, projectsCarousel }: { profile: any, projectsCarousel: any[] }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLDivElement>(null);
-    console.log("!!", profile)
+
     useGSAP(
         () => {
             const tl = gsap.timeline();
@@ -63,20 +88,73 @@ export default function HomePage({ profile }: { profile: any }) {
             <div
                 id="hero-div"
                 ref={heroRef}
-                className="hero-div flex grow items-center justify-center relative h-screen gap-6 overflow-hidden"
+                className="hero-div flex grow items-start justify-center relative h-screen gap-6 overflow-hidden p-4 pt-16"
             >
-                <GridBackground className="mt-16 border-muted border m-4" />
+                <GridBackground className="mt-16 border-muted border m-4 bg-background" />
+                <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
+                    <div className="flex flex-col w-full h-full p-12 gap-8">
+                        <h1 className="text-7xl font-geist-pixel-line tracking-tight">
+                            <Balancer>
+                                👋 Hi, I&apos;m Felix
+                            </Balancer>
+                        </h1>
+                        <h2 className="text-3xl max-w-xl">
+                            <Balancer>
+                                👤 I&apos;m a <span className="underline">Designer</span>, <span className="underline">Developer</span> and <span className="underline">Entrepreneur</span> based in Canada.
+                            </Balancer>
+                        </h2>
+                        <Flex className="flex-1" />
+                        {/* <TextField.Root color="gray" size={"3"} placeholder="Send a message">
+                            <TextField.Slot>
+                                <MessageSquare className="size-4" />
+                            </TextField.Slot>
+                            <TextField.Slot>
+                                <ArrowRight className="size-4" />
+                            </TextField.Slot>
+                        </TextField.Root> */}
 
+                        {/* <p>Scrolling</p> */}
+                    </div>
+                    <div className="relative border h-full overflow-hidden">
+                        {/* <InfiniteSlider direction="vertical" speedOnHover={24}>
+                            {projectsCarousel?.map((project: any, index: number) => (
+                                <Image
+                                    key={project._id}
+                                    alt={project.title}
+                                    width={16}
+                                    height={9}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    src={urlFor(project.image).url()}
+                                    className="w-full h-auto aspect-video object-cover shrink-0"
+                                />
+                            ))}
+                        </InfiniteSlider> */}
+                        {/* <div className="relative h-0">
+                            <LogoScene />
+                        </div> */}
+                        {/* <div className="border h-min w-full">
+                            <Image
+                                src="/logo-white.svg"
+                                alt="logo"
+                                width={0}
+                                height={0}
+                                className="w-full h-auto px-50"
+                            />
+                        </div> */}
+                        <Dither
+                            waveColor={[0.5, 0.5, 0.5]}
+                            disableAnimation={false}
+                            enableMouseInteraction
+                            mouseRadius={0.3}
+                            colorNum={4}
+                            waveAmplitude={0.3}
+                            waveFrequency={3}
+                            waveSpeed={0.05}
+                        />
 
-                {/* <div>
-          <LogoScene />
-        </div> */}
-                <div className="text-center font-geist-pixel-square">
-
-                    <h1 className="text-9xl">
-                        <Balancer>Hi there!</Balancer>
-                    </h1>
+                    </div>
                 </div>
+
 
 
                 {/* <div className="hero-icon size-24 md:size-36 shrink-0 mb-10">
@@ -92,25 +170,42 @@ export default function HomePage({ profile }: { profile: any }) {
         </div> */}
             </div>
 
-
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
-
-                <PageSection title="About" className="col-span-1">
-                    <div className="prose p-8">
-                        <ReactMarkdown>
-                            {profile.shortBio}
-                        </ReactMarkdown>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 px-4">
+                <PageSection title="👤 About" scrollingText="about" className="col-span-1">
+                    <div className="p-8 h-full flex flex-col justify-between">
+                        <article className="prose">
+                            <ReactMarkdown>
+                                {profile.shortBio}
+                            </ReactMarkdown>
+                        </article>
+                        <Button highContrast size={"3"} className="w-fit">
+                            View Full Bio
+                        </Button>
                     </div>
                 </PageSection>
-                <PageSection title="Achievements" className="col-span-1">
+                <PageSection title="🏆 Achievements" scrollingText="achievements" className="col-span-1">
                     <div className="prose p-8">
                         <ReactMarkdown>
                             {profile.achievementsSimple}
                         </ReactMarkdown>
                     </div>
                 </PageSection>
-                <PageSection title="Featured Projects" className="col-span-1">
+                <PageSection title="⭐ Featured Projects" scrollingText="featured projects" className="col-span-1">
+                    <div className="p-8 flex-col gap-4 flex">
+                        {profile.featuredProjects.map((project: any) => (
+                            <ProjectCard key={project._id} project={project} />
+                        ))}
+                        <Link href="/projects">
+                            <Button highContrast size={"3"} className="w-full">View All Projects</Button>
+                        </Link>
+                    </div>
+                </PageSection>
+                <PageSection title="🌐 Links" scrollingText="links" className="col-span-1">
+                    <div className="prose p-8">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {profile.links}
+                        </ReactMarkdown>
+                    </div>
                 </PageSection>
             </div>
 
@@ -207,10 +302,10 @@ function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[numbe
                         </IconButton>
                     </div>
 
-                    <div className="absolute -top-px -left-px border-t border-l border-white/50 size-2 z-20" />
+                    {/* <div className="absolute -top-px -left-px border-t border-l border-white/50 size-2 z-20" />
                     <div className="absolute -top-px -right-px border-t border-r border-white/50 size-2 z-20" />
                     <div className="absolute -bottom-px -left-px border-b border-l border-white/50 size-2 z-20" />
-                    <div className="absolute -bottom-px -right-px border-b border-r border-white/50 size-2 z-20" />
+                    <div className="absolute -bottom-px -right-px border-b border-r border-white/50 size-2 z-20" /> */}
                 </div>
                 <Box
                     className="absolute bottom-0 left-0 right-0 h-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex"

@@ -53,12 +53,22 @@ export const PROFILE_QUERY = groq`*[_type == "profile"][0] {
   "profileImage": profileImage.asset->url, 
   shortBio,
   "resumeURL": resume.asset->url,
-  socialLinks[]{
-    platform,
-    url
-  },
+  links,
   fullBio,
   achievementsSimple,
+  featuredProjects[]->{
+    title,
+    "slug": slug.current,
+    summary,
+    image,
+    date,
+    stack,
+    category,
+    for->{
+      name,
+      logo,
+    }
+  },
 }`;
 
 export const EXPERIENCES_QUERY = groq`*[_type == "experience"] | order(isCurrent desc, startDate desc) {
@@ -88,4 +98,21 @@ export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0] {
   "imageUrl": mainImage.asset->url,
   "alt": mainImage.alt,
   body,
+}`;
+
+export const PROJECTS_CAROUSEL_QUERY = groq`*[_type == "project" && defined(image)] | order(date desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  image {
+    asset->{
+      _id,
+      url,
+      metadata {
+        lqip,
+        dimensions
+      }
+    },
+    "alt": coalesce(alt, title)
+  }
 }`;

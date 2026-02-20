@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import Sidebar from './Sidebar';
 import Link from 'next/link';
+import { Button, DropdownMenu } from '@radix-ui/themes';
 
 gsap.registerPlugin(useGSAP);
 
@@ -95,7 +96,52 @@ const Navbar = () => {
                     </Link>
                 </div>
             </div>
-            <Sidebar />
+
+            <DropdownMenu.Root >
+                <DropdownMenu.Trigger>
+                    <Button highContrast color="gray" size="2" className='font-mono'>
+                        MENU
+                        <DropdownMenu.TriggerIcon />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content align='end' sideOffset={16} color="gray" highContrast className='[&_.rt-DropdownMenuItem]:content-between'>
+                    <Link href="/">
+                        <DropdownMenu.Item shortcut='🏠'>
+                            Home
+                        </DropdownMenu.Item>
+                    </Link>
+                    <Link href="/projects">
+                        <DropdownMenu.Item shortcut='🚧'>
+                            Projects
+                        </DropdownMenu.Item>
+                    </Link>
+                    {/* <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
+                    <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
+                    <DropdownMenu.Separator />
+                    <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
+
+                    <DropdownMenu.Sub>
+                        <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
+                        <DropdownMenu.SubContent>
+                            <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
+                            <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
+
+                            <DropdownMenu.Separator />
+                            <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
+                        </DropdownMenu.SubContent>
+                    </DropdownMenu.Sub>
+
+                    <DropdownMenu.Separator />
+                    <DropdownMenu.Item>Share</DropdownMenu.Item>
+                    <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
+                    <DropdownMenu.Separator />
+                    <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+                        Delete
+                    </DropdownMenu.Item> */}
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+
+            {/* <Sidebar /> */}
             {/* <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div> */}
         </nav >
     );
