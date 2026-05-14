@@ -170,7 +170,7 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
         </div> */}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4">
                 <PageSection title="👤 About" scrollingText="about" className="col-span-1">
                     <div className="p-8 h-full flex flex-col justify-between">
                         <article className="prose">
