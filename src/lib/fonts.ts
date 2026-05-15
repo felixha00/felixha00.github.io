@@ -12,6 +12,19 @@ export const fontSaint = localFont({
     display: 'swap',
 });
 
+export const fontEditorialNew = localFont({
+    src: [
+        { path: '../../public/fonts/editorial-new/PPEditorialNew-Ultralight.woff2', weight: '200', style: 'normal' },
+        { path: '../../public/fonts/editorial-new/PPEditorialNew-UltralightItalic.woff2', weight: '200', style: 'italic' },
+        { path: '../../public/fonts/editorial-new/PPEditorialNew-Regular.woff2', weight: '400', style: 'normal' },
+        { path: '../../public/fonts/editorial-new/PPEditorialNew-Italic.woff2', weight: '400', style: 'italic' },
+        { path: '../../public/fonts/editorial-new/PPEditorialNew-Ultrabold.woff2', weight: '800', style: 'normal' },
+        { path: '../../public/fonts/editorial-new/PPEditorialNew-UltraboldItalic.woff2', weight: '800', style: 'italic' },
+    ],
+    variable: '--font-editorial-new',
+    display: 'swap',
+})
+
 export const fontRedaction = localFont({
     src: [
         { path: '../../public/fonts/redaction/Redaction-Regular.woff2', weight: '400', style: 'normal' },

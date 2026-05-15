@@ -6,7 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { Theme } from "@radix-ui/themes";
 // import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import { fontRedaction, fontSaint, fontRedaction10, fontRedaction20, fontRedaction35, fontRedaction50, fontRedaction70, fontRedaction100 } from "@/lib/fonts";
+import { fontEditorialNew, fontRedaction, fontSaint, fontRedaction10, fontRedaction20, fontRedaction35, fontRedaction50, fontRedaction70, fontRedaction100 } from "@/lib/fonts";
 import { GeistPixelSquare, GeistPixelGrid, GeistPixelCircle, GeistPixelTriangle, GeistPixelLine } from 'geist/font/pixel';
 import MiniSidebar from "@/components/fluff/MiniSidebar";
 
@@ -43,7 +43,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <SmoothScroll>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${fontSaint.variable} ${fontRedaction.variable} ${fontRedaction10.variable} ${fontRedaction20.variable} ${fontRedaction35.variable} ${fontRedaction50.variable} ${fontRedaction70.variable} ${fontRedaction100.variable}
+          className={`${geistSans.variable} ${geistMono.variable} ${fontSaint.variable} ${fontEditorialNew.variable} ${fontRedaction.variable} ${fontRedaction10.variable} ${fontRedaction20.variable} ${fontRedaction35.variable} ${fontRedaction50.variable} ${fontRedaction70.variable} ${fontRedaction100.variable}
            
           ${GeistPixelSquare.variable} ${GeistPixelLine.variable} ${GeistPixelCircle.variable} ${GeistPixelTriangle.variable} ${GeistPixelGrid.variable} 
           antialiased`}

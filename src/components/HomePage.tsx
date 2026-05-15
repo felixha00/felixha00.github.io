@@ -93,7 +93,7 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                 <GridBackground className="mt-16 border-muted border m-4 bg-background" />
                 <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
                     <div className="flex flex-col w-full h-full p-12 gap-8">
-                        <h1 className="text-7xl font-bold font-geist-pixel-square tracking-tighter">
+                        <h1 className="text-7xl font-normal font-geist-pixel-square tracking-tight">
                             <Balancer>
                                 Hi, I&apos;m Felix.
                             </Balancer>
