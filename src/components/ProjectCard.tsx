@@ -1,7 +1,10 @@
+"use client";
+
 import { getProjectCategoryConfig } from "@/config/const";
 import { urlFor } from "@/sanity/lib/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardAction,
@@ -11,13 +14,20 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import { CalendarIcon, Layers } from "lucide-react";
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
 import Link from "next/link";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import GridBackground from "./fluff/GridBackground";
+
+const VISIBLE_STACK_LIMIT = 5;
 
 type ProjectCardProject = Project & {
     slug?: Project["slug"] | string;
@@ -37,48 +47,48 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
         [project.category]
     );
     const CategoryIcon = category?.icon ?? Layers;
-    const card = useRef<HTMLAnchorElement>(null);
     const slug = getSlugValue(project.slug);
+    const projectHref = slug ? `/projects/${slug}` : "/projects";
+    const stack = project.stack ?? [];
+    const visibleStack = stack.slice(0, VISIBLE_STACK_LIMIT);
+    const overflowStack = stack.slice(VISIBLE_STACK_LIMIT);
 
     return (
-        <Link
-            ref={card}
-            href={slug ? `/projects/${slug}` : "/projects"}
-            className="project-card group block h-full w-full no-underline"
-        >
-            <Card className="relative h-full w-full transition-colors hover:ring-foreground/20 pt-0">
-                <GridBackground />
-                <CardContent className="relative px-0 pt-0">
-                    <AspectRatio ratio={16 / 9} className="bg-muted">
-                        <div className="relative h-full w-full overflow-hidden">
-                            {project.image ? (
-                                <Image
-                                    src={urlFor(project.image).width(768).height(432).fit("crop").url()}
-                                    alt={project.image.alt || project.title || "Project image"}
-                                    fill
-                                    className="object-cover duration-500 group-hover:scale-105"
-                                />
-                            ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
-                                    <Layers className="size-12" />
-                                </div>
-                            )}
-                            {project.title && (
-                                <div
-                                    className="absolute inset-0 overflow-hidden whitespace-nowrap opacity-0 mix-blend-difference transition-opacity duration-500 group-hover:opacity-100"
-                                    style={{ containerType: "size", lineHeight: 1 }}
-                                >
-                                    <InfiniteSlider speed={24}>
-                                        <h1 className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
-                                            {project.title.replaceAll(" ", "")}
-                                        </h1>
-                                    </InfiniteSlider>
-                                </div>
-                            )}
+        <Card className="project-card group relative h-full w-full pt-0 px-0 transition-colors hover:ring-foreground/20">
+            <GridBackground />
+            <AspectRatio ratio={16 / 9} className="bg-muted">
+                <div className="relative h-full w-full overflow-hidden">
+                    {project.image ? (
+                        <Image
+                            src={urlFor(project.image).width(768).height(432).fit("crop").url()}
+                            alt={project.image.alt || project.title || "Project image"}
+                            fill
+                            className="object-cover duration-500 group-hover:scale-105"
+                        />
+                    ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                            <Layers className="size-12" />
                         </div>
-                    </AspectRatio>
-                </CardContent>
-
+                    )}
+                    {project.title && (
+                        <div
+                            className="absolute inset-0 overflow-hidden whitespace-nowrap opacity-0 mix-blend-difference transition-opacity duration-500 group-hover:opacity-100"
+                            style={{ containerType: "size", lineHeight: 1 }}
+                        >
+                            <InfiniteSlider speed={24}>
+                                <h1 className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
+                                    {project.title.replaceAll(" ", "")}
+                                </h1>
+                            </InfiniteSlider>
+                        </div>
+                    )}
+                </div>
+            </AspectRatio>
+            <Link
+                href={projectHref}
+                className="relative block no-underline outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                aria-label={`View ${project.title ?? "project"}`}
+            >
                 <CardHeader className="relative">
                     <div className="flex flex-wrap items-center gap-1">
                         <Badge variant="secondary">
@@ -104,15 +114,45 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                         </CardDescription>
                     )}
                 </CardHeader>
+            </Link>
 
-                <CardFooter className="relative mt-auto flex flex-wrap justify-start gap-1">
-                    {project.stack?.map((tech) => (
-                        <Badge key={tech} variant="secondary">
-                            {tech}
-                        </Badge>
-                    ))}
-                </CardFooter>
-            </Card>
-        </Link>
+            <CardFooter className="relative mt-auto min-h-14 justify-start gap-1 overflow-hidden">
+                <div className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
+                    {visibleStack.length > 0 ? (
+                        visibleStack.map((tech) => (
+                            <Badge key={tech} variant="secondary" className="max-w-28 truncate">
+                                {tech}
+                            </Badge>
+                        ))
+                    ) : (
+                        <span className="sr-only">No stack tags</span>
+                    )}
+                </div>
+                {overflowStack.length > 0 && (
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="xs"
+                                aria-label={`Show ${overflowStack.length} more stack tags`}
+                            >
+                                +{overflowStack.length} more
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="end" className="w-56">
+
+                            <div className="flex flex-wrap gap-1">
+                                {overflowStack.map((tech) => (
+                                    <Badge key={tech} variant="secondary" className="max-w-full truncate">
+                                        {tech}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                )}
+            </CardFooter>
+        </Card>
     );
 }
