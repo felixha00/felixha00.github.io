@@ -232,3 +232,13 @@
     transform: translateX(120%);
   }
 }
+
+@keyframes hobby-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes hobby-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

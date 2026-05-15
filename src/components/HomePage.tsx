@@ -14,6 +14,7 @@ import { TimeCard } from "@/components/cards/TimeCard";
 import { WeatherCard } from "@/components/cards/WeatherCard";
 import { LastDeployCard } from "@/components/cards/LastDeployCard";
 import { GitHubActivityCard } from "@/components/cards/GitHubActivityCard";
+import { HobbiesCard } from "@/components/cards/HobbiesCard";
 import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 
 {/* <FaultyTerminal
@@ -159,6 +160,15 @@ export default function HomePage({ profile }: HomePageProps) {
                                 <Card />
                             </motion.div>
                         ))}
+                        {/* <motion.div
+                            className="col-span-full"
+                            variants={{
+                                hidden: { opacity: 0, y: 10 },
+                                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+                            }}
+                        >
+                            <HobbiesCard />
+                        </motion.div> */}
                     </motion.div>
                 </div>
 

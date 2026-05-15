@@ -4,7 +4,8 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PROJECT_CATEGORIES } from "@/config/const";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const DESCRIPTIONS: Record<string, string> = {
   sfw: "Web apps, digital tools, and interactive experiences",
@@ -58,7 +59,7 @@ export default function CategoryShortcuts() {
                     <CardTitle className="font-display text-lg transition-colors duration-200 group-hover:text-background">
                       {category.title}
                     </CardTitle>
-                    <CardDescription className="transition-colors duration-200 group-hover:text-background/60">
+                    <CardDescription className="transition-colors duration-200 group-hover:text-background/60 hidden lg:block">
                       {DESCRIPTIONS[category.slug]}
                     </CardDescription>
                   </div>
@@ -68,6 +69,8 @@ export default function CategoryShortcuts() {
           </motion.div>
         );
       })}
+      <div />
+      <Button size={"lg"}>View All Projects <ArrowRight data-icon="inline-end" /></Button>
     </motion.div>
   );
 }
