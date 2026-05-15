@@ -10,7 +10,10 @@ import ReactMarkdown from "react-markdown";
 import Dither from "./Dither";
 import remarkGfm from "remark-gfm";
 import { Project } from "../../sanity.types";
-import { TimeCard, WeatherCard, LastDeployCard, GitHubActivityCard } from "@/components/home/StatsGrid";
+import { TimeCard } from "@/components/cards/TimeCard";
+import { WeatherCard } from "@/components/cards/WeatherCard";
+import { LastDeployCard } from "@/components/cards/LastDeployCard";
+import { GitHubActivityCard } from "@/components/cards/GitHubActivityCard";
 import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 
 {/* <FaultyTerminal
