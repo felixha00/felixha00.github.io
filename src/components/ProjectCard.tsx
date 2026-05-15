@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardAction,
+    CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
@@ -197,6 +198,19 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                     )}
                 </CardHeader>
             </Link>
+
+            {project.outcome && (
+                <CardContent className="relative -mt-1 pb-1">
+                    <p className="project-outcome flex items-baseline gap-2 rounded-md border border-foreground/10 bg-foreground/[0.035] px-3 py-2 text-xs leading-none">
+                        <span className="shrink-0 font-mono text-muted-foreground">
+                            Outcome
+                        </span>
+                        <span className="min-w-0 truncate font-heading text-sm font-semibold text-foreground">
+                            {project.outcome}
+                        </span>
+                    </p>
+                </CardContent>
+            )}
 
             <CardFooter
                 ref={footerRef}

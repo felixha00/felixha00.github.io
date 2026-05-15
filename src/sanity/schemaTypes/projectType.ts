@@ -56,6 +56,13 @@ export const projectType = defineType({
             rows: 3,
         }),
         defineField({
+            name: 'outcome',
+            title: 'Outcome',
+            description: 'Optional short outcome for project.',
+            type: 'string',
+            validation: (rule) => rule.max(64),
+        }),
+        defineField({
             name: 'image',
             title: 'Main Image',
             type: 'image',
