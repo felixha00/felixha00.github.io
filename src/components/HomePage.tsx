@@ -10,7 +10,7 @@ import ReactMarkdown from "react-markdown";
 import Dither from "./Dither";
 import remarkGfm from "remark-gfm";
 import { Project } from "../../sanity.types";
-import { TimeCard, WeatherCard } from "@/components/home/StatsGrid";
+import { TimeCard, WeatherCard, LastDeployCard, GitHubActivityCard } from "@/components/home/StatsGrid";
 import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 
 {/* <FaultyTerminal
@@ -145,33 +145,17 @@ export default function HomePage({ profile }: HomePageProps) {
                             visible: { transition: { staggerChildren: 0.1, delayChildren: 0.35 } },
                         }}
                     >
-                        {/* <Dither
-                            waveColor={[0.5, 0.5, 0.5]}
-                            disableAnimation={false}
-                            enableMouseInteraction
-                            mouseRadius={0.3}
-                            colorNum={4}
-                            waveAmplitude={0.3}
-                            waveFrequency={3}
-                            waveSpeed={0.05}
-                        /> */}
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, y: 10 },
-                                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
-                            }}
-                        >
-                            <TimeCard />
-                        </motion.div>
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, y: 10 },
-                                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
-                            }}
-                        >
-                            <WeatherCard />
-                        </motion.div>
-
+                        {[TimeCard, WeatherCard, LastDeployCard, GitHubActivityCard].map((Card, i) => (
+                            <motion.div
+                                key={i}
+                                variants={{
+                                    hidden: { opacity: 0, y: 10 },
+                                    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+                                }}
+                            >
+                                <Card />
+                            </motion.div>
+                        ))}
                     </motion.div>
                 </div>
 
