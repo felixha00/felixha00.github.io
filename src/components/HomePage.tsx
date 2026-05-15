@@ -11,6 +11,8 @@ import ReactMarkdown from "react-markdown";
 import Dither from "./Dither";
 import remarkGfm from "remark-gfm";
 import { Project } from "../../sanity.types";
+import { TimeCard, WeatherCard } from "@/components/home/StatsGrid";
+import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 
 {/* <FaultyTerminal
                     className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
@@ -51,12 +53,12 @@ export default function HomePage({ profile }: HomePageProps) {
         <main className="h-full flex grow flex-col">
             <div
                 id="hero-div"
-                className="hero-div flex grow items-start justify-center relative h-screen gap-6 overflow-hidden p-4 pt-16"
+                className="hero-div flex grow items-start justify-center relative md:h-screen gap-6 overflow-hidden p-4 pt-16"
             >
                 <GridBackground className="mt-16 border-muted border m-4 bg-background" />
-                <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
+                <div className="grid md:h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
                     <motion.div
-                        className="flex flex-col w-full h-full p-12 gap-8"
+                        className="flex flex-col w-full md:h-full p-8 gap-8"
                         initial="hidden"
                         animate="visible"
                         variants={{
@@ -93,44 +95,10 @@ export default function HomePage({ profile }: HomePageProps) {
                             </Balancer>
                         </motion.p>
                         <div className="flex-1" />
-                        {/* <TextField.Root color="gray" size={"3"} placeholder="Send a message">
-                            <TextField.Slot>
-                                <MessageSquare className="size-4" />
-                            </TextField.Slot>
-                            <TextField.Slot>
-                                <ArrowRight className="size-4" />
-                            </TextField.Slot>
-                        </TextField.Root> */}
-
-                        {/* <p>Scrolling</p> */}
+                        <CategoryShortcuts />
                     </motion.div>
-                    <div className="relative border h-full overflow-hidden">
-                        {/* <InfiniteSlider direction="vertical" speedOnHover={24}>
-                            {projectsCarousel?.map((project: any, index: number) => (
-                                <Image
-                                    key={project._id}
-                                    alt={project.title}
-                                    width={16}
-                                    height={9}
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    src={urlFor(project.image).url()}
-                                    className="w-full h-auto aspect-video object-cover shrink-0"
-                                />
-                            ))}
-                        </InfiniteSlider> */}
-                        {/* <div className="relative h-0">
-                            <LogoScene />
-                        </div> */}
-                        {/* <div className="border h-min w-full">
-                            <Image
-                                src="/logo-white.svg"
-                                alt="logo"
-                                width={0}
-                                height={0}
-                                className="w-full h-auto px-50"
-                            />
-                        </div> */}
-                        <Dither
+                    <div className="relative border md:h-full md:overflow-y-auto flex flex-col gap-0 p-0">
+                        {/* <Dither
                             waveColor={[0.5, 0.5, 0.5]}
                             disableAnimation={false}
                             enableMouseInteraction
@@ -139,8 +107,9 @@ export default function HomePage({ profile }: HomePageProps) {
                             waveAmplitude={0.3}
                             waveFrequency={3}
                             waveSpeed={0.05}
-                        />
-
+                        /> */}
+                        <TimeCard />
+                        <WeatherCard />
                     </div>
                 </div>
 
