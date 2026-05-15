@@ -1,7 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { useMotionValue, animate, motion } from 'motion/react';
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useMeasure } from 'react-use';
 
 export type InfiniteSliderProps = {
@@ -24,7 +24,13 @@ export function InfiniteSlider({
     className,
 }: InfiniteSliderProps) {
     const [currentSpeed, setCurrentSpeed] = useState(speed);
-    const [ref, { width, height }] = useMeasure();
+    const [measureRef, { width, height }] = useMeasure<HTMLDivElement>();
+    const ref = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (node) measureRef(node);
+        },
+        [measureRef]
+    );
     const translation = useMotionValue(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [key, setKey] = useState(0);

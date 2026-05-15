@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "motion/react";
-import { Flex, Button } from "@radix-ui/themes";
+import { Button } from "@/components/ui/button";
 import GridBackground from "@/components/fluff/GridBackground";
 import Link from "next/link";
 import Balancer from 'react-wrap-balancer'
@@ -92,7 +92,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                 👤 I&apos;m a multidisciplinary <span className="underline">Designer</span>, <span className="underline">Engineer</span> and <span className="underline">Entrepreneur</span> based in <span className="underline">Canada.</span>
                             </Balancer>
                         </motion.p>
-                        <Flex className="flex-1" />
+                        <div className="flex-1" />
                         {/* <TextField.Root color="gray" size={"3"} placeholder="Send a message">
                             <TextField.Slot>
                                 <MessageSquare className="size-4" />
@@ -161,19 +161,19 @@ export default function HomePage({ profile }: HomePageProps) {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4">
                 <PageSection title="👤 About" scrollingText="about" className="col-span-1">
-                    <div className="p-8 h-full flex flex-col justify-between">
+                    <div className="p-8 h-full flex flex-col justify-between bg-muted/50 rounded-xl">
                         <article className="prose">
                             <ReactMarkdown>
                                 {profile.shortBio ?? ""}
                             </ReactMarkdown>
                         </article>
-                        <Button highContrast size={"3"} className="w-fit">
+                        <Button size="lg" className="w-fit">
                             View Full Bio
                         </Button>
                     </div>
                 </PageSection>
                 <PageSection title="🏆 Achievements" scrollingText="achievements" className="col-span-1">
-                    <div className="prose p-8">
+                    <div className="prose p-8 bg-muted/50 rounded-xl">
                         <ReactMarkdown>
                             {profile.achievementsSimple ?? ""}
                         </ReactMarkdown>
@@ -184,13 +184,13 @@ export default function HomePage({ profile }: HomePageProps) {
                         {profile.featuredProjects?.map((project) => (
                             <ProjectCard key={project._id} project={project} />
                         ))}
-                        <Link href="/projects">
-                            <Button highContrast size={"3"} className="w-full">View All Projects</Button>
-                        </Link>
+                        <Button asChild size="lg" className="w-full">
+                            <Link href="/projects">View All Projects</Link>
+                        </Button>
                     </div>
                 </PageSection>
                 <PageSection title="🌐 Links" scrollingText="links" className="col-span-1">
-                    <div className="prose p-8">
+                    <div className="prose p-8 bg-muted/50 rounded-xl">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {profile.links ?? ""}
                         </ReactMarkdown>

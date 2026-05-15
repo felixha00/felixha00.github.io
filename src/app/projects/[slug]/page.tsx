@@ -4,9 +4,12 @@ import { notFound } from "next/navigation";
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
-import { Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { getProjectCategoryConfig } from "@/config/const";
 import GridBackground from "@/components/fluff/GridBackground";
+import ProjectContentTabs from "@/components/ProjectContentTabs";
 
 const getRawGithubUrl = (url: string) => {
     if (!url) return null;
@@ -15,11 +18,6 @@ const getRawGithubUrl = (url: string) => {
         .replace("github.com", "raw.githubusercontent.com")
         .replace("/blob/", "/");
 };
-
-interface PageProps {
-    params: Promise<{ slug: string }>;
-}
-
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -52,19 +50,19 @@ export async function generateMetadata(props: PageProps) {
 export default async function ProjectPage(props: PageProps) {
     const params = await props.params;
     const project = await client.fetch(PROJECT_QUERY, params);
-    const catConfig = getProjectCategoryConfig(project.category)
 
     if (!project) {
         notFound();
     }
 
+    const catConfig = getProjectCategoryConfig(project.category);
     let readmeContent: string | null = null;
 
     if (project.readmeUrl) {
         try {
             const rawUrl = getRawGithubUrl(project.readmeUrl);
             if (rawUrl) {
-                const res = await fetch(rawUrl, { next: { revalidate: 3600 } }); // Cache for 1 hour
+                const res = await fetch(rawUrl, { next: { revalidate: 3600 } });
                 if (res.ok) {
                     readmeContent = await res.text();
                 }
@@ -74,84 +72,87 @@ export default async function ProjectPage(props: PageProps) {
         }
     }
 
+    const hasProjectLinks = Boolean(project.links?.length || project.attachments?.length);
+
     return (
-        <main className="flex-1 max-w-4xl w-4xl mx-auto px-4 py-16 overflow-x-hidden border-border border-x space-y-4">
-            {/* Header Section */}
-            <header className="flex flex-col space-y-4 relative items-start">
-                <div className="flex flex-wrap gap-2 items-center">
-                    <div className="flex flex-row items-center">
-                        {project.for && <Badge color={"gray"} highContrast>
-                            {project.for?.name}
-                        </Badge>}
-                        <Badge color={catConfig?.theme}>
-                            {catConfig?.title}
+        <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 overflow-x-hidden border-x border-border px-4 py-16">
+            <header className="relative flex flex-col items-start gap-4">
+                <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-row items-center gap-1">
+                        {project.for && (
+                            <Badge variant="secondary">
+                                {project.for?.name}
+                            </Badge>
+                        )}
+                        <Badge variant="outline">
+                            {catConfig?.title || "Project"}
                         </Badge>
                     </div>
 
                     {project.date && (
-                        <span className="text-muted-foreground text-sm py-0.5">
+                        <span className="py-0.5 text-sm text-muted-foreground">
                             {new Date(project.date).getFullYear()}
                         </span>
                     )}
                 </div>
 
-                <Heading className="font-display" size={{ initial: "7", md: "9" }}>{project.title}</Heading>
+                <h1 className="font-display text-5xl font-normal tracking-tight md:text-7xl">
+                    {project.title}
+                </h1>
 
                 {project.summary && (
-                    <p className="text-xl text-muted-foreground leading-relaxed">
+                    <p className="max-w-3xl text-xl leading-relaxed text-muted-foreground">
                         {project.summary}
                     </p>
                 )}
 
-                {/* Project Links */}
-                <div className="flex flex-wrap gap-4">
-                    {project.url && (
-                        <Button size={"3"} color={catConfig?.theme} highContrast>
-                            <a
-                                href={project.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Visit Project
-                            </a>
-                        </Button>
-                    )}
-                    {project.links?.length !== 0 && <Separator orientation={"vertical"} decorative className="h-auto" />}
-                    {project.links?.map((link, index: number) => (
-                        <Button key={link._key} size={"3"} color={catConfig?.theme} variant="soft">
-                            <a
-                                key={link._key}
-                                href={link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {link.label}
-                            </a>
-                        </Button>
-
-                    ))}
-                    {project.attachments?.map((att, index: number) => (
-                        <Button key={att._key} size={"3"} color={catConfig?.theme} variant="soft">
-                            <a
-                                key={att._key}
-                                href={att.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {att.title}
-                            </a>
-                        </Button>
-
-                    ))}
-                </div>
-                {/* <div className="absolute w-full -z-10 bottom-0 aspect-[2] opacity-100">
-                    <Image className="object-cover translate-y-4 scale-x-105" alt="accent" src="/img/1.webp" fill />
-                </div> */}
+                {hasProjectLinks && (
+                    <div className="flex flex-wrap gap-3">
+                        {project.url && (
+                            <Button asChild size="lg">
+                                <a
+                                    href={project.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Visit Project
+                                </a>
+                            </Button>
+                        )}
+                        {project.url && (project.links?.length || project.attachments?.length) && (
+                            <Separator orientation="vertical" decorative className="h-auto" />
+                        )}
+                        {project.links?.map((link: { _key: string; label?: string; url?: string }) => (
+                            link.url ? (
+                                <Button key={link._key} asChild size="lg" variant="secondary">
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {link.label}
+                                    </a>
+                                </Button>
+                            ) : null
+                        ))}
+                        {project.attachments?.map((attachment: { _key: string; title?: string; url?: string }) => (
+                            attachment.url ? (
+                                <Button key={attachment._key} asChild size="lg" variant="secondary">
+                                    <a
+                                        href={attachment.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {attachment.title}
+                                    </a>
+                                </Button>
+                            ) : null
+                        ))}
+                    </div>
+                )}
             </header>
 
-
-            {/* Main Image */}
-            <Inset className="border border-accent -mx-4"></Inset>
+            <Separator className="-mx-4 w-[calc(100%+2rem)]" />
 
             {project.image && (
                 <div className="relative w-full overflow-hidden">
@@ -160,51 +161,47 @@ export default async function ProjectPage(props: PageProps) {
                         alt={project.image.alt || project.title}
                         width={1600}
                         height={900}
-                        className="w-full h-auto object-cover"
+                        className="h-auto w-full object-cover"
                         priority
                         sizes="(max-width: 768px) 100vw, 1200px"
                     />
                 </div>
             )}
 
-            <Separator className="-mx-4 w-screen"></Separator>
+            <Separator className="-mx-4 w-[calc(100%+2rem)]" />
 
             {project.stack && project.stack.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap">
-                    {/* <h3 className="font-bold uppercase text-sm font-mono">Tags</h3> */}
-                    <div className="flex flex-wrap gap-2">
-                        {project.stack.map((tech) => (
-                            <Badge highContrast key={tech} size={"1"} color={catConfig?.theme}>
-                                {tech}
-                            </Badge>
-                        ))}
-                    </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    {project.stack.map((tech: string) => (
+                        <Badge key={tech} variant="secondary">
+                            {tech}
+                        </Badge>
+                    ))}
                 </div>
             )}
 
-
             {project.tags && project.tags.length > 0 && (
-                <div>
-                    <h3 className="font-bold mb-3 uppercase text-sm">Tags</h3>
+                <div className="flex flex-col gap-3">
+                    <h2 className="text-sm font-bold uppercase">Tags</h2>
                     <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                            <Badge key={tag} className="text-gray-500 text-sm">
+                        {project.tags.map((tag: string) => (
+                            <Badge key={tag} variant="outline" className="text-muted-foreground">
                                 #{tag}
                             </Badge>
                         ))}
                     </div>
                 </div>
             )}
-            <Separator className="border border-accent -mx-4 w-screen"></Separator>
-            {/* <Inset clip={"padding-box"} className="-mx-4 -mt-4">
-                <div className="prose max-w-none">
+
+            <Separator className="-mx-4 w-[calc(100%+2rem)]" />
+            {(project.content?.length || readmeContent) && (
+                <section className="prose max-w-none">
                     <ProjectContentTabs
                         sanityContent={project.content}
                         readmeContent={readmeContent}
                     />
-                </div>
-
-            </Inset> */}
+                </section>
+            )}
             <GridBackground />
         </main>
     );

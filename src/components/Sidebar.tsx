@@ -1,6 +1,6 @@
 // TODO: better animate the links for text changing
 
-import { Button } from '@radix-ui/themes'
+import { Button } from '@/components/ui/button'
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { cn } from '@/lib/utils'
@@ -63,17 +63,14 @@ const Sidebar = () => {
             {/* Added z-index 101 to ensure button stays above the sliding sidebar (z-50) */}
             <Button
                 ref={triggerRef}
-                color='gray'
-                highContrast
-                radius='full'
                 aria-expanded={isOpen}
                 aria-controls="main-sidebar"
                 aria-label={isOpen ? "Close Menu" : "Open Menu (Ctrl+M)"}
-                className='group font-sans relative overflow-hidden z-[101]'
+                className='group relative z-[101] overflow-hidden rounded-full font-sans'
                 onClick={toggleMenu}
             >
                 {isOpen ? "CLOSE" : "MENU"}
-                <SiVercel className={cn("size-3 transition-transform duration-300", isOpen ? "scale-y-[1]" : "scale-y-[-1]")} />
+                <SiVercel data-icon="inline-end" className={cn("transition-transform duration-300", isOpen ? "scale-y-[1]" : "scale-y-[-1]")} />
             </Button>
 
             <AnimatePresence>

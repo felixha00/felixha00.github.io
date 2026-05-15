@@ -1,12 +1,13 @@
 "use client";
 
 import { PortableText } from "next-sanity";
+import type { PortableTextBlock } from "@portabletext/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Tabs, Box, Text } from "@radix-ui/themes";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ProjectContentTabsProps {
-    sanityContent: any; // BlockContent type
+    sanityContent?: PortableTextBlock[] | null;
     readmeContent: string | null;
 }
 
@@ -30,28 +31,28 @@ export default function ProjectContentTabs({
     // }
 
     return (
-        <Tabs.Root defaultValue={defaultValue}>
-            <Tabs.List color="gray">
+        <Tabs defaultValue={defaultValue}>
+            <TabsList>
                 {sanityContent &&
-                    <Tabs.Trigger value="details">Project Details</Tabs.Trigger>
+                    <TabsTrigger value="details">Project Details</TabsTrigger>
                 }
                 {readmeContent &&
-                    <Tabs.Trigger value="readme">README.md</Tabs.Trigger>}
-            </Tabs.List>
+                    <TabsTrigger value="readme">README.md</TabsTrigger>}
+            </TabsList>
 
-            <Box className="p-4">
-                <Tabs.Content value="details">
+            <div className="p-4">
+                <TabsContent value="details">
                     {sanityContent && <PortableText value={sanityContent} />}
-                </Tabs.Content>
+                </TabsContent>
 
-                <Tabs.Content value="readme">
+                <TabsContent value="readme">
                     <div className="readme-content">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {readmeContent}
                         </ReactMarkdown>
                     </div>
-                </Tabs.Content>
-            </Box>
-        </Tabs.Root>
+                </TabsContent>
+            </div>
+        </Tabs>
     );
 }

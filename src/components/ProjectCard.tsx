@@ -1,7 +1,17 @@
 import { getProjectCategoryConfig } from "@/config/const";
 import { urlFor } from "@/sanity/lib/image";
-import { Card, Inset, AspectRatio, Flex, Badge, Text, Heading, Box } from "@radix-ui/themes";
-import { Layers, Calendar } from "lucide-react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Badge } from "@/components/ui/badge";
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { CalendarIcon, Layers } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
@@ -9,98 +19,100 @@ import Link from "next/link";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import GridBackground from "./fluff/GridBackground";
 
-export default function ProjectCard({ project }: { project: Project }) {
+type ProjectCardProject = Project & {
+    slug?: Project["slug"] | string;
+    for?: {
+        name?: string;
+    };
+};
 
-    const { icon: Icon, ...cfg } = useMemo(() => getProjectCategoryConfig(project.category!)!, [project])
-    const card = useRef(null)
+const getSlugValue = (slug: ProjectCardProject["slug"]) => {
+    if (!slug) return null;
+    return typeof slug === "string" ? slug : slug.current ?? null;
+};
+
+export default function ProjectCard({ project }: { project: ProjectCardProject }) {
+    const category = useMemo(
+        () => getProjectCategoryConfig(project.category ?? ""),
+        [project.category]
+    );
+    const CategoryIcon = category?.icon ?? Layers;
+    const card = useRef<HTMLAnchorElement>(null);
+    const slug = getSlugValue(project.slug);
 
     return (
         <Link
             ref={card}
-            href={`/projects/${project.slug}`}
-            className="project-card group flex w-full will-change-transform no-underline hover-outline"
+            href={slug ? `/projects/${slug}` : "/projects"}
+            className="project-card group block h-full w-full no-underline"
         >
-            <Card size="2" className="relative w-full h-full before:bg-background">
-                {/* <IconButton highContrast color="gray" className="absolute z-40 top-0 right-0" size="3" radius="none" variant="classic"><ExternalLink /></IconButton> */}
+            <Card className="relative h-full w-full transition-colors hover:ring-foreground/20 pt-0">
                 <GridBackground />
-                <Inset clip="padding-box" side="top" pb="current" className="relative">
-                    <AspectRatio ratio={16 / 9}>
-                        {/* <div className="absolute border-l z-10 p-4 round -bottom-6.5 bg-background">
-                            <div className="flex flex-row">
-                                <Badge color="gray">
-                                    {project.for?.name || "Personal"}
-                                </Badge>
-                                <Badge variant="soft" color={cfg?.theme}>
-                                    <Icon size="10" /> {cfg?.title || "Project"}
-                                </Badge>
-                            </div>
-                        </div> */}
-                        <Box position="relative" width="100%" height="100%" style={{ overflow: "hidden" }}>
+                <CardContent className="relative px-0 pt-0">
+                    <AspectRatio ratio={16 / 9} className="bg-muted">
+                        <div className="relative h-full w-full overflow-hidden">
                             {project.image ? (
                                 <Image
                                     src={urlFor(project.image).width(768).height(432).fit("crop").url()}
-                                    alt={project.title || "Project Image"}
+                                    alt={project.image.alt || project.title || "Project image"}
                                     fill
                                     className="object-cover duration-500 group-hover:scale-105"
                                 />
                             ) : (
-                                <Flex align="center" justify="center" width="100%" height="100%" style={{ backgroundColor: "var(--gray-3)" }}>
-                                    <Layers className="h-12 w-12 text-gray-300" />
-                                </Flex>
+                                <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                                    <Layers className="size-12" />
+                                </div>
                             )}
-                            <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference" style={{ containerType: "size", lineHeight: 1 }}>
-                                <InfiniteSlider speed={24}>
-                                    <h1 className="font-display tracking-tighter font-bold uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
-                                </InfiniteSlider>
-                            </div>
-                        </Box>
-                    </AspectRatio>
-                </Inset>
-
-                <Flex direction="column" gap="2" height="100%">
-                    {/* header */}
-                    <Flex justify="between" align="center">
-                        <div className="flex flex-row">
-                            <Badge color="gray">
-                                {project.for?.name || "Personal"}
-                            </Badge>
-                            <Badge variant="soft" color={cfg?.theme}>
-                                <Icon size="10" /> {cfg?.title || "Project"}
-                            </Badge>
+                            {project.title && (
+                                <div
+                                    className="absolute inset-0 overflow-hidden whitespace-nowrap opacity-0 mix-blend-difference transition-opacity duration-500 group-hover:opacity-100"
+                                    style={{ containerType: "size", lineHeight: 1 }}
+                                >
+                                    <InfiniteSlider speed={24}>
+                                        <h1 className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
+                                            {project.title.replaceAll(" ", "")}
+                                        </h1>
+                                    </InfiniteSlider>
+                                </div>
+                            )}
                         </div>
-                        {project.date && (
-                            <Flex align="center" gap="1">
-                                <Calendar className="size-3" />
-                                <Text size="1" color="gray">
-                                    {new Date(project.date).getFullYear()}
-                                </Text>
-                            </Flex>
-                        )}
-                    </Flex>
+                    </AspectRatio>
+                </CardContent>
 
-                    {/* title and summary */}
-                    <Box className="flex flex-col gap-2">
-                        <Heading className="font-bold font-display"
-                        >
-                            {project.title}
-                        </Heading>
-                        <Text as="p" size="2" color="gray" className="line-clamp-2">
-                            {project.summary}
-                        </Text>
-                    </Box>
-
-                    {/* <Flex className="grow" /> */}
-
-                    {/* badges */}
-                    <div className="flex flex-wrap gap-1 shrink-0">
-                        {project.stack?.map((tech) => (
-                            <Badge key={tech} variant="soft" color="gray" highContrast={false}>
-                                {tech}
-                            </Badge>
-                        ))}
+                <CardHeader className="relative">
+                    <div className="flex flex-wrap items-center gap-1">
+                        <Badge variant="secondary">
+                            {project.for?.name || "Personal"}
+                        </Badge>
+                        <Badge variant="outline">
+                            <CategoryIcon data-icon="inline-start" />
+                            {category?.title || "Project"}
+                        </Badge>
                     </div>
-                </Flex>
-            </Card >
-        </Link >
+                    {project.date && (
+                        <CardAction className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <CalendarIcon />
+                            {new Date(project.date).getFullYear()}
+                        </CardAction>
+                    )}
+                    <CardTitle className="font-display text-xl font-bold">
+                        {project.title}
+                    </CardTitle>
+                    {project.summary && (
+                        <CardDescription className="line-clamp-2">
+                            {project.summary}
+                        </CardDescription>
+                    )}
+                </CardHeader>
+
+                <CardFooter className="relative mt-auto flex flex-wrap justify-start gap-1">
+                    {project.stack?.map((tech) => (
+                        <Badge key={tech} variant="secondary">
+                            {tech}
+                        </Badge>
+                    ))}
+                </CardFooter>
+            </Card>
+        </Link>
     );
 }

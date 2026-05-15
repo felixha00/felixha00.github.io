@@ -57,6 +57,7 @@ export const PROFILE_QUERY = groq`*[_type == "profile"][0] {
   fullBio,
   achievementsSimple,
   featuredProjects[]->{
+    _id,
     title,
     "slug": slug.current,
     summary,

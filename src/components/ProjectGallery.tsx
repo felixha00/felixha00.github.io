@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
 import {
-    Flex,
-    Grid,
-    Button,
-} from "@radix-ui/themes";
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import ProjectCard from "./ProjectCard";
 import { Project } from "../../sanity.types";
 import { PROJECT_CATEGORIES } from "@/config/const";
-import { LayoutGrid } from "lucide-react";
+import { LayoutGridIcon, SearchXIcon } from "lucide-react";
 
 interface ProjectGalleryProps {
     projects: Project[];
@@ -19,27 +24,25 @@ interface ProjectGalleryProps {
 
 export default function ProjectGallery({ projects }: ProjectGalleryProps) {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const searchQuery = searchParams.get("q") || "";
     const [activeCategory, setActiveCategory] = useState(searchParams.get("cat") || "all");
 
-    // Filtering Logic 
     const filteredProjects = useMemo(() => {
         return projects.filter((project) => {
             const matchesCategory = activeCategory === "all" || project.category === activeCategory;
-
             const query = searchQuery.toLowerCase();
             const matchesSearch =
                 project.title?.toLowerCase().includes(query) ||
                 project.summary?.toLowerCase().includes(query) ||
-                project.stack?.some(s => s.toLowerCase().includes(query));
+                project.stack?.some((stackItem) => stackItem.toLowerCase().includes(query));
 
             return matchesCategory && matchesSearch;
         });
     }, [projects, activeCategory, searchQuery]);
 
-    // updates URL without refreshing when filters change
     const updateUrl = (key: string, value: string | null) => {
         const params = new URLSearchParams(searchParams.toString());
         if (value && value !== "all") {
@@ -47,121 +50,73 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
         } else {
             params.delete(key);
         }
-        router.replace(`?${params.toString()}`, { scroll: false });
+        router.replace(params.toString() ? `?${params.toString()}` : pathname, { scroll: false });
     };
 
-    const handleCategoryChange = (val: string) => {
-        setActiveCategory(val);
-        updateUrl("cat", val);
+    const handleCategoryChange = (value: string) => {
+        setActiveCategory(value);
+        updateUrl("cat", value);
+    };
+
+    const clearFilters = () => {
+        setActiveCategory("all");
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("q");
+        params.delete("cat");
+        router.replace(params.toString() ? `?${params.toString()}` : pathname, { scroll: false });
     };
 
     return (
-        <Flex className="gap-4 flex-col h-full flex-1 grow">
-
-            {/* Filter & Search Bar */}
-            <Flex
-                direction={{ initial: "column", md: "row" }}
-                justify="between"
-                align={{ initial: "stretch", md: "center" }}
-            >
-                {/* Categories */}
-                <Flex gap="2" wrap="wrap">
-                    <Button
-                        variant={activeCategory === "all" ? "classic" : "outline"}
-                        onClick={() => handleCategoryChange("all")}
-                        size="2"
-                        highContrast
-                        color="gray"
-                    >
-                        <LayoutGrid className="size-3.5 shrink-0" aria-hidden="true" />
+        <div className="flex h-full flex-1 grow flex-col gap-4">
+            <div className="flex flex-col items-stretch justify-between gap-3 md:flex-row md:items-center">
+                <ToggleGroup
+                    type="single"
+                    value={activeCategory}
+                    onValueChange={(value) => {
+                        if (value) handleCategoryChange(value);
+                    }}
+                    variant="outline"
+                    size="sm"
+                    spacing={1}
+                    className="flex-wrap justify-start"
+                >
+                    <ToggleGroupItem value="all">
+                        <LayoutGridIcon data-icon="inline-start" />
                         All
-                    </Button>
+                    </ToggleGroupItem>
                     {PROJECT_CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
 
                         return (
-                            <Button
-                                key={cat.slug}
-                                variant={activeCategory === cat.slug ? "classic" : "soft"}
-                                onClick={() => handleCategoryChange(cat.slug)}
-                                size="2"
-                                color="gray"
-                                highContrast={activeCategory === cat.slug}
-                            >
-                                <Icon className="size-3.5 shrink-0" aria-hidden="true" />
+                            <ToggleGroupItem key={cat.slug} value={cat.slug}>
+                                <Icon data-icon="inline-start" />
                                 {cat.title}
-                            </Button>
-                        )
+                            </ToggleGroupItem>
+                        );
                     })}
-                </Flex>
+                </ToggleGroup>
+            </div>
 
-                {/* Search */}
-                {/* <Box minWidth="250px">
-                    <TextField.Root
-                        placeholder="Search projects..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        variant="surface"
-                    >
-                        <TextField.Slot>
-                            <Search className="w-4 h-4" />
-                        </TextField.Slot>
-                        {searchQuery && (
-                            <TextField.Slot>
-                                <IconButton
-                                    size="1"
-                                    variant="ghost"
-                                    onClick={clearSearch}
-                                    aria-label="Clear search"
-                                >
-                                    <LuX className="w-4 h-4" />
-                                </IconButton>
-                            </TextField.Slot>
-                        )}
-                    </TextField.Root>
-                </Box> */}
-            </Flex>
-
-            {/* --- Results Grid --- */}
             <div className="flex flex-1 flex-col">
                 {filteredProjects.length === 0 ? (
-                    // Empty State
-                    null
-                    // <Flex
-                    //     direction="column"
-                    //     align="center"
-                    //     justify="center"
-                    //     height="300px"
-                    // >
-                    //     <Flex
-                    //         align="center"
-                    //         justify="center"
-                    //         className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4"
-                    //     >
-                    //         <LuFilter className="w-6 h-6 opacity-40" />
-                    //     </Flex>
-                    //     <Heading size="4" mb="2">No projects found</Heading>
-                    //     <Text color="gray">
-                    //         Try adjusting your search or category filters.
-                    //     </Text>
-                    //     <Button
-                    //         variant="outline"
-                    //         className="mt-4"
-                    //         onClick={() => {
-                    //             setSearchQuery("");
-                    //             setActiveCategory("all");
-                    //             updateUrl("q", null);
-                    //             updateUrl("cat", null);
-                    //         }}
-                    //     >
-                    //         Clear all filters
-                    //     </Button>
-                    // </Flex>
+                    <Empty>
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <SearchXIcon />
+                            </EmptyMedia>
+                            <EmptyTitle>No projects found</EmptyTitle>
+                            <EmptyDescription>
+                                Try a different category or clear the current filters.
+                            </EmptyDescription>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <Button variant="outline" onClick={clearFilters}>
+                                Clear filters
+                            </Button>
+                        </EmptyContent>
+                    </Empty>
                 ) : (
-                    <Grid
-                        columns={{ initial: "1", md: "2", lg: "3" }}
-                        className="gap-1"
-                    >
+                    <div className="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3">
                         {filteredProjects.map((project, index) => (
                             <motion.div
                                 key={project._id}
@@ -176,9 +131,9 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                                 <ProjectCard project={project} />
                             </motion.div>
                         ))}
-                    </Grid>
+                    </div>
                 )}
             </div>
-        </Flex >
+        </div>
     );
 }

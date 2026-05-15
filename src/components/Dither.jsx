@@ -1,6 +1,6 @@
-import { useRef, useEffect, forwardRef } from 'react';
+/* eslint-disable react-hooks/immutability */
+import { useRef, useEffect, forwardRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, Float } from '@react-three/drei'; // 1. Import helper
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
 import * as THREE from 'three';
@@ -189,31 +189,31 @@ function DitheredWaves({
   const mouseRef = useRef(new THREE.Vector2());
   const { viewport, size, gl } = useThree();
 
-  const waveUniformsRef = useRef({
+  const waveUniforms = useMemo(() => ({
     time: new THREE.Uniform(0),
     resolution: new THREE.Uniform(new THREE.Vector2(0, 0)),
-    waveSpeed: new THREE.Uniform(waveSpeed),
-    waveFrequency: new THREE.Uniform(waveFrequency),
-    waveAmplitude: new THREE.Uniform(waveAmplitude),
-    waveColor: new THREE.Uniform(new THREE.Color(...waveColor)),
+    waveSpeed: new THREE.Uniform(0),
+    waveFrequency: new THREE.Uniform(0),
+    waveAmplitude: new THREE.Uniform(0),
+    waveColor: new THREE.Uniform(new THREE.Color()),
     mousePos: new THREE.Uniform(new THREE.Vector2(0, 0)),
-    enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
-    mouseRadius: new THREE.Uniform(mouseRadius)
-  });
+    enableMouseInteraction: new THREE.Uniform(0),
+    mouseRadius: new THREE.Uniform(0)
+  }), []);
 
   useEffect(() => {
     const dpr = gl.getPixelRatio();
     const w = Math.floor(size.width * dpr),
       h = Math.floor(size.height * dpr);
-    const res = waveUniformsRef.current.resolution.value;
+    const res = waveUniforms.resolution.value;
     if (res.x !== w || res.y !== h) {
       res.set(w, h);
     }
-  }, [size, gl]);
+  }, [size, gl, waveUniforms]);
 
-  const prevColor = useRef([...waveColor]);
+  const prevColor = useRef(null);
   useFrame(({ clock }) => {
-    const u = waveUniformsRef.current;
+    const u = waveUniforms;
 
     if (!disableAnimation) {
       u.time.value = clock.getElapsedTime();
@@ -223,7 +223,7 @@ function DitheredWaves({
     if (u.waveFrequency.value !== waveFrequency) u.waveFrequency.value = waveFrequency;
     if (u.waveAmplitude.value !== waveAmplitude) u.waveAmplitude.value = waveAmplitude;
 
-    if (!prevColor.current.every((v, i) => v === waveColor[i])) {
+    if (!prevColor.current || !prevColor.current.every((v, i) => v === waveColor[i])) {
       u.waveColor.value.set(...waveColor);
       prevColor.current = [...waveColor];
     }
@@ -262,7 +262,7 @@ function DitheredWaves({
         <shaderMaterial
           vertexShader={waveVertexShader}
           fragmentShader={waveFragmentShader}
-          uniforms={waveUniformsRef.current}
+          uniforms={waveUniforms}
         />
       </mesh>
 

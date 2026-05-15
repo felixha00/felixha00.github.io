@@ -3,12 +3,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, DropdownMenu } from '@radix-ui/themes';
+import { buttonVariants, Button } from '@/components/ui/button';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import { FolderKanbanIcon, HomeIcon, MenuIcon } from 'lucide-react';
 import { motion } from 'motion/react';
+
+const navItems = [
+    { label: 'Home', href: '/', icon: HomeIcon },
+    { label: 'Projects', href: '/projects', icon: FolderKanbanIcon },
+];
 
 const Navbar = () => {
     const containerRef = useRef(null);
     const [showLogo, setShowLogo] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleUpdate = () => {
@@ -67,49 +82,39 @@ const Navbar = () => {
                 </motion.div>
             </div>
 
-            <DropdownMenu.Root >
-                <DropdownMenu.Trigger>
-                    <Button highContrast color="gray" size="2" className='font-mono'>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+                <SheetTrigger asChild>
+                    <Button className="font-mono" size="sm">
                         MENU
-                        <DropdownMenu.TriggerIcon />
+                        <MenuIcon data-icon="inline-end" />
                     </Button>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Content align='end' sideOffset={16} color="gray" highContrast className='[&_.rt-DropdownMenuItem]:content-between'>
-                    <Link href="/">
-                        <DropdownMenu.Item shortcut='🏠'>
-                            Home
-                        </DropdownMenu.Item>
-                    </Link>
-                    <Link href="/projects">
-                        <DropdownMenu.Item shortcut='🚧'>
-                            Projects
-                        </DropdownMenu.Item>
-                    </Link>
-                    {/* <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
-                    <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
-                    <DropdownMenu.Separator />
-                    <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[min(100vw,24rem)]">
+                    <SheetHeader>
+                        <SheetTitle>Menu</SheetTitle>
+                    </SheetHeader>
+                    <nav className="flex flex-col gap-2 px-4 pb-4">
+                        {navItems.map((item) => {
+                            const Icon = item.icon;
 
-                    <DropdownMenu.Sub>
-                        <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-                        <DropdownMenu.SubContent>
-                            <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-                            <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-                            <DropdownMenu.Separator />
-                            <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-                        </DropdownMenu.SubContent>
-                    </DropdownMenu.Sub>
-
-                    <DropdownMenu.Separator />
-                    <DropdownMenu.Item>Share</DropdownMenu.Item>
-                    <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-                    <DropdownMenu.Separator />
-                    <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
-                        Delete
-                    </DropdownMenu.Item> */}
-                </DropdownMenu.Content>
-            </DropdownMenu.Root>
+                            return (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    onClick={() => setMenuOpen(false)}
+                                    className={cn(
+                                        buttonVariants({ variant: 'ghost' }),
+                                        'w-full justify-between font-mono'
+                                    )}
+                                >
+                                    {item.label}
+                                    <Icon data-icon="inline-end" />
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                </SheetContent>
+            </Sheet>
 
             {/* <Sidebar /> */}
             {/* <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-sans px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div> */}

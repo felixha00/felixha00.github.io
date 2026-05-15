@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useId } from 'react';
+import { useCallback, useEffect, useId } from 'react';
 import {
     MotionValue,
     motion,
@@ -37,7 +37,13 @@ function Digit({ value, place }: { value: number; place: number }) {
 
 function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
     const uniqueId = useId();
-    const [ref, bounds] = useMeasure();
+    const [measureRef, bounds] = useMeasure<HTMLSpanElement>();
+    const ref = useCallback(
+        (node: HTMLSpanElement | null) => {
+            if (node) measureRef(node);
+        },
+        [measureRef]
+    );
 
     const y = useTransform(mv, (latest) => {
         if (!bounds.height) return 0;

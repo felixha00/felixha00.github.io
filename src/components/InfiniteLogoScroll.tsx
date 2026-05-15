@@ -1,21 +1,22 @@
 import React from 'react'
 import { InfiniteSlider } from './motion-primitives/InfiniteSlider'
-// import Image from 'next/image'
+import Image from 'next/image'
 
-type Props = {}
+const logos = Array.from({ length: 7 }, (_, index) => index)
 
-const InfiniteLogoScroll = (props: Props) => {
+const InfiniteLogoScroll = () => {
     return (
         <InfiniteSlider gap={12} speedOnHover={20} className='w-full'>
-            <img src="/logo-white.svg" priority width={120} height={120} />
-            <img src="/logo-white.svg" priority width={120} height={120} />
-            <img src="/logo-white.svg" priority width={120} height={120} />
-            <img src="/logo-white.svg" priority width={120} height={120} />
-            <img src="/logo-white.svg" priority width={120} height={120} />
-            <img src="/logo-white.svg" priority width={120} height={120} />
-            <img src="/logo-white.svg" priority width={120} height={120} />
-
-
+            {logos.map((logo) => (
+                <Image
+                    key={logo}
+                    src="/logo-white.svg"
+                    priority
+                    width={120}
+                    height={120}
+                    alt=""
+                />
+            ))}
         </InfiniteSlider>
     )
 }
