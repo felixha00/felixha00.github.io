@@ -3,22 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { buttonVariants, Button } from '@/components/ui/button';
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
-import { FolderKanbanIcon, HomeIcon, MenuIcon } from 'lucide-react';
 import { motion } from 'motion/react';
-
-const navItems = [
-    { label: 'Home', href: '/', icon: HomeIcon },
-    { label: 'Projects', href: '/projects', icon: FolderKanbanIcon },
-];
+import { NavSheet } from '@/components/NavSheet';
 
 const Navbar = () => {
     const containerRef = useRef(null);
@@ -82,39 +68,7 @@ const Navbar = () => {
                 </motion.div>
             </div>
 
-            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-                <SheetTrigger asChild>
-                    <Button className="font-mono" size="sm">
-                        MENU
-                        <MenuIcon data-icon="inline-end" />
-                    </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[min(100vw,24rem)]">
-                    <SheetHeader>
-                        <SheetTitle>Menu</SheetTitle>
-                    </SheetHeader>
-                    <nav className="flex flex-col gap-2 px-4 pb-4">
-                        {navItems.map((item) => {
-                            const Icon = item.icon;
-
-                            return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setMenuOpen(false)}
-                                    className={cn(
-                                        buttonVariants({ variant: 'ghost' }),
-                                        'w-full justify-between font-mono'
-                                    )}
-                                >
-                                    {item.label}
-                                    <Icon data-icon="inline-end" />
-                                </Link>
-                            );
-                        })}
-                    </nav>
-                </SheetContent>
-            </Sheet>
+            <NavSheet open={menuOpen} onOpenChange={setMenuOpen} />
 
             {/* <Sidebar /> */}
             {/* <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-sans px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div> */}
