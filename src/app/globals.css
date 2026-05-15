@@ -13,7 +13,7 @@
   }
 
   .rt-Button {
-    @apply rounded-full
+    @apply rounded-full cursor-pointer
   }
 
   .rt-Heading {

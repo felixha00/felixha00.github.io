@@ -93,14 +93,14 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                 <GridBackground className="mt-16 border-muted border m-4 bg-background" />
                 <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
                     <div className="flex flex-col w-full h-full p-12 gap-8">
-                        <h1 className="text-7xl font-geist-pixel-line tracking-tight">
+                        <h1 className="text-7xl font-bold font-geist-pixel-square tracking-tighter">
                             <Balancer>
-                                👋 Hi, I&apos;m Felix
+                                Hi, I&apos;m Felix.
                             </Balancer>
                         </h1>
                         <h2 className="text-3xl max-w-xl">
                             <Balancer>
-                                👤 I&apos;m a <span className="underline">Designer</span>, <span className="underline">Developer</span> and <span className="underline">Entrepreneur</span> based in Canada.
+                                👤 I&apos;m a multidisciplinary <span className="underline">Designer</span>, <span className="underline">Engineer</span> and <span className="underline">Entrepreneur</span> based in <span className="underline">Canada.</span>
                             </Balancer>
                         </h2>
                         <Flex className="flex-1" />
