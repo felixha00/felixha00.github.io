@@ -5,22 +5,17 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import gsap from "gsap";
 
-// Utility for smooth interpolation (Lerp)
-const lerp = (start: number, end: number, factor: number) => {
-    return start + (end - start) * factor;
-};
-
 export default function MiniSidebar() {
     const pathname = usePathname();
     const [docHeight, setDocHeight] = useState(0);
 
     const sidebarRef = useRef<HTMLElement>(null);
     const rulerRef = useRef<HTMLDivElement>(null);
+    // Tracks scroll position so we can animate the ruler back on route change
+    const lastScrollRef = useRef(0);
+    const isAnimatingRef = useRef(false);
+    const setterRef = useRef<((value: number) => void) | null>(null);
 
-    // Store the current visual position of the ruler to interpolate from
-    const rulerPosRef = useRef(0);
-
-    // Populates the sidebar items based on the current path
     const items = useMemo(() => {
         const segments = pathname.split("/").filter((item) => item !== "");
         const breadcrumbs = segments.map((segment, index) => ({
@@ -30,80 +25,77 @@ export default function MiniSidebar() {
         return [{ name: "home", href: "/" }, ...breadcrumbs];
     }, [pathname]);
 
-    // 1. Sidebar Entry & Nav Item Changes
-    // useEffect(() => {
-    //     const ctx = gsap.context(() => {
-    //     }, sidebarRef);
-
-    //     return () => ctx.revert();
-    // }, []);
-
+    // Nav item animation + ruler slide-back on route change
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Kill any conflicting animations on these elements
             gsap.killTweensOf(".nav-item");
-
             gsap.fromTo(
                 ".nav-item",
-                {
-                    opacity: 0,
-                    x: -15, // Slide from "outside" (left relative to vertical text)
-                },
+                { opacity: 0, x: -15 },
                 {
                     opacity: 1,
                     x: 0,
                     duration: 0.4,
-                    stagger: {
-                        amount: 0.2,
-                    },
+                    stagger: { amount: 0.2 },
                     ease: "power4.out",
-                    overwrite: "auto"
+                    overwrite: "auto",
                 }
             );
         }, sidebarRef);
 
+        if (rulerRef.current && lastScrollRef.current > 0) {
+            isAnimatingRef.current = true;
+            gsap.fromTo(
+                rulerRef.current,
+                { y: -lastScrollRef.current },
+                {
+                    y: 0,
+                    duration: 0.9,
+                    ease: "power3.out",
+                    onComplete: () => {
+                        isAnimatingRef.current = false;
+                        // Re-sync in case user scrolled during animation
+                        setterRef.current?.(-window.scrollY);
+                    },
+                }
+            );
+        }
+
         return () => ctx.revert();
     }, [pathname]);
 
-    // smooth ruler with lerp
+    // Direct scroll sync — no lerp, ruler matches scroll position exactly
     useEffect(() => {
         if (!rulerRef.current) return;
 
         const handleResize = () => {
             setDocHeight(document.documentElement.scrollHeight);
         };
-
         handleResize();
         window.addEventListener("resize", handleResize);
 
         const observer = new MutationObserver(handleResize);
         observer.observe(document.body, { childList: true, subtree: true });
 
-        rulerPosRef.current = -window.scrollY;
+        const setter = gsap.quickSetter(rulerRef.current, "y", "px") as (v: number) => void;
+        setterRef.current = setter;
 
-        const setter = gsap.quickSetter(rulerRef.current, "y", "px");
+        setter(-window.scrollY);
+        lastScrollRef.current = window.scrollY;
 
-        const updateRuler = () => {
-            const targetY = -window.scrollY;
-
-            const diff = targetY - rulerPosRef.current;
-
-            if (Math.abs(diff) < 0.5) {
-                rulerPosRef.current = targetY;
-            } else {
-                // higher factor = snappier, lower = heavier
-                rulerPosRef.current = lerp(rulerPosRef.current, targetY, 0.1);
+        const handleScroll = () => {
+            lastScrollRef.current = window.scrollY;
+            if (!isAnimatingRef.current) {
+                setter(-window.scrollY);
             }
-
-            setter(rulerPosRef.current);
         };
 
-        gsap.ticker.add(updateRuler);
+        window.addEventListener("scroll", handleScroll, { passive: true });
 
         return () => {
             window.removeEventListener("resize", handleResize);
+            window.removeEventListener("scroll", handleScroll);
             observer.disconnect();
-            gsap.ticker.remove(updateRuler);
         };
     }, []);
 
@@ -128,8 +120,8 @@ export default function MiniSidebar() {
                     style={{
                         backgroundImage: `linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
                         backgroundSize: `10px 10px`,
-                        width: '25%',
-                        left: '75%'
+                        width: "25%",
+                        left: "75%",
                     }}
                 />
                 {/* 100px big marks */}
@@ -140,7 +132,6 @@ export default function MiniSidebar() {
                         style={{ top: `${i * tickInterval}px` }}
                     >
                         <div className="w-1/2 h-px bg-foreground/30" />
-
                         <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] font-mono text-muted-foreground mt-2 ml-2">
                             {i * tickInterval}
                         </span>
@@ -157,12 +148,14 @@ export default function MiniSidebar() {
                                 href={item.href}
                                 className={`
                                     nav-item
-                                    [writing-mode:vertical-rl] rotate-180 
+                                    [writing-mode:vertical-rl] rotate-180
                                     text-xs uppercase transition-colors duration-200
                                     whitespace-nowrap font-mono
-                                    ${isLast
-                                        ? "text-foreground font-semibold cursor-default pointer-events-none"
-                                        : "text-muted-foreground hover:text-foreground"}
+                                    ${
+                                        isLast
+                                            ? "text-foreground font-semibold cursor-default pointer-events-none"
+                                            : "text-muted-foreground hover:text-foreground"
+                                    }
                                 `}
                             >
                                 {item.name}
@@ -180,19 +173,12 @@ export default function MiniSidebar() {
     );
 }
 
-// prevents sidebar from animating on every route change, only on first mount
 function AnimateOnMount() {
     useEffect(() => {
-        // slide sidebar in from left
         gsap.fromTo(
             "aside",
             { xPercent: -100 },
-            {
-                xPercent: 0,
-                duration: 1,
-                ease: "power4.out",
-                delay: 0.2
-            }
+            { xPercent: 0, duration: 1, ease: "power4.out", delay: 0.2 }
         );
     }, []);
     return null;
