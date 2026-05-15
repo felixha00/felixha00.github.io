@@ -1,16 +1,18 @@
 "use client";
 import { useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 
-// Register plugins globally
-gsap.registerPlugin(ScrollTrigger);
-
 export default function Home() {
-    const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: triggerRef,
+        offset: ["start start", "end end"],
+    });
+    const boxX = useTransform(scrollYProgress, [0, 1], [0, 500]);
+    const boxRotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
+    const riveScale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
+    const riveRadius = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
     // 1. RIVE SETUP
     const { RiveComponent } = useRive({
@@ -23,36 +25,8 @@ export default function Home() {
         autoplay: true,
     });
 
-    // 2. GSAP SETUP
-    useGSAP(
-        () => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: triggerRef.current,
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: 1, // Smooth scrubbing effect
-                },
-            });
-
-            tl.to(".box", {
-                rotation: 360,
-                x: 500,
-                duration: 2,
-                ease: "power2.inOut",
-            });
-
-            // You can even animate the Rive container with GSAP
-            tl.to(".rive-container", {
-                scale: 1.5,
-                borderRadius: "50%",
-            }, "<");
-        },
-        { scope: containerRef }
-    );
-
     return (
-        <main ref={containerRef} className="w-full">
+        <main className="w-full">
             {/* Spacer Section */}
             <section className="h-screen flex items-center justify-center bg-gray-100">
                 <h1 className="text-4xl font-bold text-black">Scroll Down</h1>
@@ -62,12 +36,18 @@ export default function Home() {
             <section ref={triggerRef} className="h-[200vh] bg-black relative">
                 <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
 
-                    <div className="box w-32 h-32 bg-blue-500 mb-10" />
+                    <motion.div
+                        className="box w-32 h-32 bg-blue-500 mb-10"
+                        style={{ x: boxX, rotate: boxRotate }}
+                    />
 
                     {/* Rive Component */}
-                    <div className="rive-container w-[500px] h-[300px] bg-white">
+                    <motion.div
+                        className="rive-container w-[500px] h-[300px] bg-white"
+                        style={{ scale: riveScale, borderRadius: riveRadius }}
+                    >
                         <RiveComponent />
-                    </div>
+                    </motion.div>
 
                 </div>
             </section>

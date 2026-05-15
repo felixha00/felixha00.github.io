@@ -2,21 +2,16 @@
 
 import { Button } from '@radix-ui/themes'
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { TbTopologyRing2 } from 'react-icons/tb'
-import gsap from 'gsap'
-import { useGSAP } from '@gsap/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
-import { Triangle } from 'lucide-react'
 import { SiVercel } from 'react-icons/si'
 import Dither from '@/components/Dither'
 import GridBackground from './fluff/GridBackground'
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    // Removed unused state: activeLetter (unless you plan to use it for the TODO later)
-    const [, setActiveLetter] = useState(routes[0].label[0]);
 
     const container = useRef<HTMLDivElement>(null);
     const sidebarRef = useRef<HTMLElement>(null);
@@ -24,62 +19,17 @@ const Sidebar = () => {
     const firstItemRef = useRef<HTMLAnchorElement>(null);
     const leftSideRef = useRef<HTMLDivElement>(null);
 
-    const tl = useRef<gsap.core.Timeline>(null);
-
-    useGSAP(() => {
-        // 1. Set Initial States
-        gsap.set(sidebarRef.current, {
-            yPercent: -100, // Start fully off-screen (top)
-            display: 'none'
-        });
-
-        gsap.set(leftSideRef.current, {
-            opacity: 0,
-        });
-
-        gsap.set('.sidebar-item', {
-            opacity: 0,
-            y: 50, // Push items down slightly so they slide UP into view
-            filter: 'blur(10px)'
-        });
-
-        // 2. Build Timeline
-        tl.current = gsap.timeline({ paused: true })
-            .to(sidebarRef.current, {
-                display: 'flex',
-                yPercent: 0, // Slide down to natural position
-                duration: 0.6, // Slightly longer for a full-screen slide
-                ease: "power2.inOut", // "Premium" heavy ease
-            })
-            .to(leftSideRef.current, {
-                opacity: 1,
-                duration: 0.4,
-                ease: "power2.out"
-            }, "-=0.2")
-            .to('.sidebar-item', {
-                opacity: 1,
-                y: 0,
-                filter: 'blur(0px)',
-                duration: 0.4,
-                stagger: 0.1, // Stagger the text reveal
-                ease: "power2.out"
-            }, "-=0.4");
-
-    }, { scope: container });
-
     const toggleMenu = useCallback(() => {
-        setIsOpen((prev) => {
-            if (!prev) {
-                tl.current?.play();
-                document.body.style.overflow = 'hidden';
-                setActiveLetter(routes[0].label[0]);
-            } else {
-                tl.current?.reverse();
-                document.body.style.overflow = '';
-            }
-            return !prev;
-        });
+        setIsOpen((prev) => !prev);
     }, []);
+
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -126,45 +76,70 @@ const Sidebar = () => {
                 <SiVercel className={cn("size-3 transition-transform duration-300", isOpen ? "scale-y-[1]" : "scale-y-[-1]")} />
             </Button>
 
-            <aside
-                id="main-sidebar"
-                ref={sidebarRef}
-                role="dialog"
-                aria-modal="true"
-                // Added 'will-change-transform' for smoother animation performance
-                className='fixed inset-0 z-50 hidden bg-background border border-border will-change-transform'
-                style={{ containerType: "size" }}
-            >
-                <div className='grid grid-cols-1 md:grid-cols-2 w-full h-full'>
-                    <div ref={leftSideRef} className='bg-muted relative hidden md:block overflow-hidden' style={{ containerType: "size" }}>
-                        <Dither
-                            waveColor={[0.5, 0.5, 0.5]}
-                            disableAnimation={false}
-                            enableMouseInteraction
-                            mouseRadius={0.3}
-                            colorNum={4}
-                            waveAmplitude={0.3}
-                            waveFrequency={3}
-                            waveSpeed={0.05}
-                        />
-                    </div>
-                    <div className="flex flex-col justify-center items-center flex-1 relative h-full">
-                        {routes.map((item, index) => (
-                            <Link
-                                key={index}
-                                href={item.path}
-                                ref={index === 0 ? firstItemRef : null}
-                                onClick={toggleMenu}
-                                onMouseEnter={() => setActiveLetter(item.label[0])}
-                                className='sidebar-item leading-none cursor-pointer text-muted-foreground hover:text-foreground focus:text-foreground outline-none transition-colors py-1'
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.aside
+                        id="main-sidebar"
+                        ref={sidebarRef}
+                        role="dialog"
+                        aria-modal="true"
+                        initial={{ y: "-100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "-100%" }}
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        className='fixed inset-0 z-50 flex bg-background border border-border will-change-transform'
+                        style={{ containerType: "size" }}
+                    >
+                        <div className='grid grid-cols-1 md:grid-cols-2 w-full h-full'>
+                            <motion.div
+                                ref={leftSideRef}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
+                                className='bg-muted relative hidden md:block overflow-hidden'
+                                style={{ containerType: "size" }}
                             >
-                                <h1 className='font-geist-pixel-line hover:font-geist-pixel-square font-bold text-5xl'>{item.label}</h1>
-                            </Link>
-                        ))}
-                        <GridBackground rows={6} />
-                    </div>
-                </div>
-            </aside>
+                                <Dither
+                                    waveColor={[0.5, 0.5, 0.5]}
+                                    disableAnimation={false}
+                                    enableMouseInteraction
+                                    mouseRadius={0.3}
+                                    colorNum={4}
+                                    waveAmplitude={0.3}
+                                    waveFrequency={3}
+                                    waveSpeed={0.05}
+                                />
+                            </motion.div>
+                            <div className="flex flex-col justify-center items-center flex-1 relative h-full">
+                                {routes.map((item, index) => (
+                                    <motion.div
+                                        key={item.path}
+                                        initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
+                                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                        exit={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+                                        transition={{
+                                            duration: 0.4,
+                                            delay: 0.2 + index * 0.1,
+                                            ease: [0.16, 1, 0.3, 1],
+                                        }}
+                                    >
+                                        <Link
+                                            href={item.path}
+                                            ref={index === 0 ? firstItemRef : null}
+                                            onClick={toggleMenu}
+                                            className='sidebar-item leading-none cursor-pointer text-muted-foreground hover:text-foreground focus:text-foreground outline-none transition-colors py-1'
+                                        >
+                                            <h1 className='font-geist-pixel-line hover:font-geist-pixel-square font-bold text-5xl'>{item.label}</h1>
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                                <GridBackground rows={6} />
+                            </div>
+                        </div>
+                    </motion.aside>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

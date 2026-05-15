@@ -1,27 +1,16 @@
 "use client"
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { Flex, Heading, IconButton, Box, Button, TextField, AspectRatio } from "@radix-ui/themes";
-import { MAIN_CATEGORIES } from "@/config/const";
+import { motion } from "motion/react";
+import { Flex, Button } from "@radix-ui/themes";
 import GridBackground from "@/components/fluff/GridBackground";
-import { cn } from "@/lib/utils";
-import clsx from "clsx";
-import { ArrowRight, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Balancer from 'react-wrap-balancer'
 import PageSection from "@/components/PageSection";
 import ProjectCard from "@/components/ProjectCard";
 import ReactMarkdown from "react-markdown";
-import FaultyTerminal from '@/components/FaultyTerminal'
-import Marquee from "react-fast-marquee";
 import Dither from "./Dither";
-import LogoScene from "./fluff/3DLogoInteractive";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
-import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import remarkGfm from "remark-gfm";
+import { Project } from "../../sanity.types";
 
 {/* <FaultyTerminal
                     className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
@@ -44,65 +33,65 @@ import remarkGfm from "remark-gfm";
                 // brightness={0.6}
                 /> */}
 
-export default function HomePage({ profile, projectsCarousel }: { profile: any, projectsCarousel: any[] }) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const heroRef = useRef<HTMLDivElement>(null);
+type HomeProfile = {
+    shortBio?: string;
+    achievementsSimple?: string;
+    featuredProjects?: Project[];
+    links?: string;
+};
 
-    useGSAP(
-        () => {
-            const tl = gsap.timeline();
-            tl.from(".hero-text", {
-                x: 100,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out",
-                filter: "blur(10px)"
-            })
-                .from(".hero-icon", {
-                    x: -100,
-                    opacity: 0,
-                    duration: 1,
-                    // ease: "back.out(1.7)", // Added a slight bounce for the hand
-                }, "0.1");
-        },
-        { scope: heroRef }
-    );
+type HomePageProps = {
+    profile: HomeProfile;
+    projectsCarousel: Project[];
+};
 
-    // Animation for the Grid Cards (Existing)
-    useGSAP(
-        () => {
-            gsap.from(".anim-card", {
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                stagger: 0.15,
-                ease: "power3.out",
-                delay: 0.5, // Optional: Wait for hero to start before showing cards
-            });
-        },
-        { scope: containerRef }
-    );
+export default function HomePage({ profile }: HomePageProps) {
 
     return (
         <main className="h-full flex grow flex-col">
             <div
                 id="hero-div"
-                ref={heroRef}
                 className="hero-div flex grow items-start justify-center relative h-screen gap-6 overflow-hidden p-4 pt-16"
             >
                 <GridBackground className="mt-16 border-muted border m-4 bg-background" />
                 <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
-                    <div className="flex flex-col w-full h-full p-12 gap-8">
-                        <h1 className="text-7xl font-normal font-geist-pixel-square tracking-tight">
+                    <motion.div
+                        className="flex flex-col w-full h-full p-12 gap-8"
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            hidden: {},
+                            visible: {
+                                transition: {
+                                    staggerChildren: 0.12,
+                                },
+                            },
+                        }}
+                    >
+                        <motion.h1
+                            className="text-7xl font-normal font-geist-pixel-square tracking-tight"
+                            variants={{
+                                hidden: { x: 100, opacity: 0, filter: "blur(10px)" },
+                                visible: { x: 0, opacity: 1, filter: "blur(0px)" },
+                            }}
+                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        >
                             <Balancer>
                                 Hi, I&apos;m Felix.
                             </Balancer>
-                        </h1>
-                        <h2 className="text-3xl max-w-xl">
+                        </motion.h1>
+                        <motion.h2
+                            className="text-3xl max-w-xl"
+                            variants={{
+                                hidden: { x: 80, opacity: 0, filter: "blur(10px)" },
+                                visible: { x: 0, opacity: 1, filter: "blur(0px)" },
+                            }}
+                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        >
                             <Balancer>
                                 👤 I&apos;m a multidisciplinary <span className="underline">Designer</span>, <span className="underline">Engineer</span> and <span className="underline">Entrepreneur</span> based in <span className="underline">Canada.</span>
                             </Balancer>
-                        </h2>
+                        </motion.h2>
                         <Flex className="flex-1" />
                         {/* <TextField.Root color="gray" size={"3"} placeholder="Send a message">
                             <TextField.Slot>
@@ -114,7 +103,7 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                         </TextField.Root> */}
 
                         {/* <p>Scrolling</p> */}
-                    </div>
+                    </motion.div>
                     <div className="relative border h-full overflow-hidden">
                         {/* <InfiniteSlider direction="vertical" speedOnHover={24}>
                             {projectsCarousel?.map((project: any, index: number) => (
@@ -175,7 +164,7 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                     <div className="p-8 h-full flex flex-col justify-between">
                         <article className="prose">
                             <ReactMarkdown>
-                                {profile.shortBio}
+                                {profile.shortBio ?? ""}
                             </ReactMarkdown>
                         </article>
                         <Button highContrast size={"3"} className="w-fit">
@@ -186,13 +175,13 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                 <PageSection title="🏆 Achievements" scrollingText="achievements" className="col-span-1">
                     <div className="prose p-8">
                         <ReactMarkdown>
-                            {profile.achievementsSimple}
+                            {profile.achievementsSimple ?? ""}
                         </ReactMarkdown>
                     </div>
                 </PageSection>
                 <PageSection title="⭐ Featured Projects" scrollingText="featured projects" className="col-span-1">
                     <div className="p-8 flex-col gap-4 flex">
-                        {profile.featuredProjects.map((project: any) => (
+                        {profile.featuredProjects?.map((project) => (
                             <ProjectCard key={project._id} project={project} />
                         ))}
                         <Link href="/projects">
@@ -203,7 +192,7 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                 <PageSection title="🌐 Links" scrollingText="links" className="col-span-1">
                     <div className="prose p-8">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {profile.links}
+                            {profile.links ?? ""}
                         </ReactMarkdown>
                     </div>
                 </PageSection>
@@ -218,106 +207,5 @@ export default function HomePage({ profile, projectsCarousel }: { profile: any, 
                 ))}
             </div> */}
         </main>
-    );
-}
-
-function SectionCard({ section, index }: { section: typeof MAIN_CATEGORIES[number]; index: number }) {
-    const { icon: Icon } = section
-    const cardRef = useRef<HTMLDivElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
-    const spotlightRef = useRef<HTMLDivElement>(null);
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!cardRef.current || !spotlightRef.current || !contentRef.current) return;
-
-        const rect = cardRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        // spotlight
-        gsap.to(spotlightRef.current, {
-            opacity: 1,
-            x: x,
-            y: y,
-            duration: 0.2,
-            ease: "power2.out",
-            overwrite: "auto",
-        });
-    };
-
-    const handleMouseLeave = () => {
-        if (!spotlightRef.current || !contentRef.current) return;
-
-        // reset spotlight
-        gsap.to(spotlightRef.current, {
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            overwrite: "auto",
-        });
-    };
-
-    return (
-        <Link
-            href={`/projects?cat=${section.slug}`}
-            className="anim-card block h-full w-full relative group perspective-1000"
-        >
-            <div
-                ref={cardRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="h-full w-full relative"
-            >
-                <div
-                    ref={contentRef}
-                    className="h-full w-full flex border border-border bg-background relative overflow-hidden transform-style-3d will-change-transform group-hover:border-muted-foreground transition-colors"
-                    style={{ containerType: "size" }}
-                >
-                    {/* spotlight gradient */}
-                    <div
-                        ref={spotlightRef}
-                        className="absolute -translate-x-1/2 -translate-y-1/2 w-100 h-100 bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,transparent_70%)] opacity-0 pointer-events-none blur-xl"
-                        style={{ top: 0, left: 0 }}
-                    />
-
-                    <Heading
-                        className={cn("bottom-0 md:-bottom-1/12 -left-1/2 md:left-0", "absolute transition-colors right-0 uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter font-geist-pixel-line md:[writing-mode:vertical-rl] text-[100cqh] leading-[1em] md:text-[100cqw] md:leading-[1em] group-hover:text-muted-foreground text-muted")}
-                    >
-                        {section.slug}{section.slug}{section.slug}
-                    </Heading>
-
-                    <div className="self-start flex w-full pointer-events-none select-none p-4 z-1 bg-linear-to-b from-background to-transparent from-25% items-start gap-2 flex-row">
-                        {/* <Icon className="size-full" /> */}
-                        <Heading
-                            className={clsx([
-                                // index === 1 && "justify-end",,
-                                "text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-geist-pixel-line group-hover:font-geist-pixel-square"
-                            ])}
-                        >
-                            {section.title}
-                        </Heading>
-                        <Flex flexGrow={"1"} />
-                        <IconButton color={section.theme} variant="classic" radius="full">
-                            <ArrowRight />
-                        </IconButton>
-                    </div>
-
-                    {/* <div className="absolute -top-px -left-px border-t border-l border-white/50 size-2 z-20" />
-                    <div className="absolute -top-px -right-px border-t border-r border-white/50 size-2 z-20" />
-                    <div className="absolute -bottom-px -left-px border-b border-l border-white/50 size-2 z-20" />
-                    <div className="absolute -bottom-px -right-px border-b border-r border-white/50 size-2 z-20" /> */}
-                </div>
-                <Box
-                    className="absolute bottom-0 left-0 right-0 h-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex"
-                    style={{
-                        background: `linear-gradient(to top, var(--${section.theme}-a6), transparent)`
-                    }}
-                >
-                </Box>
-                <Box className="absolute p-4 bottom-0 left-0 right-0">
-                    <Icon />
-                </Box>
-            </div>
-        </Link>
     );
 }

@@ -2,18 +2,12 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import Sidebar from './Sidebar';
 import Link from 'next/link';
 import { Button, DropdownMenu } from '@radix-ui/themes';
-
-gsap.registerPlugin(useGSAP);
+import { motion } from 'motion/react';
 
 const Navbar = () => {
     const containerRef = useRef(null);
-    const nameRef = useRef(null);
-    const logoRef = useRef(null);
     const [showLogo, setShowLogo] = useState(false);
 
     useEffect(() => {
@@ -32,57 +26,33 @@ const Navbar = () => {
         };
     }, []);
 
-    useGSAP(() => {
-        const tl = gsap.timeline();
-        const duration = 0.4;
-        const ease = "power2.out";
-
-        if (showLogo) {
-            tl.to(nameRef.current, {
-                y: -15,
-                autoAlpha: 0,
-                filter: 'blur(10px)',
-                duration: duration,
-                ease: ease,
-            })
-                .fromTo(logoRef.current,
-                    { y: 15, autoAlpha: 0, filter: 'blur(10px)' },
-                    { y: 0, autoAlpha: 1, filter: 'blur(0px)', duration: duration, ease: ease },
-                    "<"
-                );
-        } else {
-            tl.to(logoRef.current, {
-                y: -15,
-                autoAlpha: 0,
-                filter: 'blur(8px)',
-                duration: duration,
-                ease: ease,
-            })
-                .fromTo(nameRef.current,
-                    { y: 15, autoAlpha: 0, filter: 'blur(8px)' },
-                    { y: 0, autoAlpha: 1, filter: 'blur(0px)', duration: duration, ease: ease },
-                    "<"
-                );
-        }
-    }, { scope: containerRef, dependencies: [showLogo] });
-
     return (
         <nav className='z-50 h-16 fixed top-0 left-0 right-0 p-4 flex items-center justify-between bg-linear-to-b from-background to-100% to-transparent'>
             <div ref={containerRef} className='grid grid-cols-1 grid-rows-1 items-center z-100 mix-blend-difference'>
                 {/* Name */}
 
-                <h1
-                    ref={nameRef}
+                <motion.h1
+                    animate={{
+                        y: showLogo ? -15 : 0,
+                        opacity: showLogo ? 0 : 1,
+                        filter: showLogo ? 'blur(10px)' : 'blur(0px)',
+                    }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className='col-start-1 row-start-1 text-2xl font-bold opacity-100 tracking-tight -translate-y-1 mix-blend-difference text-white'
                 >
                     <Link href={"/"}>
                         felix ha
                     </Link>
-                </h1>
+                </motion.h1>
 
                 {/* Logo */}
-                <div
-                    ref={logoRef}
+                <motion.div
+                    animate={{
+                        y: showLogo ? 0 : -15,
+                        opacity: showLogo ? 1 : 0,
+                        filter: showLogo ? 'blur(0px)' : 'blur(8px)',
+                    }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className='col-start-1 row-start-1 opacity-0 relative'
                 >
                     <Link href={"/"}>
@@ -94,7 +64,7 @@ const Navbar = () => {
                             priority
                         />
                     </Link>
-                </div>
+                </motion.div>
             </div>
 
             <DropdownMenu.Root >

@@ -10,7 +10,6 @@ import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import { useHoverDirty } from "react-use";
 import { cn } from "@/lib/utils";
 import GridBackground from "./fluff/GridBackground";
-// import { InfiniteSlider } from "./fluff/InfiniteSliderGSAP";
 
 export default function ProjectCard({ project }: { project: Project }) {
 

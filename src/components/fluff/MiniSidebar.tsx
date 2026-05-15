@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import gsap from "gsap";
+import { animate, motion } from "motion/react";
+
+const MotionLink = motion.create(Link);
 
 export default function MiniSidebar() {
     const pathname = usePathname();
@@ -14,7 +16,7 @@ export default function MiniSidebar() {
     // Tracks scroll position so we can animate the ruler back on route change
     const lastScrollRef = useRef(0);
     const isAnimatingRef = useRef(false);
-    const setterRef = useRef<((value: number) => void) | null>(null);
+    const setRulerYRef = useRef<((value: number) => void) | null>(null);
 
     const items = useMemo(() => {
         const segments = pathname.split("/").filter((item) => item !== "");
@@ -27,41 +29,20 @@ export default function MiniSidebar() {
 
     // Nav item animation + ruler slide-back on route change
     useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.killTweensOf(".nav-item");
-            gsap.fromTo(
-                ".nav-item",
-                { opacity: 0, x: -15 },
-                {
-                    opacity: 1,
-                    x: 0,
-                    duration: 0.4,
-                    stagger: { amount: 0.2 },
-                    ease: "power4.out",
-                    overwrite: "auto",
-                }
-            );
-        }, sidebarRef);
-
         if (rulerRef.current && lastScrollRef.current > 0) {
             isAnimatingRef.current = true;
-            gsap.fromTo(
-                rulerRef.current,
-                { y: -lastScrollRef.current },
-                {
-                    y: 0,
-                    duration: 0.9,
-                    ease: "power3.out",
-                    onComplete: () => {
-                        isAnimatingRef.current = false;
-                        // Re-sync in case user scrolled during animation
-                        setterRef.current?.(-window.scrollY);
-                    },
+            const controls = animate(-lastScrollRef.current, 0, {
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1],
+                onUpdate: (latest) => setRulerYRef.current?.(latest),
+                onComplete: () => {
+                    isAnimatingRef.current = false;
+                    setRulerYRef.current?.(-window.scrollY);
                 }
-            );
-        }
+            });
 
-        return () => ctx.revert();
+            return () => controls.stop();
+        }
     }, [pathname]);
 
     // Direct scroll sync — no lerp, ruler matches scroll position exactly
@@ -77,16 +58,19 @@ export default function MiniSidebar() {
         const observer = new MutationObserver(handleResize);
         observer.observe(document.body, { childList: true, subtree: true });
 
-        const setter = gsap.quickSetter(rulerRef.current, "y", "px") as (v: number) => void;
-        setterRef.current = setter;
+        const setRulerY = (value: number) => {
+            if (!rulerRef.current) return;
+            rulerRef.current.style.transform = `translate3d(0, ${value}px, 0)`;
+        };
+        setRulerYRef.current = setRulerY;
 
-        setter(-window.scrollY);
+        setRulerY(-window.scrollY);
         lastScrollRef.current = window.scrollY;
 
         const handleScroll = () => {
             lastScrollRef.current = window.scrollY;
             if (!isAnimatingRef.current) {
-                setter(-window.scrollY);
+                setRulerY(-window.scrollY);
             }
         };
 
@@ -96,6 +80,7 @@ export default function MiniSidebar() {
             window.removeEventListener("resize", handleResize);
             window.removeEventListener("scroll", handleScroll);
             observer.disconnect();
+            setRulerYRef.current = null;
         };
     }, []);
 
@@ -103,12 +88,13 @@ export default function MiniSidebar() {
     const ticksCount = Math.ceil(docHeight / tickInterval) + 1;
 
     return (
-        <aside
+        <motion.aside
             ref={sidebarRef}
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="fixed left-0 top-0 h-screen z-40 bg-background border-r border-border w-8 min-w-8 flex flex-col items-center select-none overflow-hidden"
         >
-            <AnimateOnMount />
-
             <div
                 ref={rulerRef}
                 className="absolute top-0 left-0 w-full pointer-events-none will-change-transform"
@@ -144,8 +130,15 @@ export default function MiniSidebar() {
                     const isLast = index === items.length - 1;
                     return (
                         <React.Fragment key={item.href}>
-                            <Link
+                            <MotionLink
                                 href={item.href}
+                                initial={{ opacity: 0, x: -15 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{
+                                    duration: 0.4,
+                                    delay: index * 0.05,
+                                    ease: [0.16, 1, 0.3, 1],
+                                }}
                                 className={`
                                     nav-item
                                     [writing-mode:vertical-rl] rotate-180
@@ -159,27 +152,25 @@ export default function MiniSidebar() {
                                 `}
                             >
                                 {item.name}
-                            </Link>
+                            </MotionLink>
                             {!isLast && (
-                                <span className="nav-item [writing-mode:vertical-rl] rotate-180 text-[10px] text-muted-foreground/30">
+                                <motion.span
+                                    initial={{ opacity: 0, x: -15 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{
+                                        duration: 0.4,
+                                        delay: index * 0.05,
+                                        ease: [0.16, 1, 0.3, 1],
+                                    }}
+                                    className="nav-item [writing-mode:vertical-rl] rotate-180 text-[10px] text-muted-foreground/30"
+                                >
                                     /
-                                </span>
+                                </motion.span>
                             )}
                         </React.Fragment>
                     );
                 })}
             </nav>
-        </aside>
+        </motion.aside>
     );
-}
-
-function AnimateOnMount() {
-    useEffect(() => {
-        gsap.fromTo(
-            "aside",
-            { xPercent: -100 },
-            { xPercent: 0, duration: 1, ease: "power4.out", delay: 0.2 }
-        );
-    }, []);
-    return null;
 }

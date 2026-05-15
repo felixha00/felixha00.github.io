@@ -1,26 +1,13 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useMemo, act } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React, { useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { urlFor } from "@/sanity/lib/image";
+import { motion } from "motion/react";
 import {
-    AspectRatio,
-    Card,
-    Inset,
-    Box,
     Flex,
-    Text,
-    Heading,
-    Badge,
     Grid,
     Button,
 } from "@radix-ui/themes";
-import { getCategoryConfig } from "@/config/const";
-import { Calendar, Layers, Search } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 import { Project } from "../../sanity.types";
 
@@ -37,11 +24,10 @@ interface ProjectGalleryProps {
 }
 
 export default function ProjectGallery({ projects }: ProjectGalleryProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+    const searchQuery = searchParams.get("q") || "";
     const [activeCategory, setActiveCategory] = useState(searchParams.get("cat") || "all");
 
     // Filtering Logic 
@@ -74,40 +60,6 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
         setActiveCategory(val);
         updateUrl("cat", val);
     };
-
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setSearchQuery(val);
-        updateUrl("q", val);
-    };
-
-    const clearSearch = () => {
-        setSearchQuery("");
-        updateUrl("q", null);
-    };
-
-    //  animations 
-    useGSAP(
-        () => {
-            if (!containerRef.current) return;
-
-            const cards = containerRef.current.querySelectorAll(".project-card");
-
-            gsap.set(cards, { y: 20, opacity: 0 });
-            gsap.to(
-                cards,
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.4,
-                    stagger: 0.05,
-                    ease: "power2.out",
-                    clearProps: "all"
-                }
-            );
-        },
-        { scope: containerRef, dependencies: [filteredProjects] }
-    );
 
     return (
         <Flex className="gap-4 flex-col h-full flex-1 grow">
@@ -171,7 +123,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
             </Flex>
 
             {/* --- Results Grid --- */}
-            <div ref={containerRef} className="flex flex-1 flex-col">
+            <div className="flex flex-1 flex-col">
                 {filteredProjects.length === 0 ? (
                     // Empty State
                     null
@@ -210,8 +162,19 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                         columns={{ initial: "1", md: "2", lg: "3" }}
                         className="gap-1"
                     >
-                        {filteredProjects.map((project) => (
-                            <ProjectCard key={project._id} project={project} />
+                        {filteredProjects.map((project, index) => (
+                            <motion.div
+                                key={project._id}
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{
+                                    duration: 0.4,
+                                    delay: index * 0.05,
+                                    ease: [0.16, 1, 0.3, 1],
+                                }}
+                            >
+                                <ProjectCard project={project} />
+                            </motion.div>
                         ))}
                     </Grid>
                 )}
