@@ -69,7 +69,7 @@ const Sidebar = () => {
                 aria-expanded={isOpen}
                 aria-controls="main-sidebar"
                 aria-label={isOpen ? "Close Menu" : "Open Menu (Ctrl+M)"}
-                className='group font-mono relative overflow-hidden z-[101]'
+                className='group font-sans relative overflow-hidden z-[101]'
                 onClick={toggleMenu}
             >
                 {isOpen ? "CLOSE" : "MENU"}
@@ -130,7 +130,7 @@ const Sidebar = () => {
                                             onClick={toggleMenu}
                                             className='sidebar-item leading-none cursor-pointer text-muted-foreground hover:text-foreground focus:text-foreground outline-none transition-colors py-1'
                                         >
-                                            <h1 className='font-geist-pixel-line hover:font-geist-pixel-square font-bold text-5xl'>{item.label}</h1>
+                                            <h1 className='font-heading hover:font-display font-bold text-5xl'>{item.label}</h1>
                                         </Link>
                                     </motion.div>
                                 ))}

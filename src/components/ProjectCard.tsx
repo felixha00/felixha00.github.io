@@ -1,21 +1,18 @@
 import { getCategoryConfig } from "@/config/const";
 import { urlFor } from "@/sanity/lib/image";
-import { Card, Inset, AspectRatio, Flex, Badge, Text, Heading, Box, Button, IconButton } from "@radix-ui/themes";
-import { Layers, Calendar, ExternalLink } from "lucide-react";
+import { Card, Inset, AspectRatio, Flex, Badge, Text, Heading, Box } from "@radix-ui/themes";
+import { Layers, Calendar } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
 import Link from "next/link";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
-import { useHoverDirty } from "react-use";
-import { cn } from "@/lib/utils";
 import GridBackground from "./fluff/GridBackground";
 
 export default function ProjectCard({ project }: { project: Project }) {
 
     const { icon: Icon, ...cfg } = useMemo(() => getCategoryConfig(project.category!)!, [project])
     const card = useRef(null)
-    const isHovered = useHoverDirty(card!)
 
     return (
         <Link
@@ -53,7 +50,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                             )}
                             <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-difference" style={{ containerType: "size", lineHeight: 1 }}>
                                 <InfiniteSlider speed={24}>
-                                    <h1 className="font-geist-pixel-line tracking-tighter font-bold uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
+                                    <h1 className="font-display tracking-tighter font-bold uppercase text-[100cqh]">{project.title?.replaceAll(" ", "")}</h1>
                                 </InfiniteSlider>
                             </div>
                         </Box>
@@ -83,7 +80,7 @@ export default function ProjectCard({ project }: { project: Project }) {
 
                     {/* title and summary */}
                     <Box className="flex flex-col gap-2">
-                        <Heading className="font-bold"
+                        <Heading className="font-bold font-display"
                         >
                             {project.title}
                         </Heading>

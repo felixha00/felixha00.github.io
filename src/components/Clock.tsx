@@ -38,10 +38,10 @@ export function Clock() {
     }, [targetTimeZone]);
 
     // Prevent rendering until the client has calculated the correct time
-    if (!time) return <div className="flex gap-0.5 font-mono text-transparent">00:00:00</div>;
+    if (!time) return <div className="flex gap-0.5 font-sans text-transparent">00:00:00</div>;
 
     return (
-        <div className='flex items-center gap-0 font-mono'>
+        <div className='flex items-center gap-0 font-sans'>
             <SlidingNumber value={time.h} padStart={true} />
             <span className='text-neutral-500'>:</span>
             <SlidingNumber value={time.m} padStart={true} />

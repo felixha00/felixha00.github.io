@@ -95,7 +95,7 @@ export default async function ProjectPage(props: PageProps) {
                     )}
                 </div>
 
-                <Heading size={{ initial: "7", md: "9" }}>{project.title}</Heading>
+                <Heading className="font-display" size={{ initial: "7", md: "9" }}>{project.title}</Heading>
 
                 {project.summary && (
                     <p className="text-xl text-muted-foreground leading-relaxed">

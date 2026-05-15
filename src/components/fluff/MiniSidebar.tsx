@@ -118,7 +118,7 @@ export default function MiniSidebar() {
                         style={{ top: `${i * tickInterval}px` }}
                     >
                         <div className="w-1/2 h-px bg-foreground/30" />
-                        <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] font-mono text-muted-foreground mt-2 ml-2">
+                        <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] font-sans text-muted-foreground mt-2 ml-2">
                             {i * tickInterval}
                         </span>
                     </div>
@@ -143,7 +143,7 @@ export default function MiniSidebar() {
                                     nav-item
                                     [writing-mode:vertical-rl] rotate-180
                                     text-xs uppercase transition-colors duration-200
-                                    whitespace-nowrap font-mono
+                                    whitespace-nowrap font-sans
                                     ${
                                         isLast
                                             ? "text-foreground font-semibold cursor-default pointer-events-none"

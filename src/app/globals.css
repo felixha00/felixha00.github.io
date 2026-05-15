@@ -1,4 +1,3 @@
-@import url('https://fonts.cdnfonts.com/css/cmu-serif');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @import "tailwindcss-radix-colors/dist/gray.css";
@@ -9,7 +8,7 @@
   @import "@radix-ui/themes/styles.css";
 
   .rt-Badge {
-    @apply font-mono;
+    @apply font-sans;
   }
 
   .rt-Button {
@@ -17,7 +16,7 @@
   }
 
   .rt-Heading {
-    @apply font-geist-pixel-square 
+    @apply font-heading;
   }
 
   /* .rt-IconButton {
@@ -27,26 +26,10 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
-  --font-heading: var(--font-geist-pixel-square);
-  --font-mono: var(--font-geist-mono);
-  --font-saint: var(--font-saint);
-  --font-editorial-new: var(--font-editorial-new);
-  --font-cmu: "CMU Serif", serif;
+  --font-heading: var(--font-geist-mono);
+  --font-display: var(--font-geist-pixel-square);
 
-  --font-geist-pixel-square: var(--font-geist-pixel-square);
-  --font-geist-pixel-grid: var(--font-geist-pixel-grid);
-  --font-geist-pixel-circle: var(--font-geist-pixel-circle);
-  --font-geist-pixel-triangle: var(--font-geist-pixel-triangle);
-  --font-geist-pixel-line: var(--font-geist-pixel-line);
-  
-  /* Redaction Family */
-  --font-redaction: var(--font-redaction);
-  --font-redaction-10: var(--font-redaction-10);
-  --font-redaction-20: var(--font-redaction-20);
-  --font-redaction-35: var(--font-redaction-35);
-  --font-redaction-50: var(--font-redaction-50);
-  --font-redaction-70: var(--font-redaction-70);
-  --font-redaction-100: var(--font-redaction-100);
+  --font-mono: var(--font-geist-mono);
 }
 
 @custom-variant dark (&:is(.dark *)); 
@@ -142,17 +125,17 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
 
-  /* h1, h2, h3, h4, h5, h6 {
+  h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
-  } */
+  }
 }
 
 :root {
   .prose {
-    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:tracking-tight leading-tight max-w-none;
+    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:font-heading prose-headings:tracking-tight leading-tight max-w-none;
   }
 
   .tl-clipped-corner {

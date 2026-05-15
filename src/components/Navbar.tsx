@@ -38,7 +38,7 @@ const Navbar = () => {
                         filter: showLogo ? 'blur(10px)' : 'blur(0px)',
                     }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className='col-start-1 row-start-1 text-2xl font-bold opacity-100 tracking-tight -translate-y-1 mix-blend-difference text-white'
+                    className='col-start-1 row-start-1 text-2xl font-extrabold opacity-100 tracking-tighter -translate-y-1 mix-blend-difference text-white font-display'
                 >
                     <Link href={"/"}>
                         felix ha
@@ -112,7 +112,7 @@ const Navbar = () => {
             </DropdownMenu.Root>
 
             {/* <Sidebar /> */}
-            {/* <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-mono px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div> */}
+            {/* <div className='bg-white/10 h-11 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-2xl flex justify-center flex-row font-sans px-4 backdrop-blur-lg text-sm items-center gap-2'>YYZ<Globe className='size-3' /><Clock /></div> */}
         </nav >
     );
 }

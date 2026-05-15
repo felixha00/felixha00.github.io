@@ -69,7 +69,7 @@ export default function HomePage({ profile }: HomePageProps) {
                         }}
                     >
                         <motion.h1
-                            className="text-7xl font-normal font-geist-pixel-square tracking-tight"
+                            className="text-7xl font-normal font-display tracking-tight"
                             variants={{
                                 hidden: { x: 100, opacity: 0, filter: "blur(10px)" },
                                 visible: { x: 0, opacity: 1, filter: "blur(0px)" },
@@ -80,7 +80,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                 Hi, I&apos;m Felix.
                             </Balancer>
                         </motion.h1>
-                        <motion.h2
+                        <motion.p
                             className="text-3xl max-w-xl"
                             variants={{
                                 hidden: { x: 80, opacity: 0, filter: "blur(10px)" },
@@ -91,7 +91,7 @@ export default function HomePage({ profile }: HomePageProps) {
                             <Balancer>
                                 👤 I&apos;m a multidisciplinary <span className="underline">Designer</span>, <span className="underline">Engineer</span> and <span className="underline">Entrepreneur</span> based in <span className="underline">Canada.</span>
                             </Balancer>
-                        </motion.h2>
+                        </motion.p>
                         <Flex className="flex-1" />
                         {/* <TextField.Root color="gray" size={"3"} placeholder="Send a message">
                             <TextField.Slot>
