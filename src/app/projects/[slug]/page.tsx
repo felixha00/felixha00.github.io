@@ -5,7 +5,7 @@ import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
 import { Badge, Button, Heading, Inset, Separator } from "@radix-ui/themes";
-import { getCategoryConfig } from "@/config/const";
+import { getProjectCategoryConfig } from "@/config/const";
 import GridBackground from "@/components/fluff/GridBackground";
 
 const getRawGithubUrl = (url: string) => {
@@ -52,7 +52,7 @@ export async function generateMetadata(props: PageProps) {
 export default async function ProjectPage(props: PageProps) {
     const params = await props.params;
     const project = await client.fetch(PROJECT_QUERY, params);
-    const catConfig = getCategoryConfig(project.category)
+    const catConfig = getProjectCategoryConfig(project.category)
 
     if (!project) {
         notFound();

@@ -202,7 +202,7 @@ export default function HomePage({ profile }: HomePageProps) {
                 ref={containerRef}
                 className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 min-h-screen gap-4 perspective-1000 overflow-hidden"
             >
-                {MAIN_CATEGORIES.map((section, i) => (
+                {PROJECT_CATEGORIES.map((section, i) => (
                     <SectionCard key={section.slug} section={section} index={i} />
                 ))}
             </div> */}

@@ -1,4 +1,4 @@
-import { getCategoryConfig } from "@/config/const";
+import { getProjectCategoryConfig } from "@/config/const";
 import { urlFor } from "@/sanity/lib/image";
 import { Card, Inset, AspectRatio, Flex, Badge, Text, Heading, Box } from "@radix-ui/themes";
 import { Layers, Calendar } from "lucide-react";
@@ -11,7 +11,7 @@ import GridBackground from "./fluff/GridBackground";
 
 export default function ProjectCard({ project }: { project: Project }) {
 
-    const { icon: Icon, ...cfg } = useMemo(() => getCategoryConfig(project.category!)!, [project])
+    const { icon: Icon, ...cfg } = useMemo(() => getProjectCategoryConfig(project.category!)!, [project])
     const card = useRef(null)
 
     return (

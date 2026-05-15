@@ -1,6 +1,6 @@
 import { CodeSquare, Globe2, Pointer, ScanEye } from "lucide-react";
 
-export const MAIN_CATEGORIES = [
+export const PROJECT_CATEGORIES = [
     {
         slug: "sfw",
         title: "Software & Web",
@@ -27,7 +27,7 @@ export const MAIN_CATEGORIES = [
     },
 ];
 
-export const getCategoryConfig = (value: string) => {
-    const category = MAIN_CATEGORIES.find(c => c.slug === value);
+export const getProjectCategoryConfig = (value: string) => {
+    const category = PROJECT_CATEGORIES.find(c => c.slug === value);
     return category
 }

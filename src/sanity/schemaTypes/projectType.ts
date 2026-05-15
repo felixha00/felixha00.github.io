@@ -1,9 +1,9 @@
 import { defineField, defineType } from 'sanity'
 
-const MAIN_CATEGORIES = [
+const PROJECT_CATEGORY_OPTIONS = [
     { title: "Software & Web", value: "sfw" },
     { title: "Hardware & Tangibles", value: "hdw" },
-    { title: "Visual & Brand", value: "viz" },
+    { title: "Visuals & Branding", value: "viz" },
     { title: "Business & Ventures", value: "biz" },
 ];
 
@@ -41,7 +41,7 @@ export const projectType = defineType({
             title: 'Category',
             type: 'string',
             options: {
-                list: MAIN_CATEGORIES.map((item) => ({
+                list: PROJECT_CATEGORY_OPTIONS.map((item) => ({
                     title: item.title,
                     value: item.value
                 })),

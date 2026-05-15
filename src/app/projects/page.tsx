@@ -16,7 +16,6 @@ export const revalidate = 60; // ISR: Revalidate every 60 seconds
 export default async function ProjectsPage() {
     const projects = await client.fetch(PROJECTS_QUERY);
 
-    console.log("!! projects", projects)
     return (
         <main className="p-4 h-full flex-1 pt-16">
             <ProjectGallery projects={projects} />

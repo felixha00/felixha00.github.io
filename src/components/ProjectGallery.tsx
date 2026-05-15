@@ -10,14 +10,8 @@ import {
 } from "@radix-ui/themes";
 import ProjectCard from "./ProjectCard";
 import { Project } from "../../sanity.types";
-
-// Constants
-const MAIN_CATEGORIES = [
-    { title: "Software & Web", value: "sfw" },
-    { title: "Hardware & Tangibles", value: "hdw" },
-    { title: "Visual & Brand", value: "viz" },
-    { title: "Business & Ventures", value: "biz" },
-];
+import { PROJECT_CATEGORIES } from "@/config/const";
+import { LayoutGrid } from "lucide-react";
 
 interface ProjectGalleryProps {
     projects: Project[];
@@ -79,20 +73,26 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                         highContrast
                         color="gray"
                     >
+                        <LayoutGrid className="size-3.5 shrink-0" aria-hidden="true" />
                         All
                     </Button>
-                    {MAIN_CATEGORIES.map((cat) => (
-                        <Button
-                            key={cat.value}
-                            variant={activeCategory === cat.value ? "classic" : "soft"}
-                            onClick={() => handleCategoryChange(cat.value)}
-                            size="2"
-                            color={activeCategory === cat.value ? "gray" : "gray"}
-                            highContrast={activeCategory === cat.value}
-                        >
-                            {cat.title}
-                        </Button>
-                    ))}
+                    {PROJECT_CATEGORIES.map((cat) => {
+                        const Icon = cat.icon;
+
+                        return (
+                            <Button
+                                key={cat.slug}
+                                variant={activeCategory === cat.slug ? "classic" : "soft"}
+                                onClick={() => handleCategoryChange(cat.slug)}
+                                size="2"
+                                color="gray"
+                                highContrast={activeCategory === cat.slug}
+                            >
+                                <Icon className="size-3.5 shrink-0" aria-hidden="true" />
+                                {cat.title}
+                            </Button>
+                        )
+                    })}
                 </Flex>
 
                 {/* Search */}
