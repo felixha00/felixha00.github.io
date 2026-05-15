@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -555,12 +556,23 @@ export function WeatherCard() {
   );
 }
 
+const statsItemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+};
+
 export default function StatsGrid() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <TimeCard />
-      <LocationCard />
-      <WeatherCard />
-    </div>
+    <motion.div
+      className="grid grid-cols-1 gap-4 md:grid-cols-3"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+    >
+      <motion.div variants={statsItemVariants}><TimeCard /></motion.div>
+      <motion.div variants={statsItemVariants}><LocationCard /></motion.div>
+      <motion.div variants={statsItemVariants}><WeatherCard /></motion.div>
+    </motion.div>
   );
 }

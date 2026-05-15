@@ -97,7 +97,15 @@ export default function HomePage({ profile }: HomePageProps) {
                         <div className="flex-1" />
                         <CategoryShortcuts />
                     </motion.div>
-                    <div className="relative border md:h-full md:overflow-y-auto flex flex-col gap-0 p-0">
+                    <motion.div
+                        className="relative border md:h-full md:overflow-y-auto flex flex-col gap-0 p-0"
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            hidden: {},
+                            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.35 } },
+                        }}
+                    >
                         {/* <Dither
                             waveColor={[0.5, 0.5, 0.5]}
                             disableAnimation={false}
@@ -108,9 +116,23 @@ export default function HomePage({ profile }: HomePageProps) {
                             waveFrequency={3}
                             waveSpeed={0.05}
                         /> */}
-                        <TimeCard />
-                        <WeatherCard />
-                    </div>
+                        <motion.div
+                            variants={{
+                                hidden: { opacity: 0, y: 10 },
+                                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+                            }}
+                        >
+                            <TimeCard />
+                        </motion.div>
+                        <motion.div
+                            variants={{
+                                hidden: { opacity: 0, y: 10 },
+                                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+                            }}
+                        >
+                            <WeatherCard />
+                        </motion.div>
+                    </motion.div>
                 </div>
 
 
