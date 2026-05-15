@@ -91,7 +91,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                     </div>
                     {project.date && (
                         <CardAction className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <CalendarIcon />
+                            <CalendarIcon className="size-3" />
                             {new Date(project.date).getFullYear()}
                         </CardAction>
                     )}

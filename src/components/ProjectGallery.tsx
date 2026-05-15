@@ -67,7 +67,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
     };
 
     return (
-        <div className="flex h-full flex-1 grow flex-col gap-4">
+        <div className="flex flex-1 grow flex-col gap-4">
             <div className="flex flex-col items-stretch justify-between gap-3 md:flex-row md:items-center">
                 <ToggleGroup
                     type="single"
@@ -104,7 +104,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                             <EmptyMedia variant="icon">
                                 <SearchXIcon />
                             </EmptyMedia>
-                            <EmptyTitle>No projects found</EmptyTitle>
+                            <EmptyTitle className="font-display text-3xl">No projects found</EmptyTitle>
                             <EmptyDescription>
                                 Try a different category or clear the current filters.
                             </EmptyDescription>
@@ -116,7 +116,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                         </EmptyContent>
                     </Empty>
                 ) : (
-                    <div className="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {filteredProjects.map((project, index) => (
                             <motion.div
                                 key={project._id}

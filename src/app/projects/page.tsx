@@ -36,7 +36,7 @@ export default async function ProjectsPage() {
     const projects = await client.fetch(PROJECTS_QUERY);
 
     return (
-        <main className="p-4 h-full flex-1 pt-16">
+        <main className="flex flex-1 flex-col p-4 pt-16">
             <Suspense fallback={<ProjectGalleryFallback />}>
                 <ProjectGallery projects={projects} />
             </Suspense>
