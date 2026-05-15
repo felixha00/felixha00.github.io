@@ -65,18 +65,18 @@ export default function HomePage({ profile }: HomePageProps) {
                             <h1 className="text-7xl font-normal font-display tracking-tight">
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.15, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     Hi,
                                 </motion.span>
                                 {" "}
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.72, duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.14, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     I&apos;m Felix.
                                 </motion.span>
@@ -85,45 +85,45 @@ export default function HomePage({ profile }: HomePageProps) {
                             <p className="text-3xl max-w-xl leading-snug">
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 1.62, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.26, duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     I&apos;m a multidisciplinary
                                 </motion.span>
                                 {" "}
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 2.08, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.36, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     <span className="underline">Designer</span>,
                                 </motion.span>
                                 {" "}
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 2.38, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.44, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     <span className="underline">Engineer</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 2.64, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.51, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     and <span className="underline">Entrepreneur</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
                                     className="inline-block"
-                                    initial={{ y: 14, opacity: 0 }}
+                                    initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 3.05, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                                    transition={{ delay: 0.58, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     based in <span className="underline">Canada.</span>
                                 </motion.span>
@@ -132,13 +132,7 @@ export default function HomePage({ profile }: HomePageProps) {
 
                         <div className="flex-1" />
 
-                        <motion.div
-                            initial={{ y: 14, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 3.55, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                            <CategoryShortcuts />
-                        </motion.div>
+                        <CategoryShortcuts />
                     </div>
                     <motion.div
                         className="relative border md:h-full md:overflow-y-auto grid grid-cols-1 lg:grid-cols-2 gap-0 p-0"

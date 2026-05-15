@@ -16,12 +16,12 @@ const DESCRIPTIONS: Record<string, string> = {
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.72 } },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.38, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
 export default function CategoryShortcuts() {
@@ -30,8 +30,7 @@ export default function CategoryShortcuts() {
       className="grid grid-cols-2 gap-4"
       variants={containerVariants}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
+      animate="visible"
     >
       {PROJECT_CATEGORIES.map((category) => {
         const Icon = category.icon;
@@ -69,8 +68,10 @@ export default function CategoryShortcuts() {
           </motion.div>
         );
       })}
-      <div />
-      <Button size={"lg"}>View All Projects <ArrowRight data-icon="inline-end" /></Button>
+      <motion.div variants={itemVariants} />
+      <motion.div variants={itemVariants}>
+        <Button size={"lg"} className="w-full">View All Projects <ArrowRight data-icon="inline-end" /></Button>
+      </motion.div>
     </motion.div>
   );
 }
