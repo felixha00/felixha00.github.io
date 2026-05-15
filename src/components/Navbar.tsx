@@ -38,9 +38,9 @@ const Navbar = () => {
                         filter: showLogo ? 'blur(10px)' : 'blur(0px)',
                     }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className='col-start-1 row-start-1 text-2xl font-extrabold opacity-100 tracking-tighter -translate-y-1 mix-blend-difference text-white font-display'
+                    className={`col-start-1 row-start-1 justify-self-start w-fit text-2xl font-extrabold opacity-100 tracking-tighter -translate-y-1 mix-blend-difference text-white font-display ${showLogo ? 'pointer-events-none' : 'pointer-events-auto'}`}
                 >
-                    <Link href={"/"}>
+                    <Link href={"/"} className='inline-flex'>
                         felix ha
                     </Link>
                 </motion.h1>
@@ -53,9 +53,9 @@ const Navbar = () => {
                         filter: showLogo ? 'blur(0px)' : 'blur(8px)',
                     }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className='col-start-1 row-start-1 opacity-0 relative'
+                    className={`col-start-1 row-start-1 justify-self-start w-fit opacity-0 relative ${showLogo ? 'pointer-events-auto' : 'pointer-events-none'}`}
                 >
-                    <Link href={"/"}>
+                    <Link href={"/"} className='inline-flex size-10'>
                         <Image
                             src="/logo-white.svg"
                             alt="Logo"
