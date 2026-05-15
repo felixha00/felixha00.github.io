@@ -17,6 +17,7 @@ import { MenuIcon } from 'lucide-react';
 const NAV_ITEMS = [
     { label: 'Home', href: '/', index: '01' },
     { label: 'Projects', href: '/projects', index: '02' },
+    // { label: 'Blog', href: '/blog', index: '03' },
 ];
 
 // CSS-only roll — zero React state on hover, runs on compositor thread
@@ -74,7 +75,7 @@ export function NavSheet({ open, onOpenChange }: NavSheetProps) {
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
-                <Button>
+                <Button className='font-mono'>
                     MENU
                     <MenuIcon data-icon="inline-end" />
                 </Button>

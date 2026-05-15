@@ -20,17 +20,17 @@ const PageSection = ({
 }: Props) => {
     return (
         <MotionFade className={cn("h-full", className)}>
-            <Card className="group relative h-full opacity-95 transition-opacity hover:opacity-100 bg-background/80 hover:border-muted-foreground">
+            <Card className="group relative h-full bg-card/20 hover:ring-muted-foreground transition-all">
                 <GridBackground />
 
-                <CardHeader className="relative border-l-4 group-hover:border-l-muted-foreground rounded-none">
+                <CardHeader className="relative border-l-4 group-hover:border-l-muted-foreground rounded-none transition-colors">
                     <CardTitle className="w-fit font-display text-4xl font-normal text-muted-foreground transition-colors group-hover:text-foreground">
                         {title}
                     </CardTitle>
                 </CardHeader>
 
                 <div
-                    className="absolute inset-0 -z-1 overflow-hidden whitespace-nowrap opacity-100 transition-opacity duration-500 group-hover:opacity-0"
+                    className="absolute inset-0 -z-1 overflow-hidden whitespace-nowrap opacity-100 transition-opacity duration-1000 group-hover:opacity-0"
                     style={{ containerType: "size", lineHeight: 1 }}
                 >
                     <InfiniteSlider speed={24} gap={0}>
