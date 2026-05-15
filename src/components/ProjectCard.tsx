@@ -8,24 +8,25 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardAction,
-    CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Layers } from "lucide-react";
+import { CalendarIcon, Layers, Trophy } from "lucide-react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
 import Link from "next/link";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import GridBackground from "./fluff/GridBackground";
+import { TextShimmer } from "./motion-primitives/TextShimmer";
 
 type ProjectCardProject = Project & {
     slug?: Project["slug"] | string;
@@ -116,6 +117,27 @@ function useFirstLineStack(stack: string[]) {
     return { footerRef, overflowMeasureRef, tagMeasureRefs, visibleCount };
 }
 
+function ProjectOutcomeItem({
+    outcome,
+}: {
+    outcome?: ProjectCardProject["outcome"];
+}) {
+    if (!outcome) return null;
+
+    return (
+        <div className="absolute left-4 top-4 z-10 w-fit">
+            <Item variant="default" className="shadow-md bg-card">
+                <ItemMedia variant="icon" className="text-muted-foreground">
+                    <Trophy />
+                </ItemMedia>
+                <ItemContent>
+                    <ItemTitle><TextShimmer className='[--base-color:var(--color-muted-foreground)][--base-gradient-color:var(--color-foreground)]'>{outcome}</TextShimmer></ItemTitle>
+                </ItemContent>
+            </Item>
+        </div>
+    );
+}
+
 export default function ProjectCard({ project }: { project: ProjectCardProject }) {
     const category = useMemo(
         () => getProjectCategoryConfig(project.category ?? ""),
@@ -133,6 +155,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
     return (
         <Card className="project-card group relative h-full w-full pt-0 px-0 transition-colors hover:ring-foreground/20">
             <GridBackground />
+            <ProjectOutcomeItem outcome={project.outcome} />
             <Link
                 href={projectHref}
                 className="relative block no-underline outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -198,19 +221,6 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                     )}
                 </CardHeader>
             </Link>
-
-            {project.outcome && (
-                <CardContent className="relative -mt-1 pb-1">
-                    <p className="project-outcome flex items-baseline gap-2 rounded-md border border-foreground/10 bg-foreground/[0.035] px-3 py-2 text-xs leading-none">
-                        <span className="shrink-0 font-mono text-muted-foreground">
-                            Outcome
-                        </span>
-                        <span className="min-w-0 truncate font-heading text-sm font-semibold text-foreground">
-                            {project.outcome}
-                        </span>
-                    </p>
-                </CardContent>
-            )}
 
             <CardFooter
                 ref={footerRef}
