@@ -194,13 +194,13 @@ export function TimeCard() {
   }, []);
 
   return (
-    <Card className="md:col-span-2 rounded-none">
+    <Card className="md:col-span-2 rounded-none h-full flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Local Time
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 flex-1">
         <div className="flex flex-wrap items-end gap-3">
           <div className="text-5xl">
             <Clock />
@@ -454,13 +454,13 @@ export function WeatherCard() {
 
   if (error) {
     return (
-      <Card className="rounded-none">
+      <Card className="rounded-none h-full flex flex-col">
         <CardHeader className="pb-2">
           <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Weather
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1">
           <p className="font-mono text-xs text-muted-foreground">
             FETCH_ERROR — weather data unavailable
           </p>
@@ -471,13 +471,13 @@ export function WeatherCard() {
 
   if (!weather) {
     return (
-      <Card className="rounded-none">
+      <Card className="rounded-none h-full flex flex-col">
         <CardHeader className="pb-2">
           <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Weather
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className="flex flex-col gap-4 flex-1">
           <div className="flex items-center gap-3">
             <Skeleton className="size-9 rounded-full" />
             <div className="flex flex-col gap-1.5">
@@ -504,13 +504,13 @@ export function WeatherCard() {
   }).format(new Date()).toUpperCase();
 
   return (
-    <Card className="rounded-none">
+    <Card className="rounded-none h-full flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Weather · {CITY}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-3 flex-1">
         <TooltipProvider>
           <div className="flex items-center gap-3">
             <Icon className="size-8 shrink-0 text-muted-foreground" />

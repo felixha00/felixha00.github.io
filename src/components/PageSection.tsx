@@ -24,7 +24,7 @@ const PageSection = ({
                 <GridBackground />
 
                 <CardHeader className="relative border-l-4 group-hover:border-l-muted-foreground rounded-none transition-colors">
-                    <CardTitle className="w-fit font-display text-4xl font-normal text-muted-foreground transition-colors group-hover:text-foreground">
+                    <CardTitle className="w-fit font-display text-2xl font-normal text-muted-foreground transition-colors group-hover:text-foreground">
                         {title}
                     </CardTitle>
                 </CardHeader>
