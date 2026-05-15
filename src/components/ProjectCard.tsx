@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardAction,
-    CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
@@ -20,14 +19,12 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon, Layers } from "lucide-react";
-import { useMemo } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
 import Link from "next/link";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import GridBackground from "./fluff/GridBackground";
-
-const VISIBLE_STACK_LIMIT = 5;
 
 type ProjectCardProject = Project & {
     slug?: Project["slug"] | string;
@@ -41,6 +38,83 @@ const getSlugValue = (slug: ProjectCardProject["slug"]) => {
     return typeof slug === "string" ? slug : slug.current ?? null;
 };
 
+const px = (value: string) => Number.parseFloat(value) || 0;
+
+function useFirstLineStack(stack: string[]) {
+    const footerRef = useRef<HTMLDivElement>(null);
+    const overflowMeasureRef = useRef<HTMLSpanElement>(null);
+    const tagMeasureRefs = useRef<Array<HTMLSpanElement | null>>([]);
+    const [visibleCount, setVisibleCount] = useState(stack.length);
+
+    useLayoutEffect(() => {
+        const footer = footerRef.current;
+        if (!footer) return;
+
+        let animationFrame = 0;
+
+        const measure = () => {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = requestAnimationFrame(() => {
+                const styles = window.getComputedStyle(footer);
+                const innerWidth =
+                    footer.clientWidth - px(styles.paddingLeft) - px(styles.paddingRight);
+                const gap = px(styles.columnGap || styles.gap);
+                const widths = stack.map((_, index) =>
+                    tagMeasureRefs.current[index]?.getBoundingClientRect().width ?? 0
+                );
+                const allTagsWidth = widths.reduce(
+                    (total, width, index) => total + width + (index > 0 ? gap : 0),
+                    0
+                );
+
+                if (allTagsWidth <= innerWidth) {
+                    setVisibleCount((current) =>
+                        current === stack.length ? current : stack.length
+                    );
+                    return;
+                }
+
+                const overflowWidth =
+                    overflowMeasureRef.current?.getBoundingClientRect().width ?? 0;
+                const availableWidth = Math.max(0, innerWidth - overflowWidth - gap);
+                let usedWidth = 0;
+                let nextVisibleCount = 0;
+
+                for (const width of widths) {
+                    const nextWidth =
+                        usedWidth + width + (nextVisibleCount > 0 ? gap : 0);
+                    if (nextWidth > availableWidth) break;
+
+                    usedWidth = nextWidth;
+                    nextVisibleCount += 1;
+                }
+
+                setVisibleCount((current) =>
+                    current === nextVisibleCount ? current : nextVisibleCount
+                );
+            });
+        };
+
+        measure();
+
+        const resizeObserver = new ResizeObserver(measure);
+        resizeObserver.observe(footer);
+        tagMeasureRefs.current.forEach((tag) => {
+            if (tag) resizeObserver.observe(tag);
+        });
+        if (overflowMeasureRef.current) {
+            resizeObserver.observe(overflowMeasureRef.current);
+        }
+
+        return () => {
+            cancelAnimationFrame(animationFrame);
+            resizeObserver.disconnect();
+        };
+    }, [stack]);
+
+    return { footerRef, overflowMeasureRef, tagMeasureRefs, visibleCount };
+}
+
 export default function ProjectCard({ project }: { project: ProjectCardProject }) {
     const category = useMemo(
         () => getProjectCategoryConfig(project.category ?? ""),
@@ -49,41 +123,49 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
     const CategoryIcon = category?.icon ?? Layers;
     const slug = getSlugValue(project.slug);
     const projectHref = slug ? `/projects/${slug}` : "/projects";
-    const stack = project.stack ?? [];
-    const visibleStack = stack.slice(0, VISIBLE_STACK_LIMIT);
-    const overflowStack = stack.slice(VISIBLE_STACK_LIMIT);
+    const stack = useMemo(() => project.stack ?? [], [project.stack]);
+    const { footerRef, overflowMeasureRef, tagMeasureRefs, visibleCount } =
+        useFirstLineStack(stack);
+    const visibleStack = stack.slice(0, visibleCount);
+    const overflowStack = stack.slice(visibleCount);
 
     return (
         <Card className="project-card group relative h-full w-full pt-0 px-0 transition-colors hover:ring-foreground/20">
             <GridBackground />
-            <AspectRatio ratio={16 / 9} className="bg-muted">
-                <div className="relative h-full w-full overflow-hidden">
-                    {project.image ? (
-                        <Image
-                            src={urlFor(project.image).width(768).height(432).fit("crop").url()}
-                            alt={project.image.alt || project.title || "Project image"}
-                            fill
-                            className="object-cover duration-500 group-hover:scale-105"
-                        />
-                    ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
-                            <Layers className="size-12" />
-                        </div>
-                    )}
-                    {project.title && (
-                        <div
-                            className="absolute inset-0 overflow-hidden whitespace-nowrap opacity-0 mix-blend-difference transition-opacity duration-500 group-hover:opacity-100"
-                            style={{ containerType: "size", lineHeight: 1 }}
-                        >
-                            <InfiniteSlider speed={24}>
-                                <h1 className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
-                                    {project.title.replaceAll(" ", "")}
-                                </h1>
-                            </InfiniteSlider>
-                        </div>
-                    )}
-                </div>
-            </AspectRatio>
+            <Link
+                href={projectHref}
+                className="relative block no-underline outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                aria-label={`View ${project.title ?? "project"}`}
+            >
+                <AspectRatio ratio={16 / 9} className="bg-muted">
+                    <div className="relative h-full w-full overflow-hidden">
+                        {project.image ? (
+                            <Image
+                                src={urlFor(project.image).width(768).height(432).fit("crop").url()}
+                                alt={project.image.alt || project.title || "Project image"}
+                                fill
+                                className="object-cover duration-500 group-hover:scale-105"
+                            />
+                        ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">
+                                <Layers className="size-12" />
+                            </div>
+                        )}
+                        {project.title && (
+                            <div
+                                className="absolute inset-0 overflow-hidden whitespace-nowrap opacity-0 mix-blend-difference transition-opacity duration-500 group-hover:opacity-100"
+                                style={{ containerType: "size", lineHeight: 1 }}
+                            >
+                                <InfiniteSlider speed={24}>
+                                    <h1 className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
+                                        {project.title.replaceAll(" ", "")}
+                                    </h1>
+                                </InfiniteSlider>
+                            </div>
+                        )}
+                    </div>
+                </AspectRatio>
+            </Link>
             <Link
                 href={projectHref}
                 className="relative block no-underline outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -116,11 +198,37 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                 </CardHeader>
             </Link>
 
-            <CardFooter className="relative mt-auto min-h-14 justify-start gap-1 overflow-hidden">
+            <CardFooter
+                ref={footerRef}
+                className="relative mt-auto min-h-14 justify-start gap-1 overflow-hidden"
+            >
+                <div aria-hidden className="pointer-events-none invisible absolute flex items-center gap-1">
+                    {stack.map((tech, index) => (
+                        <span
+                            key={`${tech}-${index}`}
+                            ref={(node) => {
+                                tagMeasureRefs.current[index] = node;
+                            }}
+                        >
+                            <Badge variant="secondary" className="max-w-28 truncate">
+                                {tech}
+                            </Badge>
+                        </span>
+                    ))}
+                    <span ref={overflowMeasureRef}>
+                        <Button type="button" variant="outline" size="xs">
+                            +{stack.length} more
+                        </Button>
+                    </span>
+                </div>
                 <div className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
                     {visibleStack.length > 0 ? (
-                        visibleStack.map((tech) => (
-                            <Badge key={tech} variant="secondary" className="max-w-28 truncate">
+                        visibleStack.map((tech, index) => (
+                            <Badge
+                                key={`${tech}-${index}`}
+                                variant="secondary"
+                                className="max-w-28 truncate"
+                            >
                                 {tech}
                             </Badge>
                         ))
@@ -141,10 +249,13 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent align="end" className="w-56">
-
                             <div className="flex flex-wrap gap-1">
-                                {overflowStack.map((tech) => (
-                                    <Badge key={tech} variant="secondary" className="max-w-full truncate">
+                                {overflowStack.map((tech, index) => (
+                                    <Badge
+                                        key={`${tech}-${visibleCount + index}`}
+                                        variant="secondary"
+                                        className="max-w-full truncate"
+                                    >
                                         {tech}
                                     </Badge>
                                 ))}
