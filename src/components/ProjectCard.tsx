@@ -195,14 +195,14 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                 className="relative block no-underline outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                 aria-label={`View ${project.title ?? "project"}`}
             >
-                <CardHeader className="relative">
+                <CardHeader className="`relative">
                     <div className="flex flex-wrap items-center gap-1">
-                        <Badge variant="secondary">
-                            {project.for?.name || "Personal"}
-                        </Badge>
                         <Badge variant="outline">
                             <CategoryIcon data-icon="inline-start" />
                             {category?.title || "Project"}
+                        </Badge>
+                        <Badge variant="secondary">
+                            {project.for?.name || "Personal"}
                         </Badge>
                     </div>
                     {project.date && (
@@ -211,7 +211,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                             {new Date(project.date).getFullYear()}
                         </CardAction>
                     )}
-                    <CardTitle className="font-display text-xl font-bold">
+                    <CardTitle className="font-display text-xl font-bold mt-4">
                         {project.title}
                     </CardTitle>
                     {project.summary && (
@@ -234,7 +234,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                                 tagMeasureRefs.current[index] = node;
                             }}
                         >
-                            <Badge variant="secondary" className="max-w-28 truncate">
+                            <Badge variant="outline" className="max-w-28 truncate">
                                 {tech}
                             </Badge>
                         </span>
@@ -250,7 +250,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                         visibleStack.map((tech, index) => (
                             <Badge
                                 key={`${tech}-${index}`}
-                                variant="secondary"
+                                variant="outline"
                                 className="max-w-28 truncate"
                             >
                                 {tech}

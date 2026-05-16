@@ -183,7 +183,7 @@
 
 :root {
   .prose {
-    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:font-heading prose-headings:tracking-tight leading-tight max-w-none;
+    @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:font-sans! prose-headings:tracking-normal prose-a:hover:text-muted-foreground leading-tight max-w-none prose-a:transition-colors;
   }
 
   .tl-clipped-corner {

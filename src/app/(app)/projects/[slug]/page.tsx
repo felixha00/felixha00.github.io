@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { getProjectCategoryConfig } from "@/config/const";
 import GridBackground from "@/components/fluff/GridBackground";
 import ProjectContentTabs from "@/components/ProjectContentTabs";
+import { Layers } from "lucide-react";
 
 const getRawGithubUrl = (url: string) => {
     if (!url) return null;
@@ -58,6 +59,8 @@ export default async function ProjectPage(props: PageProps) {
     const catConfig = getProjectCategoryConfig(project.category);
     let readmeContent: string | null = null;
 
+    const CategoryIcon = catConfig?.icon ?? Layers;
+
     if (project.readmeUrl) {
         try {
             const rawUrl = getRawGithubUrl(project.readmeUrl);
@@ -72,21 +75,26 @@ export default async function ProjectPage(props: PageProps) {
         }
     }
 
-    const hasProjectLinks = Boolean(project.links?.length || project.attachments?.length);
+    const hasSecondaryProjectLinks = Boolean(
+        project.links?.some((link: { url?: string }) => link.url) ||
+        project.attachments?.some((attachment: { url?: string }) => attachment.url)
+    );
+    const hasProjectLinks = Boolean(project.url || hasSecondaryProjectLinks);
 
     return (
         <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 overflow-x-hidden border-x border-border px-4 py-16">
             <header className="relative flex flex-col items-start gap-4">
                 <div className="flex flex-wrap items-center gap-2">
                     <div className="flex flex-row items-center gap-1">
+                        <Badge variant="outline">
+                            <CategoryIcon data-icon="inline-start" />
+                            {catConfig?.title || "Project"}
+                        </Badge>
                         {project.for && (
                             <Badge variant="secondary">
                                 {project.for?.name}
                             </Badge>
                         )}
-                        <Badge variant="outline">
-                            {catConfig?.title || "Project"}
-                        </Badge>
                     </div>
 
                     {project.date && (
@@ -119,7 +127,7 @@ export default async function ProjectPage(props: PageProps) {
                                 </a>
                             </Button>
                         )}
-                        {project.url && (project.links?.length || project.attachments?.length) && (
+                        {project.url && hasSecondaryProjectLinks && (
                             <Separator orientation="vertical" decorative className="h-auto" />
                         )}
                         {project.links?.map((link: { _key: string; label?: string; url?: string }) => (

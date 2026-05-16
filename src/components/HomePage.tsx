@@ -84,7 +84,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                 </motion.span>
                             </h1>
 
-                            <p className="text-3xl max-w-xl leading-snug">
+                            <p className="text-3xl max-w-xl leading-snug tracking-tight">
                                 <motion.span
                                     className="inline-block"
                                     initial={{ y: 10, opacity: 0 }}
@@ -100,7 +100,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.36, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    <span className="underline">Designer</span>,
+                                    <span className="underline">🧑‍🎨 Designer</span>,
                                 </motion.span>
                                 {" "}
                                 <motion.span
@@ -109,7 +109,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.44, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    <span className="underline">Engineer</span>
+                                    <span className="underline">👨‍💻 Engineer</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
@@ -118,7 +118,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.51, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    and <span className="underline">Entrepreneur</span>
+                                    and <span className="underline">👨‍💼 Entrepreneur</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
@@ -127,7 +127,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.58, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    based in <span className="underline">Canada.</span>
+                                    based in <span className="underline">🇨🇦 Canada.</span>
                                 </motion.span>
                             </p>
                         </div>
@@ -145,7 +145,7 @@ export default function HomePage({ profile }: HomePageProps) {
                             visible: { transition: { staggerChildren: 0.1, delayChildren: 0.35 } },
                         }}
                     >
-                        {[TimeCard, WeatherCard, LastDeployCard, GitHubActivityCard].map((Card, i) => (
+                        {[TimeCard, WeatherCard, LastDeployCard].map((Card, i) => (
                             <motion.div
                                 key={i}
                                 variants={{
@@ -211,7 +211,7 @@ export default function HomePage({ profile }: HomePageProps) {
                     </div>
                 </InfoCard>
                 <InfoCard title="Links" scrollingText="links" className="col-span-1">
-                    <div className="prose p-8 bg-muted/50 rounded-lg">
+                    <div className="prose p-8 bg-muted/50 rounded-lg h-full">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {profile.links ?? ""}
                         </ReactMarkdown>

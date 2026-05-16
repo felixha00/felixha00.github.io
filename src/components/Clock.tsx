@@ -41,7 +41,7 @@ export function Clock() {
     if (!time) return <div className="flex gap-0.5 font-sans text-transparent">00:00:00</div>;
 
     return (
-        <div className='flex items-center gap-0 font-sans'>
+        <div className='flex items-center gap-0 font-display'>
             <SlidingNumber value={time.h} padStart={true} />
             <span className='text-muted-foreground'>:</span>
             <SlidingNumber value={time.m} padStart={true} />

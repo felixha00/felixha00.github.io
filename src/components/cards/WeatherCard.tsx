@@ -278,7 +278,7 @@ export function WeatherCard() {
           <div className="flex items-center gap-3">
             <Icon className="size-8 shrink-0 text-muted-foreground" />
             <div>
-              <div className="font-sans text-4xl font-semibold tabular-nums leading-none">
+              <div className="font-display text-4xl tabular-nums leading-none">
                 {Math.round(weather.current.temperature_2m)}°C
               </div>
               <div className="mt-0.5 text-xs text-muted-foreground">{label}</div>
