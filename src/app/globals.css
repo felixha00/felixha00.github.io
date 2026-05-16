@@ -175,6 +175,12 @@
   }
 }
 
+@layer components {
+  .group\/button {
+    @apply font-mono uppercase tracking-normal cursor-pointer;
+  }
+}
+
 :root {
   .prose {
     @apply prose prose-neutral dark:prose-neutral dark:prose-invert prose-headings:font-heading prose-headings:tracking-tight leading-tight max-w-none;
