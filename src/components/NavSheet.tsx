@@ -1,6 +1,8 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { useEffect } from 'react';
+import { useLenis } from 'lenis/react';
 import Link from 'next/link';
 import {
     Sheet,
@@ -35,6 +37,27 @@ interface NavSheetProps {
 }
 
 export function NavSheet({ open, onOpenChange }: NavSheetProps) {
+    const lenis = useLenis();
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousHtmlOverflow = document.documentElement.style.overflow;
+
+        lenis?.stop();
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousHtmlOverflow;
+            lenis?.start();
+        };
+    }, [lenis, open]);
+
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
