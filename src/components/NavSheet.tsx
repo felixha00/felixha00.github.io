@@ -20,48 +20,11 @@ const NAV_ITEMS = [
     // { label: 'Blog', href: '/blog', index: '03' },
 ];
 
-// CSS-only roll — zero React state on hover, runs on compositor thread
-function RollChar({ char, delay }: { char: string; delay: number }) {
-    const glyph = char === ' ' ? ' ' : char;
-    const transition = {
-        transitionProperty: 'transform',
-        transitionDuration: '440ms',
-        transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-        transitionDelay: `${delay}ms`,
-    };
-    return (
-        <span
-            className="relative inline-block overflow-hidden"
-            style={{ width: char === ' ' ? '0.4em' : undefined }}
-        >
-            {/* exits up on group hover */}
-            <span
-                className="block leading-none group-hover:-translate-y-full"
-                style={transition}
-            >
-                {glyph}
-            </span>
-            {/* enters from below on group hover */}
-            <span
-                className="absolute top-full left-0 block leading-none group-hover:-translate-y-full"
-                style={transition}
-                aria-hidden
-            >
-                {glyph}
-            </span>
-        </span>
-    );
-}
 
 function NavItemText({ text }: { text: string }) {
     return (
-        <span className="flex" aria-label={text}>
-            {text
-                .toUpperCase()
-                .split('')
-                .map((char, i) => (
-                    <RollChar key={i} char={char} delay={i * 22} />
-                ))}
+        <span className="flex uppercase" aria-label={text}>
+            {text}
         </span>
     );
 }
@@ -91,7 +54,7 @@ export function NavSheet({ open, onOpenChange }: NavSheetProps) {
                 </SheetHeader>
 
                 {/* Nav links — top-aligned */}
-                <nav className="flex flex-col px-4 flex-1 gap-4">
+                <nav className="flex flex-col flex-1">
                     {NAV_ITEMS.map((item, i) => (
                         <motion.div
                             key={item.href}
@@ -102,6 +65,7 @@ export function NavSheet({ open, onOpenChange }: NavSheetProps) {
                                 ease: [0.16, 1, 0.3, 1],
                                 delay: 0.12 + i * 0.09,
                             }}
+                            className='px-4 py-2 transition-colors hover:bg-muted'
                         >
                             <Link
                                 href={item.href}

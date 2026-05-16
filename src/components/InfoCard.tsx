@@ -2,20 +2,24 @@ import React from "react";
 import { MotionFade } from "./animations/MotionFade";
 import GridBackground from "./fluff/GridBackground";
 import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 type Props = {
     title: string;
     children?: React.ReactNode;
+    action?: React.ReactNode;
+    footer?: React.ReactNode;
     className?: string;
     scrollingText?: string;
 };
 
-const PageSection = ({
+const InfoCard = ({
     title,
     scrollingText = title,
     children,
+    action,
+    footer,
     className = "",
 }: Props) => {
     return (
@@ -27,6 +31,11 @@ const PageSection = ({
                     <CardTitle className="w-fit font-display text-2xl font-normal text-muted-foreground transition-colors group-hover:text-foreground">
                         {title}
                     </CardTitle>
+                    {action ? (
+                        <CardAction>
+                            {action}
+                        </CardAction>
+                    ) : null}
                 </CardHeader>
 
                 <div
@@ -43,9 +52,15 @@ const PageSection = ({
                 <CardContent className="relative flex h-full flex-col">
                     {children}
                 </CardContent>
+
+                {footer ? (
+                    <CardFooter className="relative">
+                        {footer}
+                    </CardFooter>
+                ) : null}
             </Card>
         </MotionFade>
     );
 };
 
-export default PageSection;
+export default InfoCard;

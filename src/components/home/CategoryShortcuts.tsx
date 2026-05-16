@@ -70,7 +70,7 @@ export default function CategoryShortcuts() {
       })}
       <motion.div variants={itemVariants} />
       <motion.div variants={itemVariants}>
-        <Button size={"lg"} className="w-full">View All Projects <ArrowRight data-icon="inline-end" /></Button>
+        <Button size={"lg"} className="w-full" variant={"outline"}>View All Projects <ArrowRight data-icon="inline-end" /></Button>
       </motion.div>
     </motion.div>
   );

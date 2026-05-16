@@ -43,9 +43,9 @@ export function Clock() {
     return (
         <div className='flex items-center gap-0 font-sans'>
             <SlidingNumber value={time.h} padStart={true} />
-            <span className='text-neutral-500'>:</span>
+            <span className='text-muted-foreground'>:</span>
             <SlidingNumber value={time.m} padStart={true} />
-            <span className='text-neutral-500'>:</span>
+            <span className='text-muted-foreground'>:</span>
             <SlidingNumber value={time.s} padStart={true} />
         </div>
     );

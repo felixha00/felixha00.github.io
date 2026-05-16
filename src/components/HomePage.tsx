@@ -4,18 +4,19 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import GridBackground from "@/components/fluff/GridBackground";
 import Link from "next/link";
-import PageSection from "@/components/PageSection";
+import InfoCard from "@/components/InfoCard";
 import ProjectCard from "@/components/ProjectCard";
 import ReactMarkdown from "react-markdown";
-import Dither from "./Dither";
+// import Dither from "./Dither";
 import remarkGfm from "remark-gfm";
 import { Project } from "../../sanity.types";
 import { TimeCard } from "@/components/cards/TimeCard";
 import { WeatherCard } from "@/components/cards/WeatherCard";
 import { LastDeployCard } from "@/components/cards/LastDeployCard";
 import { GitHubActivityCard } from "@/components/cards/GitHubActivityCard";
-import { HobbiesCard } from "@/components/cards/HobbiesCard";
+// import { HobbiesCard } from "@/components/cards/HobbiesCard";
 import CategoryShortcuts from "@/components/home/CategoryShortcuts";
+import { ArrowRight } from "lucide-react";
 
 {/* <FaultyTerminal
                     className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
@@ -182,42 +183,39 @@ export default function HomePage({ profile }: HomePageProps) {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4">
-                <PageSection title="About" scrollingText="about" className="col-span-1">
+                <InfoCard title="About" scrollingText="about" className="col-span-1">
                     <div className="p-8 h-full flex flex-col justify-between bg-muted/50 rounded-lg">
                         <article className="prose">
                             <ReactMarkdown>
                                 {profile.shortBio ?? ""}
                             </ReactMarkdown>
                         </article>
-                        <Button size="lg" className="w-fit">
-                            View Full Bio
-                        </Button>
+
                     </div>
-                </PageSection>
-                <PageSection title="Achievements" scrollingText="achievements" className="col-span-1">
+                </InfoCard>
+                <InfoCard title="Achievements" scrollingText="achievements" className="col-span-1">
                     <div className="prose p-8 bg-muted/50 rounded-lg">
                         <ReactMarkdown>
                             {profile.achievementsSimple ?? ""}
                         </ReactMarkdown>
                     </div>
-                </PageSection>
-                <PageSection title="Featured Projects" scrollingText="featured projects" className="col-span-1">
+                </InfoCard>
+                <InfoCard title="Featured Projects" scrollingText="featured projects" className="col-span-1" action={<Button asChild size="lg" >
+                    <Link href="/projects">View All Projects <ArrowRight data-icon="inline-end" /> </Link>
+                </Button>}>
                     <div className="p-8 flex-col gap-4 flex bg-muted/50 rounded-lg">
                         {profile.featuredProjects?.map((project) => (
                             <ProjectCard key={project._id} project={project} />
                         ))}
-                        <Button asChild size="lg" className="w-full">
-                            <Link href="/projects">View All Projects</Link>
-                        </Button>
                     </div>
-                </PageSection>
-                <PageSection title="Links" scrollingText="links" className="col-span-1">
+                </InfoCard>
+                <InfoCard title="Links" scrollingText="links" className="col-span-1">
                     <div className="prose p-8 bg-muted/50 rounded-lg">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {profile.links ?? ""}
                         </ReactMarkdown>
                     </div>
-                </PageSection>
+                </InfoCard>
             </div>
 
             {/* <div
