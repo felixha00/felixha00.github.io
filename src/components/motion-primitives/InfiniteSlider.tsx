@@ -1,8 +1,8 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { useMotionValue, animate, motion } from 'motion/react';
-import { useCallback, useState, useEffect } from 'react';
-import { useMeasure } from 'react-use';
+import { useState, useEffect, useRef } from 'react';
+import useMeasure from 'react-use-measure';
 
 export type InfiniteSliderProps = {
     children: React.ReactNode;
@@ -12,6 +12,7 @@ export type InfiniteSliderProps = {
     direction?: 'horizontal' | 'vertical';
     reverse?: boolean;
     className?: string;
+    paused?: boolean;
 };
 
 export function InfiniteSlider({
@@ -22,18 +23,15 @@ export function InfiniteSlider({
     direction = 'horizontal',
     reverse = false,
     className,
+    paused = false,
 }: InfiniteSliderProps) {
-    const [currentSpeed, setCurrentSpeed] = useState(speed);
-    const [measureRef, { width, height }] = useMeasure<HTMLDivElement>();
-    const ref = useCallback(
-        (node: HTMLDivElement | null) => {
-            if (node) measureRef(node);
-        },
-        [measureRef]
-    );
+    const [isHovering, setIsHovering] = useState(false);
+    const currentSpeed = isHovering && speedOnHover ? speedOnHover : speed;
+    const [ref, { width, height }] = useMeasure();
     const translation = useMotionValue(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [key, setKey] = useState(0);
+    const controlsRef = useRef<{ pause(): void; play(): void } | null>(null);
 
     useEffect(() => {
         let controls;
@@ -70,6 +68,9 @@ export function InfiniteSlider({
             });
         }
 
+        controlsRef.current = controls ?? null;
+        if (paused) controls?.pause();
+
         return controls?.stop;
     }, [
         key,
@@ -83,15 +84,23 @@ export function InfiniteSlider({
         reverse,
     ]);
 
+    useEffect(() => {
+        if (paused) {
+            controlsRef.current?.pause();
+        } else {
+            controlsRef.current?.play();
+        }
+    }, [paused]);
+
     const hoverProps = speedOnHover
         ? {
             onHoverStart: () => {
                 setIsTransitioning(true);
-                setCurrentSpeed(speedOnHover);
+                setIsHovering(true);
             },
             onHoverEnd: () => {
                 setIsTransitioning(true);
-                setCurrentSpeed(speed);
+                setIsHovering(false);
             },
         }
         : {};

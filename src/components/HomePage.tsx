@@ -17,6 +17,7 @@ import { GitHubActivityCard } from "@/components/cards/GitHubActivityCard";
 // import { HobbiesCard } from "@/components/cards/HobbiesCard";
 import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 import { ArrowRight } from "lucide-react";
+import { HobbiesCard } from "./cards/HobbiesCard";
 
 {/* <FaultyTerminal
                     className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
@@ -156,7 +157,7 @@ export default function HomePage({ profile }: HomePageProps) {
                             </motion.div>
                         ))}
                         {/* <motion.div
-                            className="col-span-full"
+                            // className="col-span-full"
                             variants={{
                                 hidden: { opacity: 0, y: 10 },
                                 visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
