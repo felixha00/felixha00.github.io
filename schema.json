@@ -1343,6 +1343,13 @@
         },
         "optional": true
       },
+      "hidden": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
       "for": {
         "type": "objectAttribute",
         "value": {

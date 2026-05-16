@@ -29,6 +29,13 @@ export const projectType = defineType({
             validation: (rule) => rule.required(),
         }),
         defineField({
+            name: 'hidden',
+            title: 'Hide from site',
+            description: 'Exclude this project from public project pages, featured lists, and carousels.',
+            type: 'boolean',
+            initialValue: false,
+        }),
+        defineField({
             name: 'for',
             title: 'For (Client / Entity)',
             description: 'Who was this project created for?',
@@ -174,7 +181,15 @@ export const projectType = defineType({
         select: {
             title: 'title',
             subtitle: 'summary',
+            hidden: 'hidden',
             media: 'image',
+        },
+        prepare({ title, subtitle, hidden, media }) {
+            return {
+                title,
+                subtitle: hidden ? `Hidden from site${subtitle ? ` - ${subtitle}` : ''}` : subtitle,
+                media,
+            }
         },
     },
 })

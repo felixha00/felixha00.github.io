@@ -1,11 +1,11 @@
 import { groq } from "next-sanity";
 
 // ---- PROJECT QUERIES ----
-export const PROJECT_SLUGS_QUERY = groq`*[_type == "project" && defined(slug.current)]{
+export const PROJECT_SLUGS_QUERY = groq`*[_type == "project" && defined(slug.current) && coalesce(hidden, false) == false]{
   "slug": slug.current
 }`;
 
-export const PROJECTS_QUERY = groq`*[_type == "project"] | order(date desc) {
+export const PROJECTS_QUERY = groq`*[_type == "project" && coalesce(hidden, false) == false] | order(date desc) {
   _id,
   title,
   "slug": slug.current,
@@ -22,7 +22,7 @@ export const PROJECTS_QUERY = groq`*[_type == "project"] | order(date desc) {
 }`;
 
 // get a specific project by slug
-export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug][0]{
+export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug && coalesce(hidden, false) == false][0]{
   _id,
   title,
   slug,
@@ -58,7 +58,7 @@ export const PROFILE_QUERY = groq`*[_type == "profile"][0] {
   links,
   fullBio,
   achievementsSimple,
-  featuredProjects[]->{
+  featuredProjects[coalesce(@->hidden, false) == false]->{
     _id,
     title,
     "slug": slug.current,
@@ -104,7 +104,7 @@ export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0] {
   body,
 }`;
 
-export const PROJECTS_CAROUSEL_QUERY = groq`*[_type == "project" && defined(image)] | order(date desc) {
+export const PROJECTS_CAROUSEL_QUERY = groq`*[_type == "project" && defined(image) && coalesce(hidden, false) == false] | order(date desc) {
   _id,
   title,
   "slug": slug.current,

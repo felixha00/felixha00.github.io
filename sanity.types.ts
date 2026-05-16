@@ -206,6 +206,7 @@ export type Project = {
   _rev: string;
   title?: string;
   slug?: Slug;
+  hidden?: boolean;
   for?: {
     _ref: string;
     _type: "reference";
