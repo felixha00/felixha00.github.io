@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { useEffect } from 'react';
 import { useLenis } from 'lenis/react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
     Sheet,
     SheetContent,
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { MenuIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 
 const NAV_ITEMS = [
@@ -23,12 +25,28 @@ const NAV_ITEMS = [
 ];
 
 
-function NavItemText({ text }: { text: string }) {
+function NavItemText({ text, active }: { text: string; active: boolean }) {
     return (
-        <span className="flex uppercase" aria-label={text}>
+        <span
+            className={cn(
+                "flex uppercase transition-colors",
+                active
+                    ? "text-background"
+                    : "text-muted-foreground group-hover:text-foreground"
+            )}
+            aria-label={text}
+        >
             {text}
         </span>
     );
+}
+
+function isActivePath(pathname: string, href: string) {
+    if (href === '/') {
+        return pathname === href;
+    }
+
+    return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 interface NavSheetProps {
@@ -38,6 +56,7 @@ interface NavSheetProps {
 
 export function NavSheet({ open, onOpenChange }: NavSheetProps) {
     const lenis = useLenis();
+    const pathname = usePathname();
 
     useEffect(() => {
         if (!open) {
@@ -78,36 +97,46 @@ export function NavSheet({ open, onOpenChange }: NavSheetProps) {
 
                 {/* Nav links — top-aligned */}
                 <nav className="flex flex-col flex-1">
-                    {NAV_ITEMS.map((item, i) => (
-                        <motion.div
-                            key={item.href}
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{
-                                duration: 0.55,
-                                ease: [0.16, 1, 0.3, 1],
-                                delay: 0.12 + i * 0.09,
-                            }}
-                            className='px-4 py-2 transition-colors hover:bg-muted'
-                        >
-                            <Link
-                                href={item.href}
-                                onClick={() => onOpenChange(false)}
-                                className="group flex items-center justify-between"
+                    {NAV_ITEMS.map((item, i) => {
+                        const active = isActivePath(pathname, item.href);
+
+                        return (
+                            <motion.div
+                                key={item.href}
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.55,
+                                    ease: [0.16, 1, 0.3, 1],
+                                    delay: 0.12 + i * 0.09,
+                                }}
+                                className={cn(
+                                    'group px-4 py-2 transition-colors',
+                                    active
+                                        ? 'bg-foreground'
+                                        : 'hover:bg-muted'
+                                )}
                             >
-                                <span
-                                    className="font-display text-6xl leading-none"
+                                <Link
+                                    href={item.href}
+                                    onClick={() => onOpenChange(false)}
+                                    className="group flex items-center justify-between"
+                                    aria-current={active ? 'page' : undefined}
                                 >
-                                    <NavItemText text={item.label} />
-                                </span>
-                                {/* <span
+                                    <span
+                                        className="font-display text-6xl leading-none transition-colors"
+                                    >
+                                        <NavItemText text={item.label} active={active} />
+                                    </span>
+                                    {/* <span
                                     className="font-mono text-xs tabular-nums shrink-0 transition-[opacity,transform] duration-300 ease-out group-hover:opacity-65 group-hover:-translate-x-1.5 text-muted-foreground"
                                 >
                                     {item.index}
                                 </span> */}
-                            </Link>
-                        </motion.div>
-                    ))}
+                                </Link>
+                            </motion.div>
+                        );
+                    })}
                 </nav>
 
                 <SheetFooter>
