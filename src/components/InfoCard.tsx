@@ -37,7 +37,7 @@ const InfoCard = ({
                         </CardAction>
                     ) : null}
                 </CardHeader>
-
+                {/* 
                 <div
                     className="absolute inset-0 -z-1 overflow-hidden whitespace-nowrap opacity-100 transition-opacity duration-1000 group-hover:opacity-0"
                     style={{ containerType: "size", lineHeight: 1 }}
@@ -47,7 +47,7 @@ const InfoCard = ({
                             {scrollingText?.replaceAll(" ", "")}
                         </h1>
                     </InfiniteSlider>
-                </div>
+                </div> */}
 
                 <CardContent className="relative flex h-full flex-col">
                     {children}
