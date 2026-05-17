@@ -93,7 +93,7 @@ export default function MiniSidebar() {
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="fixed left-0 top-0 h-screen z-40 bg-background border-r border-border w-8 min-w-8 flex flex-col items-center select-none overflow-hidden"
+            className="fixed left-0 top-0 h-screen z-40 bg-background border-r border-border w-8 min-w-8 flex-col items-center select-none overflow-hidden hidden lg:flex"
         >
             <div
                 ref={rulerRef}
@@ -144,10 +144,9 @@ export default function MiniSidebar() {
                                     [writing-mode:vertical-rl] rotate-180
                                     text-xs uppercase transition-colors duration-200
                                     whitespace-nowrap font-sans
-                                    ${
-                                        isLast
-                                            ? "text-foreground font-semibold cursor-default pointer-events-none"
-                                            : "text-muted-foreground hover:text-foreground"
+                                    ${isLast
+                                        ? "text-foreground font-semibold cursor-default pointer-events-none"
+                                        : "text-muted-foreground hover:text-foreground"
                                     }
                                 `}
                             >
