@@ -23,7 +23,7 @@ type DeployData = {
 };
 
 function timeAgo(ms: number | null): string {
-  if (ms == null) return "—";
+  if (ms == null) return "n/a";
   const diff = Date.now() - ms;
   const m = Math.floor(diff / 60000);
   if (m < 1) return "just now";
@@ -34,7 +34,7 @@ function timeAgo(ms: number | null): string {
 }
 
 function fmtDate(ms: number | null): string {
-  if (ms == null) return "—";
+  if (ms == null) return "n/a";
   return new Date(ms).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -69,7 +69,7 @@ export function LastDeployCard() {
         </CardHeader>
         <CardContent>
           <p className="font-mono text-xs text-muted-foreground">
-            FETCH_ERROR — deploy data unavailable
+            FETCH_ERROR: deploy data unavailable
           </p>
         </CardContent>
       </Card>
@@ -108,7 +108,7 @@ export function LastDeployCard() {
   }
 
   const { current, recent } = data;
-  const isReady = current.state === "SUCCESS";
+  const isReady = current.state === "READY";
 
   return (
     <Card className="rounded-none h-full">
@@ -155,7 +155,7 @@ export function LastDeployCard() {
         <dl className="grid grid-cols-1 gap-1.5 font-mono text-xs">
           <div className="flex justify-between gap-2">
             <dt className="text-muted-foreground">BRANCH</dt>
-            <dd className="truncate text-right">{current.branch ?? "—"}</dd>
+            <dd className="truncate text-right">{current.branch ?? "n/a"}</dd>
           </div>
           {current.author && (
             <div className="flex justify-between gap-2">
@@ -166,7 +166,7 @@ export function LastDeployCard() {
           <div className="flex justify-between gap-2">
             <dt className="text-muted-foreground">DURATION</dt>
             <dd className="tabular-nums">
-              {current.duration != null ? `${current.duration}s` : "—"}
+              {current.duration != null ? `${current.duration}s` : "n/a"}
             </dd>
           </div>
           <div className="flex justify-between gap-2">
@@ -195,7 +195,7 @@ export function LastDeployCard() {
                       {entry.sha ?? "???????"}
                     </span>
                     <span className="font-mono text-xs line-clamp-1 flex-1 min-w-0">
-                      {entry.message ?? "—"}
+                      {entry.message ?? "n/a"}
                     </span>
                     <span className="font-mono text-xs text-muted-foreground tabular-nums shrink-0 ml-auto">
                       {timeAgo(entry.readyAt)}

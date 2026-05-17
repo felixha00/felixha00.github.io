@@ -1,72 +1,97 @@
 import { NextResponse } from "next/server";
 
-const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? "felixha00";
-const GITHUB_REPO = process.env.GITHUB_REPO ?? "felixha00.github.io";
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
+const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
+const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
+const VERCEL_TEAM_SLUG = process.env.VERCEL_TEAM_SLUG;
 
 export const revalidate = 300;
 
-type GitHubRun = {
-  head_sha: string;
-  head_branch: string;
-  head_commit: { message: string; author: { name: string } } | null;
-  status: string;
-  conclusion: string | null;
-  created_at: string;
-  updated_at: string;
-  run_started_at?: string;
+type VercelDeployment = {
+  uid?: string;
+  state?: string;
+  readyState?: string;
+  createdAt?: number;
+  created?: number;
+  buildingAt?: number;
+  ready?: number;
+  meta?: Record<string, string | undefined>;
+  creator?: {
+    username?: string;
+    githubLogin?: string;
+    email?: string;
+  };
 };
 
-function shape(run: GitHubRun) {
-  const state =
-    run.status === "completed"
-      ? (run.conclusion ?? "unknown").toUpperCase()
-      : run.status.toUpperCase().replace(/_/g, " ");
+type DeployEntry = {
+  sha: string | null;
+  message: string | null;
+  branch: string | null;
+  author: string | null;
+  state: string;
+  createdAt: number | null;
+  readyAt: number | null;
+  duration: number | null;
+};
 
-  const createdAt = new Date(run.created_at).getTime();
-  const readyAt = new Date(run.updated_at).getTime();
-  const startedAt = run.run_started_at
-    ? new Date(run.run_started_at).getTime()
-    : createdAt;
+function valueOrNull(value: number | undefined): number | null {
+  return typeof value === "number" ? value : null;
+}
+
+function shape(deployment: VercelDeployment): DeployEntry {
+  const meta = deployment.meta ?? {};
+  const createdAt = valueOrNull(deployment.createdAt ?? deployment.created);
+  const readyAt = valueOrNull(deployment.ready);
+  const buildingAt = valueOrNull(deployment.buildingAt);
 
   return {
-    sha: run.head_sha.slice(0, 7),
-    message: run.head_commit?.message.split("\n")[0] ?? null,
-    branch: run.head_branch ?? null,
-    author: run.head_commit?.author.name ?? null,
-    state,
+    sha: meta.githubCommitSha?.slice(0, 7) ?? null,
+    message: meta.githubCommitMessage ?? null,
+    branch: meta.githubCommitRef ?? meta.gitBranch ?? null,
+    author:
+      meta.githubCommitAuthorName ??
+      deployment.creator?.githubLogin ??
+      deployment.creator?.username ??
+      deployment.creator?.email ??
+      null,
+    state: deployment.readyState ?? deployment.state ?? "UNKNOWN",
     createdAt,
     readyAt,
     duration:
-      run.status === "completed"
-        ? Math.round((readyAt - startedAt) / 1000)
+      readyAt != null && buildingAt != null
+        ? Math.round((readyAt - buildingAt) / 1000)
         : null,
   };
 }
 
 export async function GET() {
-  const headers: Record<string, string> = {
-    Accept: "application/vnd.github+json",
-    "User-Agent": "portfolio/1.0",
-    "X-GitHub-Api-Version": "2022-11-28",
-  };
-  if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
+  if (!VERCEL_TOKEN || !VERCEL_PROJECT_ID) {
+    return NextResponse.json({ error: "missing Vercel config" }, { status: 503 });
+  }
 
-  const res = await fetch(
-    `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/actions/runs?per_page=5&exclude_pull_requests=true`,
-    { headers, next: { revalidate: 300 } }
-  );
+  const url = new URL("https://api.vercel.com/v6/deployments");
+  url.searchParams.set("projectId", VERCEL_PROJECT_ID);
+  url.searchParams.set("limit", "4");
+  url.searchParams.set("state", "READY");
+  url.searchParams.set("target", "production");
+  if (VERCEL_TEAM_ID) url.searchParams.set("teamId", VERCEL_TEAM_ID);
+  else if (VERCEL_TEAM_SLUG) url.searchParams.set("slug", VERCEL_TEAM_SLUG);
+
+  const res = await fetch(url.toString(), {
+    headers: { Authorization: `Bearer ${VERCEL_TOKEN}` },
+    next: { revalidate: 300 },
+  });
 
   if (!res.ok) {
-    return NextResponse.json({ error: `GitHub API ${res.status}` }, { status: 502 });
+    return NextResponse.json({ error: `Vercel API ${res.status}` }, { status: 502 });
   }
 
   const data = await res.json();
-  const runs: GitHubRun[] = data.workflow_runs ?? [];
-  if (!runs.length) {
-    return NextResponse.json({ error: "no runs" }, { status: 404 });
+  const deployments: VercelDeployment[] = data.deployments ?? [];
+  if (!deployments.length) {
+    return NextResponse.json({ error: "no Vercel deployments" }, { status: 404 });
   }
 
-  const [current, ...rest] = runs.slice(0, 4).map(shape);
-  return NextResponse.json({ current, recent: rest });
+  const [current, ...recent] = deployments.map(shape);
+  return NextResponse.json({ current, recent });
 }
