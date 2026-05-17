@@ -4,8 +4,19 @@ const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
 const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
 const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
 const VERCEL_TEAM_SLUG = process.env.VERCEL_TEAM_SLUG;
+const GITHUB_OWNER =
+  process.env.GITHUB_OWNER ??
+  process.env.GITHUB_USERNAME ??
+  process.env.VERCEL_GIT_REPO_OWNER ??
+  "felixha00";
+const GITHUB_REPO =
+  process.env.GITHUB_REPO ??
+  process.env.VERCEL_GIT_REPO_SLUG ??
+  "felixha00.github.io";
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type VercelDeployment = {
   uid?: string;
@@ -32,6 +43,31 @@ type DeployEntry = {
   createdAt: number | null;
   readyAt: number | null;
   duration: number | null;
+};
+
+type CommitEntry = {
+  sha: string;
+  message: string;
+  branch: string | null;
+  author: string | null;
+  committedAt: number | null;
+};
+
+type GitHubCommit = {
+  sha: string;
+  commit: {
+    message?: string;
+    author?: {
+      name?: string;
+      date?: string;
+    };
+    committer?: {
+      date?: string;
+    };
+  };
+  author?: {
+    login?: string;
+  };
 };
 
 function valueOrNull(value: number | undefined): number | null {
@@ -64,6 +100,44 @@ function shape(deployment: VercelDeployment): DeployEntry {
   };
 }
 
+function shapeCommit(commit: GitHubCommit, branch: string | null): CommitEntry {
+  const committedAt =
+    Date.parse(commit.commit.author?.date ?? commit.commit.committer?.date ?? "") ||
+    null;
+
+  return {
+    sha: commit.sha.slice(0, 7),
+    message: commit.commit.message?.split("\n")[0] ?? "n/a",
+    branch,
+    author: commit.author?.login ?? commit.commit.author?.name ?? null,
+    committedAt,
+  };
+}
+
+async function fetchCommits(branch: string | null): Promise<CommitEntry[]> {
+  const url = new URL(
+    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits`
+  );
+  url.searchParams.set("per_page", "3");
+  if (branch) url.searchParams.set("sha", branch);
+
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "portfolio/1.0",
+  };
+  if (GITHUB_TOKEN) headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
+
+  const res = await fetch(url.toString(), {
+    headers,
+    cache: "no-store",
+  });
+
+  if (!res.ok) return [];
+
+  const commits: GitHubCommit[] = await res.json();
+  return commits.map((commit) => shapeCommit(commit, branch));
+}
+
 export async function GET() {
   if (!VERCEL_TOKEN || !VERCEL_PROJECT_ID) {
     return NextResponse.json({ error: "missing Vercel config" }, { status: 503 });
@@ -71,7 +145,7 @@ export async function GET() {
 
   const url = new URL("https://api.vercel.com/v6/deployments");
   url.searchParams.set("projectId", VERCEL_PROJECT_ID);
-  url.searchParams.set("limit", "4");
+  url.searchParams.set("limit", "1");
   url.searchParams.set("state", "READY");
   url.searchParams.set("target", "production");
   if (VERCEL_TEAM_ID) url.searchParams.set("teamId", VERCEL_TEAM_ID);
@@ -79,7 +153,7 @@ export async function GET() {
 
   const res = await fetch(url.toString(), {
     headers: { Authorization: `Bearer ${VERCEL_TOKEN}` },
-    next: { revalidate: 300 },
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -92,6 +166,17 @@ export async function GET() {
     return NextResponse.json({ error: "no Vercel deployments" }, { status: 404 });
   }
 
-  const [current, ...recent] = deployments.map(shape);
-  return NextResponse.json({ current, recent });
+  const current = shape(deployments[0]);
+  const commits = await fetchCommits(current.branch);
+  const [latestCommit, ...recentCommits] = commits;
+
+  return NextResponse.json({
+    current,
+    latestCommit: latestCommit ?? null,
+    recentCommits: recentCommits.slice(0, 2),
+    isLatestDeployed:
+      latestCommit != null && current.sha != null
+        ? latestCommit.sha === current.sha
+        : null,
+  });
 }

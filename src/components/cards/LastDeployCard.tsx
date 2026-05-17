@@ -17,9 +17,19 @@ type DeployEntry = {
   duration: number | null;
 };
 
+type CommitEntry = {
+  sha: string;
+  message: string;
+  branch: string | null;
+  author: string | null;
+  committedAt: number | null;
+};
+
 type DeployData = {
   current: DeployEntry;
-  recent: DeployEntry[];
+  latestCommit: CommitEntry | null;
+  recentCommits: CommitEntry[];
+  isLatestDeployed: boolean | null;
 };
 
 function timeAgo(ms: number | null): string {
@@ -43,7 +53,7 @@ function fmtDate(ms: number | null): string {
   });
 }
 
-const opacities = [0.55, 0.35, 0.2];
+const opacities = [0.58, 0.34];
 
 export function LastDeployCard() {
   const [data, setData] = useState<DeployData | null>(null);
@@ -95,11 +105,7 @@ export function LastDeployCard() {
             <Skeleton className="h-3 w-full" />
           </div>
           <Separator />
-          {[...Array(3)].map((_, i) => (
-            <Skeleton key={i} className="h-3 w-full" />
-          ))}
-          <Separator />
-          {[...Array(3)].map((_, i) => (
+          {[...Array(2)].map((_, i) => (
             <Skeleton key={i} className="h-3 w-full" />
           ))}
         </CardContent>
@@ -107,8 +113,17 @@ export function LastDeployCard() {
     );
   }
 
-  const { current, recent } = data;
+  const { current, latestCommit, recentCommits, isLatestDeployed } = data;
   const isReady = current.state === "READY";
+  const visibleCommit = latestCommit ?? {
+    sha: current.sha ?? "???????",
+    message: current.message ?? "n/a",
+    branch: current.branch,
+    author: current.author,
+    committedAt: current.readyAt,
+  };
+  const deployedIsLatest =
+    isLatestDeployed ?? (current.sha != null && visibleCommit.sha === current.sha);
 
   return (
     <Card className="rounded-none h-full">
@@ -131,21 +146,36 @@ export function LastDeployCard() {
           </span>
           <span className="font-mono text-xs">{current.state}</span>
           <span className="ml-auto font-mono text-xs text-muted-foreground tabular-nums">
-            {timeAgo(current.readyAt)}
+            deployed {timeAgo(current.readyAt)}
           </span>
         </div>
 
-        {/* Current commit */}
-        {current.sha && (
+        {/* Latest commit */}
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+              Latest commit
+            </span>
+            {!deployedIsLatest && (
+              <Badge variant="outline" className="ml-auto rounded-none font-mono text-[10px]">
+                not deployed
+              </Badge>
+            )}
+          </div>
           <div className="flex items-start gap-2">
             <Badge variant="secondary" className="font-mono text-xs shrink-0">
-              {current.sha}
+              {visibleCommit.sha}
             </Badge>
             <span className="font-mono text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-              {current.message}
+              {visibleCommit.message}
             </span>
           </div>
-        )}
+          {!deployedIsLatest && current.sha && (
+            <p className="font-mono text-xs text-muted-foreground/75">
+              deployed {current.sha} · {timeAgo(current.readyAt)}
+            </p>
+          )}
+        </div>
 
         <div className="grow" />
 
@@ -176,35 +206,35 @@ export function LastDeployCard() {
         </dl>
 
 
-        {/* Recent commits */}
-        {recent.length > 0 && (
+        {/* Previous commits */}
+        {recentCommits.length > 0 && (
           <>
             <Separator />
             <div className="flex flex-col gap-2">
               <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                Recent
+                Previous commits
               </p>
-              {recent.map((entry, i) => (
+              {recentCommits.map((entry, i) => (
                 <div
-                  key={entry.sha ?? i}
+                  key={entry.sha}
                   className="flex flex-col gap-0.5"
-                  style={{ opacity: opacities[i] ?? 0.15 }}
+                  style={{ opacity: opacities[i] ?? 0.2 }}
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-xs text-muted-foreground bg-muted px-1 shrink-0 leading-5">
-                      {entry.sha ?? "???????"}
+                      {entry.sha}
                     </span>
                     <span className="font-mono text-xs line-clamp-1 flex-1 min-w-0">
-                      {entry.message ?? "n/a"}
+                      {entry.message}
                     </span>
                     <span className="font-mono text-xs text-muted-foreground tabular-nums shrink-0 ml-auto">
-                      {timeAgo(entry.readyAt)}
+                      {timeAgo(entry.committedAt)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 pl-0">
                     <span className="font-mono text-xs text-muted-foreground">
-                      {fmtDate(entry.createdAt)}
-                      {entry.duration != null ? ` · ${entry.duration}s` : ""}
+                      {fmtDate(entry.committedAt)}
+                      {entry.author ? ` · ${entry.author}` : ""}
                       {entry.branch ? ` · ${entry.branch}` : ""}
                     </span>
                   </div>
