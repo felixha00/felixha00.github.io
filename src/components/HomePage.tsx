@@ -118,7 +118,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.51, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    and <span className="underline">👨‍💼 Entrepreneur</span>
+                                    and <span className="underline">👨‍💼 Creator</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
