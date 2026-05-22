@@ -11,6 +11,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const metadata: Metadata = {
     title: "Projects",
     description: "A showcase of Felix Ha's work across software, hardware, visual branding, and ventures.",
+    alternates: {
+        canonical: '/projects',
+    },
     openGraph: {
         title: "Projects | felix ha",
         description: "A showcase of Felix Ha's work across software, hardware, visual branding, and ventures.",

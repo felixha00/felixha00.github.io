@@ -4,11 +4,10 @@ import { client } from "@/sanity/lib/client";
 import { PROFILE_QUERY, PROJECTS_CAROUSEL_QUERY } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
-  title: 'felix ha',
+  title: 'home',
   description: 'Felix Ha — multidisciplinary designer and developer working across software, hardware, visual branding, and ventures.',
-  openGraph: {
-    title: 'felix ha',
-    description: 'Felix Ha — multidisciplinary designer and developer working across software, hardware, visual branding, and ventures.',
+  alternates: {
+    canonical: '/',
   },
 };
 
