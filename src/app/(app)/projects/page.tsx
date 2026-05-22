@@ -9,8 +9,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 
 export const metadata: Metadata = {
-    title: "Projects | My Portfolio",
-    description: "A showcase of my latest development projects and experiments.",
+    title: "Projects",
+    description: "A showcase of Felix Ha's work across software, hardware, visual branding, and ventures.",
+    openGraph: {
+        title: "Projects | felix ha",
+        description: "A showcase of Felix Ha's work across software, hardware, visual branding, and ventures.",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Projects | felix ha",
+        description: "A showcase of Felix Ha's work across software, hardware, visual branding, and ventures.",
+    },
 };
 
 export const revalidate = 60; // ISR: Revalidate every 60 seconds

@@ -1,9 +1,14 @@
 import Image from "next/image";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
+
+const getProject = cache(async (slug: string) =>
+    client.fetch(PROJECT_QUERY, { slug })
+);
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -32,25 +37,33 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: PageProps) {
-    const params = await props.params;
-    const project = await client.fetch(PROJECT_QUERY, params);
+    const { slug } = await props.params;
+    const project = await getProject(slug);
 
     if (!project) return {};
 
+    const ogImage = project.image ? urlFor(project.image).width(1200).height(630).url() : undefined;
+
     return {
-        title: `${project.title}`,
+        title: project.title,
         description: project.summary,
         openGraph: {
             title: project.title,
             description: project.summary,
-            images: project.image ? [urlFor(project.image).width(1200).height(630).url()] : [],
+            images: ogImage ? [ogImage] : [],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: project.title,
+            description: project.summary,
+            images: ogImage ? [ogImage] : [],
         },
     };
 }
 
 export default async function ProjectPage(props: PageProps) {
-    const params = await props.params;
-    const project = await client.fetch(PROJECT_QUERY, params);
+    const { slug } = await props.params;
+    const project = await getProject(slug);
 
     if (!project) {
         notFound();
