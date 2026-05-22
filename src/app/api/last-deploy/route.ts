@@ -16,7 +16,6 @@ const GITHUB_REPO =
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 type VercelDeployment = {
   uid?: string;

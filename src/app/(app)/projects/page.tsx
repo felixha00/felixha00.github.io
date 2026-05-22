@@ -49,6 +49,7 @@ export default async function ProjectsPage() {
 
     return (
         <main className="flex flex-1 flex-col p-4 pt-16">
+            {/* Suspense required: ProjectGallery uses useSearchParams(), which causes a CSR bailout */}
             <Suspense fallback={<ProjectGalleryFallback />}>
                 <ProjectGallery projects={projects} />
             </Suspense>

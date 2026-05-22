@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 import { NavSheet } from '@/components/NavSheet';
 
 const Navbar = () => {
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [showLogo, setShowLogo] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 

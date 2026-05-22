@@ -31,7 +31,7 @@ export default function Image() {
             textTransform: "uppercase",
           }}
         >
-          <span>felixha00.github.io</span>
+          <span>{process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, "") ?? "felixha.com"}</span>
           <span>PORTFOLIO</span>
         </div>
 

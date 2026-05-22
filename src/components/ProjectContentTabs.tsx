@@ -11,40 +11,35 @@ interface ProjectContentTabsProps {
     readmeContent: string | null;
 }
 
-
 export default function ProjectContentTabs({
     sanityContent,
     readmeContent,
 }: ProjectContentTabsProps) {
-    const defaultValue = sanityContent && sanityContent.length > 0 ? "details" : "readme";
+    const hasSanity = Boolean(sanityContent && sanityContent.length > 0);
+    const hasReadme = Boolean(readmeContent);
 
-    // if (!readmeContent && sanityContent) {
-    //     return <PortableText value={sanityContent} />;
-    // }
+    if (hasSanity && !hasReadme) {
+        return <PortableText value={sanityContent!} />;
+    }
 
-    // if (readmeContent && (!sanityContent || sanityContent.length === 0)) {
-    //     return (
-    //         <ReactMarkdown remarkPlugins={[remarkGfm]}>
-    //             {readmeContent}
-    //         </ReactMarkdown>
-    //     );
-    // }
+    if (hasReadme && !hasSanity) {
+        return (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {readmeContent}
+            </ReactMarkdown>
+        );
+    }
 
     return (
-        <Tabs defaultValue={defaultValue}>
+        <Tabs defaultValue="details">
             <TabsList>
-                {sanityContent &&
-                    <TabsTrigger value="details">Project Details</TabsTrigger>
-                }
-                {readmeContent &&
-                    <TabsTrigger value="readme">README.md</TabsTrigger>}
+                <TabsTrigger value="details">Project Details</TabsTrigger>
+                <TabsTrigger value="readme">README.md</TabsTrigger>
             </TabsList>
-
             <div className="p-4">
                 <TabsContent value="details">
-                    {sanityContent && <PortableText value={sanityContent} />}
+                    <PortableText value={sanityContent!} />
                 </TabsContent>
-
                 <TabsContent value="readme">
                     <div className="readme-content">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>

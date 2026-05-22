@@ -177,13 +177,14 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                         )}
                         {project.title && (
                             <div
+                                aria-hidden
                                 className="absolute inset-0 overflow-hidden whitespace-nowrap opacity-0 mix-blend-difference transition-opacity duration-500 group-hover:opacity-100"
                                 style={{ containerType: "size", lineHeight: 1 }}
                             >
                                 <InfiniteSlider speed={24}>
-                                    <h1 className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
+                                    <span className="font-display text-[100cqh] font-bold uppercase tracking-tighter">
                                         {project.title.replaceAll(" ", "")}
-                                    </h1>
+                                    </span>
                                 </InfiniteSlider>
                             </div>
                         )}
