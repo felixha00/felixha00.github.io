@@ -5,8 +5,6 @@ import "./root.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://felixha.com";
 
-const geistMonoHeading = Geist_Mono({subsets:['latin'],variable:'--font-heading'});
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -67,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={geistMonoHeading.variable}>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} antialiased`}
       >
