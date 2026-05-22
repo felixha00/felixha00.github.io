@@ -68,10 +68,9 @@ export default function CategoryShortcuts() {
           </motion.div>
         );
       })}
-      <motion.div variants={itemVariants} />
-      <motion.div variants={itemVariants}>
-        <Button size={"lg"} className="w-full" variant={"outline"}>View All Projects <ArrowRight data-icon="inline-end" /></Button>
-      </motion.div>
+      {/* <motion.div variants={itemVariants} className="col-span-full lg:col-span-1">
+        <Button size={"lg"} className="w-full h-12" variant={"outline"}>View All Projects<ArrowRight data-icon="inline-end" /></Button>
+      </motion.div> */}
     </motion.div>
   );
 }
