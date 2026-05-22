@@ -7,38 +7,13 @@ import Link from "next/link";
 import InfoCard from "@/components/InfoCard";
 import ProjectCard from "@/components/ProjectCard";
 import ReactMarkdown from "react-markdown";
-// import Dither from "./Dither";
 import remarkGfm from "remark-gfm";
 import { Project } from "../../sanity.types";
 import { TimeCard } from "@/components/cards/TimeCard";
 import { WeatherCard } from "@/components/cards/WeatherCard";
 import { LastDeployCard } from "@/components/cards/LastDeployCard";
-import { GitHubActivityCard } from "@/components/cards/GitHubActivityCard";
-// import { HobbiesCard } from "@/components/cards/HobbiesCard";
 import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 import { ArrowRight } from "lucide-react";
-import { HobbiesCard } from "./cards/HobbiesCard";
-
-{/* <FaultyTerminal
-                    className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
-                    scale={2}
-                    gridMul={[2, 1]}
-                    digitSize={1.2}
-                    timeScale={0.5}
-                    pause={false}
-                    scanlineIntensity={0.5}
-                    glitchAmount={1}
-                    flickerAmount={1}
-                    noiseAmp={1}
-                    chromaticAberration={0}
-                    dither={0}
-                    curvature={0.1}
-                    tint="#ffffff"
-                    mouseReact
-                    mouseStrength={0.5}
-                    pageLoadAnimation
-                // brightness={0.6}
-                /> */}
 
 type HomeProfile = {
     shortBio?: string;
@@ -49,7 +24,6 @@ type HomeProfile = {
 
 type HomePageProps = {
     profile: HomeProfile;
-    projectsCarousel: Project[];
 };
 
 export default function HomePage({ profile }: HomePageProps) {
@@ -156,47 +130,23 @@ export default function HomePage({ profile }: HomePageProps) {
                                 <Card />
                             </motion.div>
                         ))}
-                        {/* <motion.div
-                            // className="col-span-full"
-                            variants={{
-                                hidden: { opacity: 0, y: 10 },
-                                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
-                            }}
-                        >
-                            <HobbiesCard />
-                        </motion.div> */}
                     </motion.div>
                 </div>
-
-
-
-                {/* <div className="hero-icon size-24 md:size-36 shrink-0 mb-10">
-          <AspectRatio ratio={1}>
-            <Image
-              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png"
-              alt="Waving Hand"
-              fill
-              unoptimized
-              className="object-contain"
-            />
-          </AspectRatio>
-        </div> */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4">
                 <InfoCard title="About" scrollingText="about" className="col-span-1">
                     <div className="p-8 h-full flex flex-col justify-between bg-muted/50 rounded-lg">
                         <article className="prose">
-                            <ReactMarkdown>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                 {profile.shortBio ?? ""}
                             </ReactMarkdown>
                         </article>
-
                     </div>
                 </InfoCard>
                 <InfoCard title="Achievements" scrollingText="achievements" className="col-span-1">
                     <div className="prose p-8 bg-muted/50 rounded-lg">
-                        <ReactMarkdown>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {profile.achievementsSimple ?? ""}
                         </ReactMarkdown>
                     </div>
@@ -218,15 +168,6 @@ export default function HomePage({ profile }: HomePageProps) {
                     </div>
                 </InfoCard>
             </div>
-
-            {/* <div
-                ref={containerRef}
-                className="grid grid-cols-1 grid-rows-4 md:grid-cols-4 md:grid-rows-1 p-4 flex-1 min-h-screen gap-4 perspective-1000 overflow-hidden"
-            >
-                {PROJECT_CATEGORIES.map((section, i) => (
-                    <SectionCard key={section.slug} section={section} index={i} />
-                ))}
-            </div> */}
         </main>
     );
 }

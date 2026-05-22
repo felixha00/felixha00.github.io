@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import HomePage from "@/components/HomePage";
 import { client } from "@/sanity/lib/client";
-import { PROFILE_QUERY, PROJECTS_CAROUSEL_QUERY } from "@/sanity/lib/queries";
+import { PROFILE_QUERY } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
   title: 'home',
@@ -14,9 +14,6 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function Page() {
-
   const profile = await client.fetch(PROFILE_QUERY);
-  const projectsCarousel = await client.fetch(PROJECTS_CAROUSEL_QUERY);
-
-  return <HomePage profile={profile} projectsCarousel={projectsCarousel} />;
+  return <HomePage profile={profile} />;
 }
