@@ -38,9 +38,6 @@ import {
 } from "lucide-react";
 
 const TZ = process.env.NEXT_PUBLIC_MY_TIMEZONE || "America/Toronto";
-const LAT = parseFloat(process.env.NEXT_PUBLIC_MY_LAT || "43.6532");
-const LNG = parseFloat(process.env.NEXT_PUBLIC_MY_LNG || "-79.3832");
-const CITY = process.env.NEXT_PUBLIC_MY_CITY || "Toronto";
 
 type WeatherData = {
   current: {
@@ -52,6 +49,8 @@ type WeatherData = {
   hourly: {
     temperature_2m: number[];
   };
+  city: string;
+  timezone: string;
 };
 
 const tempChartConfig = {
@@ -198,15 +197,7 @@ export function WeatherCard() {
   }, []);
 
   useEffect(() => {
-    const url = new URL("https://api.open-meteo.com/v1/forecast");
-    url.searchParams.set("latitude", String(LAT));
-    url.searchParams.set("longitude", String(LNG));
-    url.searchParams.set("current", "temperature_2m,weather_code,apparent_temperature,wind_speed_10m");
-    url.searchParams.set("hourly", "temperature_2m");
-    url.searchParams.set("timezone", TZ);
-    url.searchParams.set("forecast_days", "1");
-
-    fetch(url.toString())
+    fetch("/api/weather")
       .then((r) => {
         if (!r.ok) throw new Error("fetch failed");
         return r.json();
@@ -259,8 +250,9 @@ export function WeatherCard() {
   const temps = weather.hourly.temperature_2m.slice(0, 24);
   const lo = Math.round(Math.min(...temps));
   const hi = Math.round(Math.max(...temps));
+  const tz = weather.timezone || TZ;
   const todayLabel = new Intl.DateTimeFormat("en-US", {
-    timeZone: TZ,
+    timeZone: tz,
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -270,7 +262,7 @@ export function WeatherCard() {
     <Card className="rounded-none h-full flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-          Weather · {CITY}
+          Weather · {weather.city}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 flex-1">
