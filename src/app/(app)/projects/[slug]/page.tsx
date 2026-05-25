@@ -3,6 +3,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { formatProjectDate } from "@/lib/project-date";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
 
@@ -76,6 +77,7 @@ export default async function ProjectPage(props: PageProps) {
     let readmeContent: string | null = null;
 
     const CategoryIcon = catConfig?.icon ?? Layers;
+    const dateLabel = formatProjectDate(project.date, project.isCurrent);
 
     if (project.readmeUrl) {
         try {
@@ -113,9 +115,9 @@ export default async function ProjectPage(props: PageProps) {
                         )}
                     </div>
 
-                    {project.date && (
+                    {dateLabel && (
                         <span className="py-0.5 text-sm text-muted-foreground">
-                            {new Date(project.date).getFullYear()}
+                            {dateLabel}
                         </span>
                     )}
                 </div>

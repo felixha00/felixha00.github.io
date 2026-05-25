@@ -230,6 +230,7 @@ export type Project = {
     _type: "image";
   };
   date?: string;
+  isCurrent?: boolean;
   url?: string;
   tags?: Array<string>;
   stack?: Array<string>;

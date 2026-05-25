@@ -13,6 +13,7 @@ export const PROJECTS_QUERY = groq`*[_type == "project" && coalesce(hidden, fals
   outcome,
   image,
   date,
+  isCurrent,
   stack,
   category,
   for->{
@@ -31,6 +32,7 @@ export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug 
   outcome,
   image,
   date,
+  isCurrent,
   url,
   tags,
   stack,
@@ -66,6 +68,7 @@ export const PROFILE_QUERY = groq`*[_type == "profile"][0] {
     outcome,
     image,
     date,
+    isCurrent,
     stack,
     category,
     for->{

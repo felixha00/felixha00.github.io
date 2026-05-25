@@ -1,6 +1,7 @@
 "use client";
 
 import { getProjectCategoryConfig } from "@/config/const";
+import { formatProjectDate } from "@/lib/project-date";
 import { urlFor } from "@/sanity/lib/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
@@ -151,6 +152,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
         useFirstLineStack(stack);
     const visibleStack = stack.slice(0, visibleCount);
     const overflowStack = stack.slice(visibleCount);
+    const dateLabel = formatProjectDate(project.date, project.isCurrent);
 
     return (
         <Card className="project-card group relative h-full w-full pt-0 px-0 transition-colors hover:ring-foreground/20">
@@ -206,10 +208,10 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                             {project.for?.name || "Personal"}
                         </Badge>
                     </div>
-                    {project.date && (
+                    {dateLabel && (
                         <CardAction className="flex items-center gap-1 text-xs text-muted-foreground">
                             <CalendarIcon className="size-3" />
-                            {new Date(project.date).getFullYear()}
+                            {dateLabel}
                         </CardAction>
                     )}
                     <CardTitle className="font-display text-xl font-bold mt-4">

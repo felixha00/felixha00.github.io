@@ -1502,6 +1502,13 @@
         },
         "optional": true
       },
+      "isCurrent": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
       "url": {
         "type": "objectAttribute",
         "value": {

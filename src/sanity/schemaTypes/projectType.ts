@@ -91,6 +91,13 @@ export const projectType = defineType({
             options: { dateFormat: 'YYYY-MM' },
         }),
         defineField({
+            name: 'isCurrent',
+            title: 'Current',
+            description: 'Show this project as ongoing/present.',
+            type: 'boolean',
+            initialValue: false,
+        }),
+        defineField({
             name: 'url',
             title: 'Main Project URL',
             type: 'url',
