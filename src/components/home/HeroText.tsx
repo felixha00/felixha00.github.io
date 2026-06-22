@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 export default function HeroText() {
     return (
         <div className="flex flex-col gap-4">
-            <h1 className="text-6xl font-normal font-display tracking-tight">
+            <h1 className="text-5xl md:text-6xl font-normal font-display tracking-tight">
                 <motion.span
                     className="inline-block"
                     initial={{ y: 10, opacity: 0 }}
@@ -25,7 +25,7 @@ export default function HeroText() {
                 </motion.span>
             </h1>
 
-            <p className="text-2xl max-w-xl leading-snug tracking-tight">
+            <p className="text-xl md:text-2xl max-w-xl leading-snug tracking-tight">
                 <motion.span
                     className="inline-block"
                     initial={{ y: 10, opacity: 0 }}

@@ -9,7 +9,7 @@ import { LastDeployCard } from "@/components/cards/LastDeployCard";
 export default function LiveCardPanel() {
     return (
         <motion.div
-            className="relative border md:h-full md:overflow-y-auto grid grid-cols-1 lg:grid-cols-2 gap-0 p-0"
+            className="hidden md:grid relative border md:h-full md:overflow-y-auto grid-cols-1 lg:grid-cols-2 gap-0 p-0"
             initial="hidden"
             animate="visible"
             variants={{
