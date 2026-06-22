@@ -75,6 +75,12 @@
   --color-purple-dim: oklch(0.28 0.14 295);
   --color-purple-glow: oklch(0.78 0.12 295);
 
+  /* Role identity palette — R: Designer, G: Engineer, B: Maker */
+  --color-role-designer: var(--role-designer);
+  --color-role-engineer: var(--role-engineer);
+  --color-role-maker: var(--role-maker);
+  --color-role-text: oklch(0.12 0.005 0);
+
   --radius-sm: calc(var(--radius) * 0.6);
 
   --radius-md: calc(var(--radius) * 0.8);
@@ -126,6 +132,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --role-designer: oklch(0.90 0.08 22);
+  --role-engineer: oklch(0.90 0.09 142);
+  --role-maker: oklch(0.88 0.10 250);
 }
 
 .dark {
@@ -161,6 +170,9 @@
   --sidebar-accent-foreground: oklch(0.985 0.004 295);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --role-designer: oklch(0.74 0.14 22);
+  --role-engineer: oklch(0.74 0.15 142);
+  --role-maker: oklch(0.72 0.16 250);
 }
 
 @layer base {
