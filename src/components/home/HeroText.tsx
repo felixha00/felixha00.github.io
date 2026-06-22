@@ -41,7 +41,7 @@ export default function HeroText() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.36, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    <span className="inline-flex items-center rounded px-2 py-0.5 bg-role-designer text-role-text font-medium">Designer</span>,
+                    <span className="inline-flex items-center rounded px-2 py-0.5 bg-role-designer text-role-text font-medium role-keycap-designer">Designer</span>,
                 </motion.span>
                 {" "}
                 <motion.span
@@ -50,7 +50,7 @@ export default function HeroText() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.44, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    <span className="inline-flex items-center rounded px-2 py-0.5 bg-role-engineer text-role-text font-medium">Engineer</span>
+                    <span className="inline-flex items-center rounded px-2 py-0.5 bg-role-engineer text-role-text font-medium role-keycap-engineer">Engineer</span>
                 </motion.span>
                 {" "}
                 <motion.span
@@ -59,7 +59,7 @@ export default function HeroText() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.51, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    and <span className="inline-flex items-center rounded px-2 py-0.5 bg-role-maker text-role-text font-medium">Maker</span>
+                    and <span className="inline-flex items-center rounded px-2 py-0.5 bg-role-maker text-role-text font-medium role-keycap-maker">Maker</span>
                 </motion.span>
                 {" "}
                 <motion.span

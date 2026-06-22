@@ -20,7 +20,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import { CalendarIcon, Layers, Trophy } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -179,9 +178,9 @@ function ProjectOutcomeItem({
 }
 
 const ROLE_CONFIG = {
-    designer: { initial: "D", className: "bg-role-designer" },
-    engineer: { initial: "E", className: "bg-role-engineer" },
-    maker:    { initial: "M", className: "bg-role-maker" },
+    designer: { initial: "D", bgClass: "bg-role-designer", shadow: "var(--role-designer-shadow)" },
+    engineer: { initial: "E", bgClass: "bg-role-engineer", shadow: "var(--role-engineer-shadow)" },
+    maker:    { initial: "M", bgClass: "bg-role-maker",    shadow: "var(--role-maker-shadow)" },
 } as const;
 
 export default function ProjectCard({ project }: { project: ProjectCardProject }) {
@@ -247,19 +246,22 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
                 <CardHeader className="`relative">
                     <div className="flex flex-wrap items-center gap-1">
                         {roles.length > 0 && (
-                            <AvatarGroup className="-space-x-1 mr-0.5">
+                            <div className="flex -space-x-1 mr-0.5">
                                 {roles.map((role) => {
                                     const cfg = ROLE_CONFIG[role as keyof typeof ROLE_CONFIG];
                                     if (!cfg) return null;
                                     return (
-                                        <Avatar key={role} className="size-4" title={role.charAt(0).toUpperCase() + role.slice(1)}>
-                                            <AvatarFallback className={`${cfg.className} text-role-text font-mono text-[8px] font-bold`}>
-                                                {cfg.initial}
-                                            </AvatarFallback>
-                                        </Avatar>
+                                        <span
+                                            key={role}
+                                            title={role.charAt(0).toUpperCase() + role.slice(1)}
+                                            className={`inline-flex size-4 shrink-0 items-center justify-center rounded-full ${cfg.bgClass} text-role-text font-mono text-[8px] font-bold`}
+                                            style={{ boxShadow: `inset 0 1px 0 oklch(1 0 0 / 0.20), 0 3px 0 ${cfg.shadow}` }}
+                                        >
+                                            {cfg.initial}
+                                        </span>
                                     );
                                 })}
-                            </AvatarGroup>
+                            </div>
                         )}
                         <Badge variant="outline">
                             <CategoryIcon data-icon="inline-start" />

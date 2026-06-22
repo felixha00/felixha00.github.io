@@ -135,6 +135,9 @@
   --role-designer: oklch(0.90 0.08 22);
   --role-engineer: oklch(0.90 0.09 142);
   --role-maker: oklch(0.88 0.10 250);
+  --role-designer-shadow: oklch(0.65 0.18 22);
+  --role-engineer-shadow: oklch(0.65 0.19 142);
+  --role-maker-shadow: oklch(0.60 0.20 250);
 }
 
 .dark {
@@ -173,6 +176,9 @@
   --role-designer: oklch(0.74 0.14 22);
   --role-engineer: oklch(0.74 0.15 142);
   --role-maker: oklch(0.72 0.16 250);
+  --role-designer-shadow: oklch(0.48 0.20 22);
+  --role-engineer-shadow: oklch(0.48 0.21 142);
+  --role-maker-shadow: oklch(0.44 0.22 250);
 }
 
 @layer base {
@@ -195,6 +201,16 @@
   .group\/button {
     @apply font-mono uppercase tracking-normal cursor-pointer;
   }
+
+  /* Keycap — small circles (16px avatars in project cards) */
+  .role-keycap-sm-designer { box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.18), 0 2px 0 var(--role-designer-shadow); }
+  .role-keycap-sm-engineer { box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.18), 0 2px 0 var(--role-engineer-shadow); }
+  .role-keycap-sm-maker    { box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.18), 0 2px 0 var(--role-maker-shadow); }
+
+  /* Keycap — pill badges (hero text) */
+  .role-keycap-designer { box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.22), 0 4px 0 var(--role-designer-shadow); }
+  .role-keycap-engineer { box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.22), 0 4px 0 var(--role-engineer-shadow); }
+  .role-keycap-maker    { box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.22), 0 4px 0 var(--role-maker-shadow); }
 }
 
 :root {
