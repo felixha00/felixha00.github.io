@@ -24,7 +24,7 @@ const InfoCard = ({
 }: Props) => {
     return (
         <MotionFade className={cn("h-full", className)}>
-            <Card className="group relative h-full bg-card/20 hover:ring-muted-foreground transition-all">
+            <Card className="group relative h-full bg-card/20 hover:ring-muted-foreground transition-all pb-0 md:pb-4!">
                 <GridBackground />
 
                 <CardHeader className="relative border-l-4 group-hover:border-l-muted-foreground rounded-none transition-colors">
@@ -49,12 +49,12 @@ const InfoCard = ({
                     </InfiniteSlider>
                 </div> */}
 
-                <CardContent className="relative flex h-full flex-col">
+                <CardContent className="relative flex h-full flex-col px-0 md:px-4">
                     {children}
                 </CardContent>
 
                 {footer ? (
-                    <CardFooter className="relative">
+                    <CardFooter className="relative pb-0">
                         {footer}
                     </CardFooter>
                 ) : null}

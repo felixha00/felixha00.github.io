@@ -36,7 +36,7 @@ export default function HomePage({ profile }: HomePageProps) {
             >
                 <GridBackground className="mt-16 border-muted border m-4 bg-background" />
                 <div className="grid md:h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
-                    <div className="flex flex-col w-full md:h-full p-8 gap-8">
+                    <div className="flex flex-col w-full md:h-full p-4 gap-4">
                         <div className="flex flex-col gap-3">
                             <h1 className="text-7xl font-normal font-display tracking-tight">
                                 <motion.span
@@ -74,7 +74,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.36, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    <span className="underline">🧑‍🎨 Designer</span>,
+                                    <span>🧑‍🎨 Designer</span>,
                                 </motion.span>
                                 {" "}
                                 <motion.span
@@ -83,7 +83,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.44, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    <span className="underline">👨‍💻 Engineer</span>
+                                    <span>👨‍💻 Engineer</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
@@ -92,7 +92,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.51, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    and <span className="underline">👨‍💼 Creator</span>
+                                    and <span>👨‍💼 Creator</span>
                                 </motion.span>
                                 {" "}
                                 <motion.span
@@ -101,7 +101,7 @@ export default function HomePage({ profile }: HomePageProps) {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.58, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                                 >
-                                    based in <span className="underline">🇨🇦 Canada.</span>
+                                    based in <span>🇨🇦 Canada.</span>
                                 </motion.span>
                             </p>
                         </div>
@@ -154,7 +154,7 @@ export default function HomePage({ profile }: HomePageProps) {
                 <InfoCard title="Featured Projects" scrollingText="featured projects" className="col-span-1" action={<Button asChild size="lg" >
                     <Link href="/projects">View All Projects <ArrowRight data-icon="inline-end" /> </Link>
                 </Button>}>
-                    <div className="p-8 flex-col gap-4 flex bg-muted/50 rounded-lg">
+                    <div className="p-4 flex-col gap-4 flex bg-muted/50 rounded-lg">
                         {profile.featuredProjects?.map((project) => (
                             <ProjectCard key={project._id} project={project} />
                         ))}

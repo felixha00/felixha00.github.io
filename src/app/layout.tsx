@@ -20,7 +20,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const description = "Felix Ha — multidisciplinary designer and developer working across software, hardware, visual branding, and ventures.";
+const description = "Felix Ha is a multidisciplinary designer and developer working across software, hardware, visual branding, and ventures.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
