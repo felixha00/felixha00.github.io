@@ -20,7 +20,7 @@ export default function AppLayout({
       <TooltipProvider>
         <SmoothScroll>
           <Navbar />
-          <div className="relative lg:ml-8 mb-4 flex min-h-screen flex-col">
+          <div className="relative flex min-h-dvh flex-col pb-4 lg:ml-8">
             <MiniSidebar />
             {children}
           </div>
