@@ -138,12 +138,6 @@ export function NavSheet({ open, onOpenChange }: NavSheetProps) {
                         );
                     })}
                 </nav>
-
-                <SheetFooter>
-                    <p>
-                        Felix Ha — 2025
-                    </p>
-                </SheetFooter>
             </SheetContent>
         </Sheet>
     );
