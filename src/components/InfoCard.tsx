@@ -1,7 +1,6 @@
 import React from "react";
 import { MotionFade } from "./animations/MotionFade";
 import GridBackground from "./fluff/GridBackground";
-import { InfiniteSlider } from "./motion-primitives/InfiniteSlider";
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
