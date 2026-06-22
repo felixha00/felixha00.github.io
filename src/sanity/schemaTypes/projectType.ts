@@ -112,6 +112,20 @@ export const projectType = defineType({
             },
         }),
         defineField({
+            name: 'roles',
+            title: 'My Roles',
+            description: 'Which hats did you wear on this project?',
+            type: 'array',
+            of: [{ type: 'string' }],
+            options: {
+                list: [
+                    { title: 'Designer', value: 'designer' },
+                    { title: 'Engineer', value: 'engineer' },
+                    { title: 'Maker', value: 'maker' },
+                ],
+            },
+        }),
+        defineField({
             name: 'stack',
             title: 'Stack',
             type: 'array',

@@ -20,6 +20,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import { CalendarIcon, Layers, Trophy } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -177,6 +178,12 @@ function ProjectOutcomeItem({
     );
 }
 
+const ROLE_CONFIG = {
+    designer: { initial: "D", className: "bg-role-designer" },
+    engineer: { initial: "E", className: "bg-role-engineer" },
+    maker:    { initial: "M", className: "bg-role-maker" },
+} as const;
+
 export default function ProjectCard({ project }: { project: ProjectCardProject }) {
     const category = useMemo(
         () => getProjectCategoryConfig(project.category ?? ""),
@@ -185,6 +192,7 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
     const CategoryIcon = category?.icon ?? Layers;
     const slug = getSlugValue(project.slug);
     const projectHref = slug ? `/projects/${slug}` : "/projects";
+    const roles = useMemo(() => project.roles ?? [], [project.roles]);
     const stack = useMemo(() => project.stack ?? [], [project.stack]);
     const { footerRef, overflowMeasureRef, tagMeasureRefs, visibleCount } =
         useFirstLineStack(stack);
@@ -238,6 +246,21 @@ export default function ProjectCard({ project }: { project: ProjectCardProject }
             >
                 <CardHeader className="`relative">
                     <div className="flex flex-wrap items-center gap-1">
+                        {roles.length > 0 && (
+                            <AvatarGroup className="-space-x-1 mr-0.5">
+                                {roles.map((role) => {
+                                    const cfg = ROLE_CONFIG[role as keyof typeof ROLE_CONFIG];
+                                    if (!cfg) return null;
+                                    return (
+                                        <Avatar key={role} className="size-4" title={role.charAt(0).toUpperCase() + role.slice(1)}>
+                                            <AvatarFallback className={`${cfg.className} text-role-text font-mono text-[8px] font-bold`}>
+                                                {cfg.initial}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    );
+                                })}
+                            </AvatarGroup>
+                        )}
                         <Badge variant="outline">
                             <CategoryIcon data-icon="inline-start" />
                             {category?.title || "Project"}

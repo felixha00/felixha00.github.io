@@ -233,6 +233,7 @@ export type Project = {
   isCurrent?: boolean;
   url?: string;
   tags?: Array<string>;
+  roles?: Array<"designer" | "engineer" | "maker">;
   stack?: Array<string>;
   links?: Array<{
     label?: string;
