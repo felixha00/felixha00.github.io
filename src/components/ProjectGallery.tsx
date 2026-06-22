@@ -43,6 +43,23 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
         });
     }, [projects, activeCategory, searchQuery]);
 
+    const categoryCounts = useMemo(() => {
+        const query = searchQuery.toLowerCase();
+        const searched = query
+            ? projects.filter(
+                  (p) =>
+                      p.title?.toLowerCase().includes(query) ||
+                      p.summary?.toLowerCase().includes(query) ||
+                      p.stack?.some((s) => s.toLowerCase().includes(query))
+              )
+            : projects;
+        const counts: Record<string, number> = { all: searched.length };
+        for (const p of searched) {
+            if (p.category) counts[p.category] = (counts[p.category] ?? 0) + 1;
+        }
+        return counts;
+    }, [projects, searchQuery]);
+
     const updateUrl = (key: string, value: string | null) => {
         const params = new URLSearchParams(searchParams.toString());
         if (value && value !== "all") {
@@ -83,6 +100,9 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                     <ToggleGroupItem value="all">
                         <LayoutGridIcon data-icon="inline-start" />
                         All
+                        <span className="ml-1.5 font-mono text-[10px] tabular-nums opacity-45">
+                            {categoryCounts.all ?? 0}
+                        </span>
                     </ToggleGroupItem>
                     {PROJECT_CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
@@ -91,6 +111,9 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
                             <ToggleGroupItem key={cat.slug} value={cat.slug}>
                                 <Icon data-icon="inline-start" />
                                 {cat.title}
+                                <span className="ml-1.5 font-mono text-[10px] tabular-nums opacity-45">
+                                    {categoryCounts[cat.slug] ?? 0}
+                                </span>
                             </ToggleGroupItem>
                         );
                     })}
