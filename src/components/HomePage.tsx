@@ -27,9 +27,9 @@ export default function HomePage({ profile }: HomePageProps) {
         <main className="h-full flex grow flex-col">
             <div
                 id="hero-div"
-                className="hero-div flex grow items-start justify-center relative md:h-screen gap-6 overflow-hidden p-4 pt-16"
+                className="hero-div flex grow items-start justify-center relative md:h-screen gap-6 overflow-hidden p-0 md:p-4 pt-12 md:pt-16"
             >
-                <GridBackground className="mt-16 border-muted border m-4 bg-background" />
+                <GridBackground className="mask-[linear-gradient(to_bottom,black_50%,transparent)] md:mask-none md:mt-16 md:border-muted md:border md:m-4 md:bg-background" />
                 <div className="grid md:h-full w-full grid-cols-1 md:grid-cols-2 gap-0">
                     <div className="flex flex-col w-full md:h-full p-4 gap-4">
                         <HeroText />
