@@ -88,7 +88,7 @@ export default function HeroText() {
                 </motion.span>
             </h1>
 
-            <div className="text-xl md:text-2xl max-w-xl leading-snug tracking-tight">
+            <div className="text-xl md:text-2xl max-w-xl leading-relaxed tracking-tight">
                 <motion.span
                     className="inline-block"
                     initial={{ y: 10, opacity: 0 }}
@@ -107,7 +107,7 @@ export default function HeroText() {
                 >
                     <motion.span className="relative inline-block" style={{ y: designer.y }}>
                         <motion.span
-                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-designer text-role-text font-medium cursor-default select-none"
+                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-designer text-role-text font-medium cursor-default select-none leading-tight"
                             style={{ boxShadow: designer.boxShadow }}
                             onMouseEnter={() => onEnter(designerRef)}
                             onMouseLeave={() => onLeave(designerRef)}
@@ -132,7 +132,7 @@ export default function HeroText() {
                 >
                     <motion.span className="relative inline-block" style={{ y: engineer.y }}>
                         <motion.span
-                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-engineer text-role-text font-medium cursor-default select-none"
+                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-engineer text-role-text font-medium cursor-default select-none leading-tight"
                             style={{ boxShadow: engineer.boxShadow }}
                             onMouseEnter={() => onEnter(engineerRef)}
                             onMouseLeave={() => onLeave(engineerRef)}
@@ -158,7 +158,7 @@ export default function HeroText() {
                     and{" "}
                     <motion.span className="relative inline-block" style={{ y: maker.y }}>
                         <motion.span
-                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-maker text-role-text font-medium cursor-default select-none"
+                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-maker text-role-text font-medium cursor-default select-none leading-tight"
                             style={{ boxShadow: maker.boxShadow }}
                             onMouseEnter={() => onEnter(makerRef)}
                             onMouseLeave={() => onLeave(makerRef)}
