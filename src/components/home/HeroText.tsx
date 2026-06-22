@@ -86,7 +86,7 @@ export default function HeroText() {
                         onMouseLeave={() => onLeave(designerRef)}
                         onClick={() => onTap(designerRef)}
                     >
-                        <FrameIcon ref={designerRef} size={20} />
+                        <FrameIcon ref={designerRef} size={20} className="text-role-designer-icon" />
                         Designer
                     </span>,
                 </motion.span>
@@ -104,7 +104,7 @@ export default function HeroText() {
                         onMouseLeave={() => onLeave(engineerRef)}
                         onClick={() => onTap(engineerRef)}
                     >
-                        <CogIcon ref={engineerRef} size={20} />
+                        <CogIcon ref={engineerRef} size={20} className="text-role-engineer-icon" />
                         Engineer
                     </span>
                 </motion.span>
@@ -122,7 +122,7 @@ export default function HeroText() {
                         onMouseLeave={() => onLeave(makerRef)}
                         onClick={() => onTap(makerRef)}
                     >
-                        <BoxesIcon ref={makerRef} size={20} />
+                        <BoxesIcon ref={makerRef} size={20} className="text-role-maker-icon" />
                         Maker
                     </span>
                 </motion.span>

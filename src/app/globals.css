@@ -80,6 +80,9 @@
   --color-role-engineer: var(--role-engineer);
   --color-role-maker: var(--role-maker);
   --color-role-text: oklch(0.12 0.005 0);
+  --color-role-designer-icon: var(--role-designer-icon);
+  --color-role-engineer-icon: var(--role-engineer-icon);
+  --color-role-maker-icon: var(--role-maker-icon);
 
   --radius-sm: calc(var(--radius) * 0.6);
 
@@ -132,12 +135,15 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --role-designer: oklch(0.90 0.08 22);
-  --role-engineer: oklch(0.90 0.09 142);
-  --role-maker: oklch(0.88 0.10 250);
-  --role-designer-shadow: oklch(0.65 0.18 22);
-  --role-engineer-shadow: oklch(0.65 0.19 142);
-  --role-maker-shadow: oklch(0.60 0.20 250);
+  --role-designer: oklch(0.88 0.14 22);
+  --role-engineer: oklch(0.88 0.15 142);
+  --role-maker: oklch(0.85 0.17 250);
+  --role-designer-shadow: oklch(0.60 0.24 22);
+  --role-engineer-shadow: oklch(0.58 0.25 142);
+  --role-maker-shadow: oklch(0.54 0.27 250);
+  --role-designer-icon: oklch(0.52 0.26 22);
+  --role-engineer-icon: oklch(0.48 0.26 142);
+  --role-maker-icon: oklch(0.46 0.28 250);
 }
 
 .dark {
@@ -173,12 +179,15 @@
   --sidebar-accent-foreground: oklch(0.985 0.004 295);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --role-designer: oklch(0.74 0.14 22);
-  --role-engineer: oklch(0.74 0.15 142);
-  --role-maker: oklch(0.72 0.16 250);
-  --role-designer-shadow: oklch(0.48 0.20 22);
-  --role-engineer-shadow: oklch(0.48 0.21 142);
-  --role-maker-shadow: oklch(0.44 0.22 250);
+  --role-designer: oklch(0.76 0.24 22);
+  --role-engineer: oklch(0.76 0.25 142);
+  --role-maker: oklch(0.74 0.26 250);
+  --role-designer-shadow: oklch(0.42 0.26 22);
+  --role-engineer-shadow: oklch(0.40 0.27 142);
+  --role-maker-shadow: oklch(0.38 0.28 250);
+  --role-designer-icon: oklch(0.32 0.22 22);
+  --role-engineer-icon: oklch(0.30 0.22 142);
+  --role-maker-icon: oklch(0.28 0.24 250);
 }
 
 @layer base {
