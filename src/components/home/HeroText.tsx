@@ -1,13 +1,29 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { FrameIcon, type FrameIconHandle } from "@/components/common/DesignerIcon";
 import { CogIcon, type CogIconHandle } from "@/components/common/EngineerIcon";
 import { BoxesIcon, type BoxesIconHandle } from "@/components/common/MakerIcon";
 
 type IconHandle = { startAnimation: () => void; stopAnimation: () => void };
+type Role = "designer" | "engineer" | "maker";
+
+// Shadow offsets: resting = 4px, pressed = 1px (key moves down 3px to compensate)
+const SHADOW_REST = 4;
+const SHADOW_PRESS = 1;
+const KEY_TRAVEL = SHADOW_REST - SHADOW_PRESS;
+
+function keycapShadow(role: Role, pressed: boolean): React.CSSProperties {
+    const depth = pressed ? SHADOW_PRESS : SHADOW_REST;
+    const highlight = pressed ? "oklch(1 0 0 / 0.12)" : "oklch(1 0 0 / 0.22)";
+    return {
+        boxShadow: `inset 0 1px 0 ${highlight}, 0 ${depth}px 0 var(--role-${role}-shadow)`,
+    };
+}
+
+const pressSpring = { type: "spring", stiffness: 400, damping: 17, mass: 0.3 } as const;
 
 export default function HeroText() {
     const designerRef = useRef<FrameIconHandle>(null);
@@ -15,9 +31,9 @@ export default function HeroText() {
     const makerRef = useRef<BoxesIconHandle>(null);
     const mobileTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const onEnter = (ref: React.RefObject<IconHandle | null>) => {
-        ref.current?.startAnimation();
-    };
+    const [pressedRole, setPressedRole] = useState<Role | null>(null);
+
+    const onEnter = (ref: React.RefObject<IconHandle | null>) => ref.current?.startAnimation();
 
     const onLeave = (ref: React.RefObject<IconHandle | null>) => {
         if (mobileTimerRef.current) {
@@ -27,7 +43,10 @@ export default function HeroText() {
         ref.current?.stopAnimation();
     };
 
-    const onTap = (ref: React.RefObject<IconHandle | null>) => {
+    const onPress = (role: Role) => setPressedRole(role);
+    const onRelease = () => setPressedRole(null);
+
+    const onTap = (role: Role, ref: React.RefObject<IconHandle | null>) => {
         if (mobileTimerRef.current) clearTimeout(mobileTimerRef.current);
         ref.current?.startAnimation();
         mobileTimerRef.current = setTimeout(() => {
@@ -80,15 +99,27 @@ export default function HeroText() {
                     transition={{ delay: 0.36, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     onAnimationComplete={() => playOnce(designerRef)}
                 >
-                    <span
-                        className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-designer text-role-text font-medium role-keycap-designer cursor-default select-none"
-                        onMouseEnter={() => onEnter(designerRef)}
-                        onMouseLeave={() => onLeave(designerRef)}
-                        onClick={() => onTap(designerRef)}
+                    {/* Wrapper handles y-travel; inner span owns the visual + shadow */}
+                    <motion.span
+                        className="relative inline-block"
+                        animate={{ y: pressedRole === "designer" ? KEY_TRAVEL : 0 }}
+                        transition={pressSpring}
                     >
-                        <FrameIcon ref={designerRef} size={20} className="text-role-designer-icon" />
-                        Designer
-                    </span>,
+                        <span
+                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-designer text-role-text font-medium cursor-default select-none"
+                            style={keycapShadow("designer", pressedRole === "designer")}
+                            onMouseEnter={() => onEnter(designerRef)}
+                            onMouseLeave={() => { onLeave(designerRef); onRelease(); }}
+                            onPointerDown={() => onPress("designer")}
+                            onPointerUp={onRelease}
+                            onPointerLeave={onRelease}
+                            onPointerCancel={onRelease}
+                            onClick={() => onTap("designer", designerRef)}
+                        >
+                            <FrameIcon ref={designerRef} size={20} className="text-role-designer-icon" />
+                            Designer
+                        </span>
+                    </motion.span>,
                 </motion.span>
                 {" "}
                 <motion.span
@@ -98,15 +129,26 @@ export default function HeroText() {
                     transition={{ delay: 0.44, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     onAnimationComplete={() => playOnce(engineerRef)}
                 >
-                    <span
-                        className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-engineer text-role-text font-medium role-keycap-engineer cursor-default select-none"
-                        onMouseEnter={() => onEnter(engineerRef)}
-                        onMouseLeave={() => onLeave(engineerRef)}
-                        onClick={() => onTap(engineerRef)}
+                    <motion.span
+                        className="relative inline-block"
+                        animate={{ y: pressedRole === "engineer" ? KEY_TRAVEL : 0 }}
+                        transition={pressSpring}
                     >
-                        <CogIcon ref={engineerRef} size={20} className="text-role-engineer-icon" />
-                        Engineer
-                    </span>
+                        <span
+                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-engineer text-role-text font-medium cursor-default select-none"
+                            style={keycapShadow("engineer", pressedRole === "engineer")}
+                            onMouseEnter={() => onEnter(engineerRef)}
+                            onMouseLeave={() => { onLeave(engineerRef); onRelease(); }}
+                            onPointerDown={() => onPress("engineer")}
+                            onPointerUp={onRelease}
+                            onPointerLeave={onRelease}
+                            onPointerCancel={onRelease}
+                            onClick={() => onTap("engineer", engineerRef)}
+                        >
+                            <CogIcon ref={engineerRef} size={20} className="text-role-engineer-icon" />
+                            Engineer
+                        </span>
+                    </motion.span>
                 </motion.span>
                 {" "}
                 <motion.span
@@ -116,15 +158,27 @@ export default function HeroText() {
                     transition={{ delay: 0.51, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     onAnimationComplete={() => playOnce(makerRef)}
                 >
-                    and <span
-                        className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-maker text-role-text font-medium role-keycap-maker cursor-default select-none"
-                        onMouseEnter={() => onEnter(makerRef)}
-                        onMouseLeave={() => onLeave(makerRef)}
-                        onClick={() => onTap(makerRef)}
+                    and{" "}
+                    <motion.span
+                        className="relative inline-block"
+                        animate={{ y: pressedRole === "maker" ? KEY_TRAVEL : 0 }}
+                        transition={pressSpring}
                     >
-                        <BoxesIcon ref={makerRef} size={20} className="text-role-maker-icon" />
-                        Maker
-                    </span>
+                        <span
+                            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 bg-role-maker text-role-text font-medium cursor-default select-none"
+                            style={keycapShadow("maker", pressedRole === "maker")}
+                            onMouseEnter={() => onEnter(makerRef)}
+                            onMouseLeave={() => { onLeave(makerRef); onRelease(); }}
+                            onPointerDown={() => onPress("maker")}
+                            onPointerUp={onRelease}
+                            onPointerLeave={onRelease}
+                            onPointerCancel={onRelease}
+                            onClick={() => onTap("maker", makerRef)}
+                        >
+                            <BoxesIcon ref={makerRef} size={20} className="text-role-maker-icon" />
+                            Maker
+                        </span>
+                    </motion.span>
                 </motion.span>
                 {" "}
                 <motion.span
