@@ -21,6 +21,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon, Layers, Trophy } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Project } from "../../sanity.types";
 import Image from "next/image";
@@ -123,16 +124,53 @@ function ProjectOutcomeItem({
 }: {
     outcome?: ProjectCardProject["outcome"];
 }) {
+    const textRef = useRef<HTMLDivElement>(null);
+    const [offset, setOffset] = useState(0);
+    const prefersReducedMotion = useReducedMotion();
+
+    useLayoutEffect(() => {
+        const el = textRef.current;
+        if (!el) return;
+        const measure = () => {
+            const available = el.parentElement?.clientWidth ?? 0;
+            setOffset(Math.max(0, el.offsetWidth - available));
+        };
+        measure();
+        const ro = new ResizeObserver(measure);
+        ro.observe(el);
+        if (el.parentElement) ro.observe(el.parentElement);
+        return () => ro.disconnect();
+    }, [outcome]);
+
     if (!outcome) return null;
 
+    const shouldAnimate = !prefersReducedMotion && offset > 0;
+
     return (
-        <div className="absolute left-4 top-4 z-10 w-fit">
-            <Item variant="default" className="shadow-md bg-card">
-                <ItemMedia variant="icon" className="text-muted-foreground">
+        <div className="absolute left-4 top-4 z-10 max-w-[calc(100%-2rem)]">
+            <Item variant="default" className="shadow-md bg-card overflow-hidden">
+                <ItemMedia variant="icon" className="text-muted-foreground shrink-0">
                     <Trophy />
                 </ItemMedia>
-                <ItemContent>
-                    <ItemTitle><TextShimmer className='[--base-color:var(--color-muted-foreground)][--base-gradient-color:var(--color-foreground)]'>{outcome}</TextShimmer></ItemTitle>
+                <ItemContent className="min-w-0 overflow-hidden">
+                    <motion.div
+                        ref={textRef}
+                        className="w-max"
+                        animate={shouldAnimate ? { x: [0, -offset] } : { x: 0 }}
+                        transition={shouldAnimate ? {
+                            duration: Math.max(1.5, offset / 40),
+                            ease: "easeInOut",
+                            repeat: Infinity,
+                            repeatType: "mirror",
+                            repeatDelay: 1.5,
+                        } : { duration: 0 }}
+                    >
+                        <ItemTitle className="line-clamp-none whitespace-nowrap w-max">
+                            <TextShimmer className="[--base-color:var(--color-muted-foreground)][--base-gradient-color:var(--color-foreground)]">
+                                {outcome}
+                            </TextShimmer>
+                        </ItemTitle>
+                    </motion.div>
                 </ItemContent>
             </Item>
         </div>
