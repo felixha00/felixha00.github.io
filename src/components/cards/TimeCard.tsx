@@ -245,19 +245,57 @@ function DaylightBar({
 
 // ── main ─────────────────────────────────────────────────────────────────────
 
+function initExtra(): TimeExtra {
+  const now = new Date();
+  return {
+    dayOfWeek: new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "short" })
+      .format(now)
+      .toUpperCase(),
+    dateStr: new Intl.DateTimeFormat("en-US", {
+      timeZone: TZ,
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+      .format(now)
+      .toUpperCase(),
+    epoch: Math.floor(now.getTime() / 1000),
+    utcOffset: computeUtcOffset(TZ),
+    tzAbbr: computeTzAbbr(TZ),
+  };
+}
+
 export function TimeCard() {
-  const [extra, setExtra] = useState<TimeExtra | null>(null);
+  const [extra, setExtra] = useState<TimeExtra>(initExtra);
   const [sunTimes, setSunTimes] = useState<SunTimes | null>(null);
   const [solarLive, setSolarLive] = useState<SolarLive | null>(null);
-  const [moon, setMoon] = useState<MoonData | null>(null);
+  const [moon, setMoon] = useState<MoonData>(() => getMoonPhase(new Date()));
   const [sunError, setSunError] = useState(false);
   const sunTimesRef = useRef<SunTimes | null>(null);
 
-  // Per-second ticker: time metadata, moon, live solar position
+  // Per-second ticker: epoch counter and solar "now" position
   useEffect(() => {
-    const tick = () => {
+    const fastTick = () => {
       const now = new Date();
-      setExtra({
+      setExtra((prev) => ({ ...prev, epoch: Math.floor(now.getTime() / 1000) }));
+      if (sunTimesRef.current) {
+        setSolarLive({
+          elevation: calcSolarElevation(LAT, LNG, now),
+          nowPct: localTimeFraction(TZ, now) * 100,
+        });
+      }
+    };
+    fastTick();
+    const id = setInterval(fastTick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  // Per-minute ticker: date metadata and moon phase (effectively static within a day)
+  useEffect(() => {
+    const slowTick = () => {
+      const now = new Date();
+      setExtra((prev) => ({
+        ...prev,
         dayOfWeek: new Intl.DateTimeFormat("en-US", {
           timeZone: TZ,
           weekday: "short",
@@ -272,20 +310,12 @@ export function TimeCard() {
         })
           .format(now)
           .toUpperCase(),
-        epoch: Math.floor(now.getTime() / 1000),
         utcOffset: computeUtcOffset(TZ),
         tzAbbr: computeTzAbbr(TZ),
-      });
+      }));
       setMoon(getMoonPhase(now));
-      if (sunTimesRef.current) {
-        setSolarLive({
-          elevation: calcSolarElevation(LAT, LNG, now),
-          nowPct: localTimeFraction(TZ, now) * 100,
-        });
-      }
     };
-    tick();
-    const id = setInterval(tick, 1000);
+    const id = setInterval(slowTick, 60000);
     return () => clearInterval(id);
   }, []);
 
@@ -343,54 +373,42 @@ export function TimeCard() {
           <div className="text-5xl">
             <Clock />
           </div>
-          {extra ? (
-            <div className="flex gap-1.5 pb-1">
-              <Badge variant="secondary" className="font-mono text-xs">
-                {extra.tzAbbr}
-              </Badge>
-              <Badge variant="outline" className="font-mono text-xs">
-                {extra.utcOffset}
-              </Badge>
-            </div>
-          ) : (
-            <Skeleton className="h-6 w-28" />
-          )}
+          <div className="flex gap-1.5 pb-1">
+            <Badge variant="secondary" className="font-mono text-xs">
+              {extra.tzAbbr}
+            </Badge>
+            <Badge variant="outline" className="font-mono text-xs">
+              {extra.utcOffset}
+            </Badge>
+          </div>
         </div>
 
         <Separator />
 
         {/* Time metadata */}
-        {extra ? (
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-1.5 font-mono text-xs">
-            <div className="flex justify-between gap-2">
-              <dt className="text-muted-foreground">DAY</dt>
-              <dd>{extra.dayOfWeek}</dd>
-            </div>
-            <div className="flex justify-between gap-2">
-              <dt className="text-muted-foreground">DATE</dt>
-              <dd>{extra.dateStr}</dd>
-            </div>
-            <div className="col-span-2 flex justify-between gap-2">
-              <dt className="text-muted-foreground">EPOCH</dt>
-              <dd className="tabular-nums">{extra.epoch}</dd>
-            </div>
-            <div className="col-span-2 flex justify-between gap-2">
-              <dt className="shrink-0 text-muted-foreground">TZ</dt>
-              <dd className="truncate text-right">{TZ}</dd>
-            </div>
-          </dl>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-4 w-full" />
-            ))}
+        <dl className="grid grid-cols-2 gap-x-8 gap-y-1.5 font-mono text-xs">
+          <div className="flex justify-between gap-2">
+            <dt className="text-muted-foreground">DAY</dt>
+            <dd>{extra.dayOfWeek}</dd>
           </div>
-        )}
+          <div className="flex justify-between gap-2">
+            <dt className="text-muted-foreground">DATE</dt>
+            <dd>{extra.dateStr}</dd>
+          </div>
+          <div className="col-span-2 flex justify-between gap-2">
+            <dt className="text-muted-foreground">EPOCH</dt>
+            <dd className="tabular-nums">{extra.epoch}</dd>
+          </div>
+          <div className="col-span-2 flex justify-between gap-2">
+            <dt className="shrink-0 text-muted-foreground">TZ</dt>
+            <dd className="truncate text-right">{TZ}</dd>
+          </div>
+        </dl>
 
         <Separator />
 
         {/* Solar & lunar section */}
-        {showSolar && moon ? (
+        {showSolar ? (
           <div className="flex flex-col gap-3">
             <div className="grid grid-cols-2 gap-x-8 font-mono text-xs">
               {/* Sun */}
