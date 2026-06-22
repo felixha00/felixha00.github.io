@@ -157,7 +157,7 @@ export function LastDeployCard() {
               Latest commit
             </span>
             {!deployedIsLatest && (
-              <Badge variant="outline" className="ml-auto rounded-none font-mono text-[10px]">
+              <Badge variant="outline" className="ml-auto font-mono text-[10px]">
                 not deployed
               </Badge>
             )}
