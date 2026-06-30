@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import { useRef } from "react";
 
@@ -7,8 +8,19 @@ import { FrameIcon, type FrameIconHandle } from "@/components/common/DesignerIco
 import { CogIcon, type CogIconHandle } from "@/components/common/EngineerIcon";
 import { BoxesIcon, type BoxesIconHandle } from "@/components/common/MakerIcon";
 
+import type { ConfettiRole } from "@/components/home/ConfettiCanvas";
+
 type IconHandle = { startAnimation: () => void; stopAnimation: () => void };
-type Role = "designer" | "engineer" | "maker";
+type Role = ConfettiRole;
+
+function spawnConfetti(role: Role, e: React.MouseEvent | React.PointerEvent) {
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+  window.dispatchEvent(
+    new CustomEvent("confetti:spawn", {
+      detail: { role, x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+    })
+  );
+}
 
 const SHADOW_REST = 4;
 const SHADOW_PRESS = 1;
@@ -115,7 +127,7 @@ export default function HeroText() {
                             onPointerUp={designer.release}
                             onPointerLeave={designer.release}
                             onPointerCancel={designer.release}
-                            onClick={() => onTap(designerRef)}
+                            onClick={(e) => { onTap(designerRef); spawnConfetti("designer", e); }}
                         >
                             <FrameIcon ref={designerRef} size={20} className="text-role-designer-icon" />
                             Designer
@@ -140,7 +152,7 @@ export default function HeroText() {
                             onPointerUp={engineer.release}
                             onPointerLeave={engineer.release}
                             onPointerCancel={engineer.release}
-                            onClick={() => onTap(engineerRef)}
+                            onClick={(e) => { onTap(engineerRef); spawnConfetti("engineer", e); }}
                         >
                             <CogIcon ref={engineerRef} size={20} className="text-role-engineer-icon" />
                             Engineer
@@ -166,7 +178,7 @@ export default function HeroText() {
                             onPointerUp={maker.release}
                             onPointerLeave={maker.release}
                             onPointerCancel={maker.release}
-                            onClick={() => onTap(makerRef)}
+                            onClick={(e) => { onTap(makerRef); spawnConfetti("maker", e); }}
                         >
                             <BoxesIcon ref={makerRef} size={20} className="text-role-maker-icon" />
                             Maker

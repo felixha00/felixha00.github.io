@@ -10,6 +10,7 @@ import CategoryShortcuts from "@/components/home/CategoryShortcuts";
 import { ArrowRight } from "lucide-react";
 import HeroText from "@/components/home/HeroText";
 import LiveCardPanel from "@/components/home/LiveCardPanel";
+import ConfettiCanvas from "@/components/home/ConfettiCanvas";
 
 type HomeProfile = {
     shortBio?: string;
@@ -25,6 +26,7 @@ type HomePageProps = {
 export default function HomePage({ profile }: HomePageProps) {
     return (
         <main className="h-full flex grow flex-col">
+            <ConfettiCanvas />
             <div
                 id="hero-div"
                 className="hero-div flex grow items-start justify-center relative md:h-screen gap-6 overflow-hidden p-0 md:p-4 pt-12 md:pt-16"
