@@ -1,10 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Matter from "matter-js";
-import { useLenis } from "lenis/react";
-import { Button } from "@/components/ui/button";
 
 // ── Icon renderers ───────────────────────────────────────────────────────────
 // Each draws into a square canvas at `size` pixels, matching the SVG icons
@@ -62,14 +60,15 @@ function drawMakerPiece(ctx: CanvasRenderingContext2D, size: number, color: stri
 
 export type ConfettiRole = "designer" | "engineer" | "maker";
 
-const PIECE_SIZE = 46;   // px — square canvas for each piece
+const PIECE_SIZE = 46;
 const MAX_BODIES = 140;
 const SPAWN_COUNT = 22;
 const BASE_GRAVITY = 2.8;
-const PUSHER_R = 30;   // mouse interaction circle radius
+const PUSHER_R = 30;
+// Fade begins at this fraction of canvas height, pieces are fully gone at bottom edge
+const FADE_START = 0.72;
 
-// 5 OKLCH variants per role: subtle shifts in lightness, chroma, and hue
-// so a burst always has a small spread of shades rather than one flat colour.
+// 5 OKLCH variants per role
 const COLOR_VARIANTS: Record<ConfettiRole, string[]> = {
   designer: [
     "oklch(0.88 0.14 22)",
@@ -121,25 +120,16 @@ export default function ConfettiCanvas() {
   const bodyRolesRef = useRef<Map<number, ConfettiRole>>(new Map());
   const bodyVariantRef = useRef<Map<number, number>>(new Map());
   const imagesRef = useRef<Record<ConfettiRole, HTMLCanvasElement[]> | null>(null);
-  const wallsRef = useRef<{ ground: Matter.Body; left: Matter.Body; right: Matter.Body } | null>(null);
+  const wallsRef = useRef<{ left: Matter.Body; right: Matter.Body } | null>(null);
   const pusherRef = useRef<Matter.Body | null>(null);
   const rafRef = useRef<number>(0);
-  const cleaningRef = useRef(false);
   const bodyCountRef = useRef(0);
   const curMouseRef = useRef({ x: -2000, y: -2000 });
   const prevMouseRef = useRef({ x: -2000, y: -2000 });
-  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  const [hasConfetti, setHasConfetti] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
   // SSR guard — false on server, true on client, no extra render cycle
   const isClient = useSyncExternalStore(() => () => { }, () => true, () => false);
 
-  // Physics engine + canvas render loop
-  // `isClient` in deps: during Next.js hydration useSyncExternalStore returns the server
-  // snapshot (false), so the first pass renders null — no canvas, canvasRef.current is null.
-  // React re-renders synchronously with the client snapshot (true) AFTER passive effects fire,
-  // so the [] effect misses the canvas. Listing isClient re-runs the effect once it flips true.
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -158,12 +148,10 @@ export default function ConfettiCanvas() {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    const ground = Matter.Bodies.rectangle(w / 2, h + 25, w * 3, 50, {
-      isStatic: true, friction: 0.5, restitution: 0.12, label: "ground",
-    });
+    // No ground — pieces fall through the viewport and are culled in the render tick
     const leftWall = Matter.Bodies.rectangle(-25, h / 2, 50, h * 2, { isStatic: true, label: "wall" });
     const rightWall = Matter.Bodies.rectangle(w + 25, h / 2, 50, h * 2, { isStatic: true, label: "wall" });
-    wallsRef.current = { ground, left: leftWall, right: rightWall };
+    wallsRef.current = { left: leftWall, right: rightWall };
 
     // Kinematic mouse pusher (static, but we drive position + velocity manually)
     const pusher = Matter.Bodies.circle(-2000, -2000, PUSHER_R, {
@@ -175,11 +163,9 @@ export default function ConfettiCanvas() {
     });
     pusherRef.current = pusher;
 
-    Matter.World.add(engine.world, [ground, leftWall, rightWall, pusher]);
+    Matter.World.add(engine.world, [leftWall, rightWall, pusher]);
 
-    // Drive pusher kinematically each tick:
-    // setPosition moves the body (updates vertices/bounds), then we manually
-    // rewind positionPrev so Matter.js collision resolver sees real velocity.
+    // Drive pusher kinematically each tick
     Matter.Events.on(engine, "beforeUpdate", () => {
       const p = pusherRef.current;
       if (!p) return;
@@ -188,7 +174,6 @@ export default function ConfettiCanvas() {
 
       Matter.Body.setPosition(p, { x: cur.x, y: cur.y });
 
-      // positionPrev is internal — not in @types/matter-js but always present at runtime
       const pp = (p as unknown as { positionPrev: Matter.Vector }).positionPrev;
       pp.x = prev.x;
       pp.y = prev.y;
@@ -213,13 +198,32 @@ export default function ConfettiCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const bodies = Matter.Composite.allBodies(engineRef.current.world).filter(b => !b.isStatic);
+      const fadeZone = canvas.height * FADE_START;
+      const fadeRange = canvas.height * (1 - FADE_START) + PIECE_SIZE;
+
       for (const body of bodies) {
         const role = bodyRolesRef.current.get(body.id);
         if (!role) continue;
+
+        // Cull once fully past the bottom edge
+        if (body.position.y > canvas.height + PIECE_SIZE) {
+          bodyRolesRef.current.delete(body.id);
+          bodyVariantRef.current.delete(body.id);
+          Matter.Composite.remove(engineRef.current.world, body);
+          bodyCountRef.current = Math.max(0, bodyCountRef.current - 1);
+          continue;
+        }
+
         const variant = bodyVariantRef.current.get(body.id) ?? 0;
         const img = imagesRef.current[role]?.[variant];
         if (!img) continue;
+
+        const alpha = body.position.y < fadeZone
+          ? 1
+          : Math.max(0, 1 - (body.position.y - fadeZone) / fadeRange);
+
         ctx.save();
+        ctx.globalAlpha = alpha;
         ctx.translate(body.position.x, body.position.y);
         ctx.rotate(body.angle);
         ctx.drawImage(img, -PIECE_SIZE / 2, -PIECE_SIZE / 2, PIECE_SIZE, PIECE_SIZE);
@@ -236,7 +240,6 @@ export default function ConfettiCanvas() {
       canvas.width = nw;
       canvas.height = nh;
       if (!wallsRef.current) return;
-      Matter.Body.setPosition(wallsRef.current.ground, { x: nw / 2, y: nh + 25 });
       Matter.Body.setPosition(wallsRef.current.left, { x: -25, y: nh / 2 });
       Matter.Body.setPosition(wallsRef.current.right, { x: nw + 25, y: nh / 2 });
     }
@@ -244,15 +247,13 @@ export default function ConfettiCanvas() {
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      clearTimeout(exitTimerRef.current);
       window.removeEventListener("resize", handleResize);
       Matter.Runner.stop(runner);
       Matter.Engine.clear(engine);
-      engineRef.current = null; // null out so stale-engine guards work on re-init
+      engineRef.current = null;
       bodyRolesRef.current = new Map();
       bodyVariantRef.current = new Map();
       bodyCountRef.current = 0;
-      cleaningRef.current = false; // reset if unmounted mid-cleanup so remount isn't permanently blocked
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClient]);
@@ -279,12 +280,8 @@ export default function ConfettiCanvas() {
   useEffect(() => {
     function handleSpawn(e: Event) {
       const { role, x, y } = (e as CustomEvent<{ role: ConfettiRole; x: number; y: number }>).detail;
-      if (!engineRef.current || cleaningRef.current) return;
+      if (!engineRef.current) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      // Cancel any in-progress exit so re-spawning feels immediate
-      clearTimeout(exitTimerRef.current);
-      setIsExiting(false);
 
       const toAdd: Matter.Body[] = [];
 
@@ -293,7 +290,6 @@ export default function ConfettiCanvas() {
         const speed = 7 + Math.random() * 15;
         const variant = Math.floor(Math.random() * VARIANT_COUNT);
 
-        // Cog → circle body so it rolls naturally
         const body = role === "engineer"
           ? Matter.Bodies.circle(
             x + (Math.random() - 0.5) * 80, y, PIECE_SIZE / 2,
@@ -327,95 +323,20 @@ export default function ConfettiCanvas() {
 
       Matter.World.add(engineRef.current.world, toAdd);
       bodyCountRef.current = Math.min(existing.length - Math.max(0, excess) + toAdd.length, MAX_BODIES);
-      setHasConfetti(true);
     }
 
     window.addEventListener("confetti:spawn", handleSpawn);
     return () => window.removeEventListener("confetti:spawn", handleSpawn);
   }, []);
 
-  // Scroll impulse — strong enough to visibly jostle and spin the pile
-  useLenis(({ velocity }) => {
-    if (!engineRef.current || bodyCountRef.current === 0 || Math.abs(velocity) < 0.5) return;
-    const bodies = Matter.Composite.allBodies(engineRef.current.world).filter(b => !b.isStatic);
-    if (!bodies.length) return;
-
-    const fy = -velocity * 0.00055;
-    for (const body of bodies) {
-      Matter.Body.applyForce(body, body.position, {
-        x: (Math.random() - 0.5) * 0.00025,
-        y: fy,
-      });
-      // Spin pieces on scroll
-      Matter.Body.setAngularVelocity(
-        body,
-        body.angularVelocity + (Math.random() - 0.5) * 0.18
-      );
-    }
-  });
-
-  // Cleanup: yank gravity up, remove ground, let everything fall off screen,
-  // and slide the canvas out so the exit feels deliberate rather than abrupt.
-  const handleCleanup = useCallback(() => {
-    if (!engineRef.current || !wallsRef.current || cleaningRef.current) return;
-    cleaningRef.current = true;
-    setHasConfetti(false);
-    setIsExiting(true);
-
-    Matter.Composite.remove(engineRef.current.world, wallsRef.current.ground);
-    engineRef.current.gravity.y = 22;
-
-    exitTimerRef.current = setTimeout(() => {
-      if (!engineRef.current) return;
-      const bodies = Matter.Composite.allBodies(engineRef.current.world).filter(b => !b.isStatic);
-      bodies.forEach(b => {
-        bodyRolesRef.current.delete(b.id);
-        bodyVariantRef.current.delete(b.id);
-        Matter.Composite.remove(engineRef.current!.world, b);
-      });
-
-      engineRef.current.gravity.y = BASE_GRAVITY;
-
-      if (wallsRef.current) {
-        const nw = window.innerWidth;
-        const nh = window.innerHeight;
-        const newGround = Matter.Bodies.rectangle(nw / 2, nh + 25, nw * 3, 50, {
-          isStatic: true, friction: 0.5, restitution: 0.12, label: "ground",
-        });
-        wallsRef.current.ground = newGround;
-        Matter.World.add(engineRef.current.world, newGround);
-      }
-
-      bodyCountRef.current = 0;
-      cleaningRef.current = false;
-    }, 700);
-  }, []);
-
   if (!isClient) return null;
 
   return createPortal(
-    <>
-      <canvas
-        ref={canvasRef}
-        style={{
-          transition: "opacity 600ms cubic-bezier(0.16,1,0.3,1), transform 600ms cubic-bezier(0.16,1,0.3,1)",
-          opacity: isExiting ? 0 : undefined,
-          transform: isExiting ? "translateY(1rem)" : undefined,
-        }}
-        className="pointer-events-none fixed inset-0 z-[9000]"
-        aria-hidden="true"
-      />
-      {hasConfetti && (
-        <Button
-          variant="default"
-          size="lg"
-          onClick={handleCleanup}
-          className="animate-in fade-in slide-in-from-bottom-4 duration-300 fixed bottom-0 left-1/2 -translate-x-1/2 z-[9001] rounded-b-none shadow-[0_-2px_12px_oklch(0_0_0/0.08)]"
-        >
-          Clean It Up!
-        </Button>
-      )}
-    </>,
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none fixed inset-0 z-[9000]"
+      aria-hidden="true"
+    />,
     document.body
   );
 }
