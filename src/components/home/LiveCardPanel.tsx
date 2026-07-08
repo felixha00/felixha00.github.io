@@ -6,12 +6,14 @@ import { motion } from "motion/react";
 import { TimeCard } from "@/components/cards/TimeCard";
 import { WeatherCard } from "@/components/cards/WeatherCard";
 import { LastDeployCard } from "@/components/cards/LastDeployCard";
+import { HomelabCard } from "@/components/cards/HomelabCard";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 const CARDS: { Card: React.ComponentType; label: string; className?: string }[] = [
-    { Card: TimeCard, label: "Local Time", className: "lg:col-span-2" },
+    { Card: TimeCard, label: "Local Time" },
     { Card: WeatherCard, label: "Weather" },
+    { Card: HomelabCard, label: "Homelab" },
     { Card: LastDeployCard, label: "Last Deploy" },
 ];
 
@@ -124,7 +126,7 @@ function DesktopCardGrid() {
         <motion.div
             role="region"
             aria-label="Live status cards"
-            className="hidden md:grid relative min-h-0 border bg-background/80 md:h-full md:overflow-hidden grid-cols-1 lg:grid-cols-2 md:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)] gap-4 p-4 **:data-[slot=card]:min-h-0 **:data-[slot=card]:rounded-lg **:data-[slot=card]:py-4 **:data-[slot=card]:gap-4 **:data-[slot=card-header]:px-4 **:data-[slot=card-content]:px-4"
+            className="hidden md:grid relative min-h-0 border bg-background/80 md:h-full md:overflow-hidden grid-cols-2 grid-rows-2 gap-4 p-4 **:data-[slot=card]:min-h-0 **:data-[slot=card]:rounded-lg **:data-[slot=card]:py-3 **:data-[slot=card]:gap-3 **:data-[slot=card-header]:px-4 **:data-[slot=card-content]:px-4"
             initial="hidden"
             animate="visible"
             variants={{
