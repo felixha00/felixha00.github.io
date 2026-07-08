@@ -181,14 +181,14 @@ function MoonGlyph({ fraction }: { fraction: number }) {
 
   if (isNew) {
     return (
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden>
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="currentColor" strokeOpacity={0.4} strokeWidth={1} />
       </svg>
     );
   }
   if (isFull) {
     return (
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden>
         <circle cx={cx} cy={cy} r={r} fill="currentColor" fillOpacity={0.85} />
       </svg>
     );
@@ -206,7 +206,7 @@ function MoonGlyph({ fraction }: { fraction: number }) {
   }
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden>
       <circle cx={cx} cy={cy} r={r} fill="currentColor" fillOpacity={0.08} stroke="currentColor" strokeOpacity={0.22} strokeWidth={0.75} />
       <path d={d} fill="currentColor" fillOpacity={0.82} />
     </svg>
@@ -396,7 +396,7 @@ export function TimeCard() {
           <LiveDot />
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
+      <CardContent className="flex flex-col justify-between gap-4 flex-1">
         {/* Clock row */}
         <div className="flex flex-wrap items-end gap-3">
           <div className="text-5xl">
@@ -473,12 +473,12 @@ export function TimeCard() {
               </dl>
               {/* Moon */}
               <dl className="flex flex-col gap-1.5">
-                <div className="flex justify-between items-center gap-2">
-                  <dt className="text-muted-foreground">PHASE</dt>
+                <div className="flex justify-between items-center gap-2 min-w-0">
+                  <dt className="shrink-0 text-muted-foreground">PHASE</dt>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <dd className="flex cursor-default items-center gap-1.5">
+                        <dd className="flex min-w-0 cursor-default items-center gap-1.5">
                           <MoonGlyph fraction={moon.fraction} />
                           <span className="truncate">{moon.phaseName}</span>
                         </dd>

@@ -99,7 +99,7 @@ function TempGraph({
   const chartData = temps.slice(0, 24).map((temp, i) => ({ hour: i, temp }));
 
   return (
-    <ChartContainer config={tempChartConfig} className="h-25 w-full">
+    <ChartContainer config={tempChartConfig} className="min-h-25 w-full flex-1">
       <AreaChart data={chartData} margin={{ top: 6, right: 2, bottom: 0, left: 2 }}>
         <defs>
           <linearGradient id="tempAreaFill" x1="0" y1="0" x2="0" y2="1">
