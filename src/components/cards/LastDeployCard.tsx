@@ -73,7 +73,7 @@ export function LastDeployCard() {
 
   if (error) {
     return (
-      <Card className="rounded-none">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Last Deploy
@@ -90,7 +90,7 @@ export function LastDeployCard() {
 
   if (!data) {
     return (
-      <Card className="rounded-none">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Last Deploy
@@ -128,7 +128,7 @@ export function LastDeployCard() {
     isLatestDeployed ?? (current.sha != null && visibleCommit.sha === current.sha);
 
   return (
-    <Card className="rounded-none h-full relative">
+    <Card className="h-full relative">
       <CardWatermark icon={Rocket} />
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">

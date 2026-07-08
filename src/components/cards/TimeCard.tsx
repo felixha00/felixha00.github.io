@@ -497,7 +497,7 @@ export function TimeCard() {
   }).format(solstice.date);
 
   return (
-    <Card className="rounded-none h-full flex flex-col relative">
+    <Card className=" h-full flex flex-col relative">
       <CardWatermark icon={ClockIcon} />
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">

@@ -210,7 +210,7 @@ export function WeatherCard() {
 
   if (error) {
     return (
-      <Card className="rounded-none h-full flex flex-col">
+      <Card className="h-full flex flex-col">
         <CardHeader className="pb-2">
           <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Weather
@@ -227,7 +227,7 @@ export function WeatherCard() {
 
   if (!weather) {
     return (
-      <Card className="rounded-none h-full flex flex-col">
+      <Card className="h-full flex flex-col">
         <CardHeader className="pb-2">
           <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             Weather
@@ -261,7 +261,7 @@ export function WeatherCard() {
   }).format(new Date()).toUpperCase();
 
   return (
-    <Card className="rounded-none h-full flex flex-col relative">
+    <Card className="h-full flex flex-col relative">
       <CardWatermark icon={Icon} />
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">

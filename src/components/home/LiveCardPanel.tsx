@@ -9,7 +9,7 @@ import { LastDeployCard } from "@/components/cards/LastDeployCard";
 export default function LiveCardPanel() {
     return (
         <motion.div
-            className="hidden md:grid relative border md:h-full md:overflow-y-auto md:overscroll-contain [scrollbar-gutter:stable] grid-cols-1 lg:grid-cols-2 gap-0 p-0"
+            className="hidden md:grid relative border md:h-full md:overflow-y-auto md:overscroll-contain [scrollbar-gutter:stable] grid-cols-1 lg:grid-cols-2 gap-4 p-4"
             initial="hidden"
             animate="visible"
             variants={{
