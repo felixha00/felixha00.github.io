@@ -52,22 +52,88 @@ type MoonData = {
   phaseName: string;
 };
 
+type Solstice = {
+  date: Date;
+  name: string;
+};
+
 // ── pure calculations ────────────────────────────────────────────────────────
+
+function computeOffsetMinutes(tz: string, date: Date): number {
+  try {
+    const utcMs = new Date(date.toLocaleString("en-US", { timeZone: "UTC" })).getTime();
+    const tzMs = new Date(date.toLocaleString("en-US", { timeZone: tz })).getTime();
+    return Math.round((tzMs - utcMs) / 60000);
+  } catch {
+    return 0;
+  }
+}
 
 function computeUtcOffset(tz: string): string {
   try {
-    const now = new Date();
-    const utcMs = new Date(now.toLocaleString("en-US", { timeZone: "UTC" })).getTime();
-    const tzMs = new Date(now.toLocaleString("en-US", { timeZone: tz })).getTime();
-    const diffH = (tzMs - utcMs) / 3600000;
-    const sign = diffH >= 0 ? "+" : "-";
-    const abs = Math.abs(diffH);
-    const h = String(Math.floor(abs)).padStart(2, "0");
-    const m = String(Math.round((abs % 1) * 60)).padStart(2, "0");
+    const diffMin = computeOffsetMinutes(tz, new Date());
+    const sign = diffMin >= 0 ? "+" : "-";
+    const abs = Math.abs(diffMin);
+    const h = String(Math.floor(abs / 60)).padStart(2, "0");
+    const m = String(abs % 60).padStart(2, "0");
     return `UTC${sign}${h}:${m}`;
   } catch {
     return "UTC";
   }
+}
+
+function formatOffsetDelta(deltaMin: number): string {
+  const sign = deltaMin >= 0 ? "+" : "-";
+  const abs = Math.abs(deltaMin);
+  const h = Math.floor(abs / 60);
+  const m = abs % 60;
+  return `${sign}${h}H${m ? `${m}M` : ""}`;
+}
+
+function describeOffsetDelta(deltaMin: number): string {
+  const abs = Math.abs(deltaMin);
+  const h = Math.floor(abs / 60);
+  const m = abs % 60;
+  const dur = `${h}h${m ? ` ${m}m` : ""}`;
+  return `Felix is ${dur} ${deltaMin >= 0 ? "ahead of" : "behind"} you`;
+}
+
+function formatClockHHMM(tz: string, date: Date): string {
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+  } catch {
+    return "--:--";
+  }
+}
+
+// Low-precision Meeus solstice formula (valid 1000–3000 CE, accurate to within a day).
+function solsticeJDE(year: number, solstice: "june" | "december"): number {
+  const Y = (year - 2000) / 1000;
+  if (solstice === "june") {
+    return 2451716.56767 + 365241.62603 * Y + 0.00325 * Y ** 2 + 0.00888 * Y ** 3 - 0.0003 * Y ** 4;
+  }
+  return 2451900.05952 + 365242.74049 * Y - 0.06223 * Y ** 2 - 0.00823 * Y ** 3 + 0.00032 * Y ** 4;
+}
+
+function jdeToDate(jde: number): Date {
+  return new Date((jde - 2440587.5) * 86400000);
+}
+
+function nextSolstice(now: Date, isNorthernHemisphere: boolean): Solstice {
+  const year = now.getUTCFullYear();
+  const candidates: { date: Date; month: "june" | "december" }[] = [
+    { date: jdeToDate(solsticeJDE(year, "june")), month: "june" },
+    { date: jdeToDate(solsticeJDE(year, "december")), month: "december" },
+    { date: jdeToDate(solsticeJDE(year + 1, "june")), month: "june" },
+  ];
+  const next = candidates.find((c) => c.date.getTime() > now.getTime()) ?? candidates[candidates.length - 1]!;
+  const isSummer = isNorthernHemisphere ? next.month === "june" : next.month === "december";
+  return { date: next.date, name: isSummer ? "Summer Solstice" : "Winter Solstice" };
 }
 
 function computeTzAbbr(tz: string): string {
@@ -228,6 +294,8 @@ function DaylightBar({
   sunriseTime: string;
   sunsetTime: string;
 }) {
+  const bandPct = 2.2; // ~30min sliver approximating golden/blue hour, rendered as a gradient fade
+
   return (
     <div className="select-none">
       <div className="relative h-2.5 w-full overflow-hidden rounded-[1px] bg-muted">
@@ -236,14 +304,29 @@ function DaylightBar({
           style={{ left: `${sunrisePct}%`, right: `${100 - sunsetPct}%` }}
         />
         <div
-          className="absolute inset-y-0 w-0.5 bg-foreground/65"
+          aria-hidden
+          className="absolute inset-y-0 bg-linear-to-r from-transparent to-[oklch(0.55_0.06_255)]/45"
+          style={{ left: `${Math.max(0, sunrisePct - bandPct)}%`, width: `${bandPct}%` }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-y-0 bg-linear-to-r from-[oklch(0.78_0.1_75)]/45 to-transparent"
+          style={{ left: `${sunrisePct}%`, width: `${bandPct}%` }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-y-0 bg-linear-to-r from-transparent to-[oklch(0.78_0.1_75)]/45"
+          style={{ left: `${Math.max(0, sunsetPct - bandPct)}%`, width: `${bandPct}%` }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-y-0 bg-linear-to-r from-[oklch(0.55_0.06_255)]/45 to-transparent"
+          style={{ left: `${sunsetPct}%`, width: `${bandPct}%` }}
+        />
+        <div
+          className="absolute inset-y-0 w-0.5 bg-foreground/65 motion-safe:animate-pulse"
           style={{ left: `${Math.min(99.5, nowPct)}%` }}
-        >
-          <span
-            aria-hidden
-            className="motion-safe:animate-pulse absolute top-1/2 left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/25"
-          />
-        </div>
+        />
       </div>
       <div className="relative mt-1 h-3 font-mono text-[9px] text-muted-foreground tabular-nums">
         <span
@@ -292,7 +375,20 @@ export function TimeCard() {
   const [moon, setMoon] = useState<MoonData>(() => getMoonPhase(new Date()));
   const [sunError, setSunError] = useState(false);
   const [epochCopied, setEpochCopied] = useState(false);
+  const [visitorTz, setVisitorTz] = useState<string | null>(null);
   const sunTimesRef = useRef<SunTimes | null>(null);
+
+  // Detect the visitor's timezone once on mount (client-only, avoids hydration mismatch)
+  useEffect(() => {
+    const detectVisitorTz = () => {
+      try {
+        setVisitorTz(Intl.DateTimeFormat().resolvedOptions().timeZone || null);
+      } catch {
+        setVisitorTz(null);
+      }
+    };
+    detectVisitorTz();
+  }, []);
 
   function handleCopyEpoch() {
     navigator.clipboard.writeText(String(extra.epoch)).then(() => {
@@ -388,6 +484,18 @@ export function TimeCard() {
 
   const showSolar = sunTimes && solarLive;
 
+  const now = new Date(extra.epoch * 1000);
+  const visitorDeltaMin = visitorTz ? computeOffsetMinutes(TZ, now) - computeOffsetMinutes(visitorTz, now) : 0;
+  const showVisitorTime = visitorTz !== null && visitorDeltaMin !== 0;
+
+  const solstice = nextSolstice(now, LAT >= 0);
+  const daysUntilSolstice = Math.max(0, Math.ceil((solstice.date.getTime() - now.getTime()) / 86400000));
+  const solsticeDateStr = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    month: "short",
+    day: "numeric",
+  }).format(solstice.date);
+
   return (
     <Card className="rounded-none h-full flex flex-col relative">
       <CardWatermark icon={ClockIcon} />
@@ -444,6 +552,24 @@ export function TimeCard() {
             <dt className="shrink-0 text-muted-foreground">TZ</dt>
             <dd className="truncate text-right">{TZ}</dd>
           </div>
+          {showVisitorTime ? (
+            <div className="col-span-2 flex justify-between gap-2">
+              <dt className="shrink-0 text-muted-foreground">YOUR TIME</dt>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <dd className="cursor-default tabular-nums">
+                      {formatClockHHMM(visitorTz!, now)}{" "}
+                      <span className="text-muted-foreground">{formatOffsetDelta(visitorDeltaMin)}</span>
+                    </dd>
+                  </TooltipTrigger>
+                  <TooltipContent className="font-mono text-[11px]">
+                    {describeOffsetDelta(visitorDeltaMin)}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          ) : null}
         </dl>
 
         <Separator />
@@ -472,6 +598,21 @@ export function TimeCard() {
                     {solarLive.elevation > 0 ? "+" : ""}
                     {solarLive.elevation}°
                   </dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">SOLSTICE</dt>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <dd className="cursor-default tabular-nums">
+                          {daysUntilSolstice === 0 ? "TODAY" : `${daysUntilSolstice}D`}
+                        </dd>
+                      </TooltipTrigger>
+                      <TooltipContent className="font-mono text-[11px]">
+                        {solstice.name} · {solsticeDateStr}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </dl>
               {/* Moon */}
