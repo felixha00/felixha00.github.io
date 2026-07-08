@@ -15,8 +15,23 @@ const CARDS: { Card: React.ComponentType; label: string; className?: string }[] 
     { Card: LastDeployCard, label: "Last Deploy" },
 ];
 
+function useIsDesktop() {
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const query = window.matchMedia("(min-width: 768px)");
+        const update = () => setIsDesktop(query.matches);
+
+        update();
+        query.addEventListener("change", update);
+        return () => query.removeEventListener("change", update);
+    }, []);
+
+    return isDesktop;
+}
+
 // Below md there's no room for three stacked panels, so the same cards
-// become a swipeable strip instead — one full card in view at a time.
+// become a swipeable strip instead, one full card in view at a time.
 function MobileCardCarousel() {
     const scrollRef = useRef<HTMLDivElement>(null);
     const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -64,7 +79,7 @@ function MobileCardCarousel() {
                 role="region"
                 aria-roledescription="carousel"
                 aria-label="Live status cards"
-                className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto motion-safe:scroll-smooth px-4 focus-visible:outline-none"
+                className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto motion-safe:scroll-smooth px-4 focus-visible:outline-none"
             >
                 {CARDS.map(({ Card, label }, i) => (
                     <div
@@ -104,33 +119,38 @@ function MobileCardCarousel() {
     );
 }
 
-export default function LiveCardPanel() {
+function DesktopCardGrid() {
     return (
-        <>
-            <MobileCardCarousel />
-
-            <motion.div
-                className="hidden md:grid relative border md:h-full md:overflow-y-auto md:overscroll-contain [scrollbar-gutter:stable] grid-cols-1 lg:grid-cols-2 gap-4 p-4"
-                initial="hidden"
-                animate="visible"
-                variants={{
-                    hidden: {},
-                    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.35 } },
-                }}
-            >
-                {CARDS.map(({ Card, className }, i) => (
-                    <motion.div
-                        key={i}
-                        className={className}
-                        variants={{
-                            hidden: { opacity: 0 },
-                            visible: { opacity: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
-                        }}
-                    >
-                        <Card />
-                    </motion.div>
-                ))}
-            </motion.div>
-        </>
+        <motion.div
+            role="region"
+            aria-label="Live status cards"
+            className="hidden md:grid relative min-h-0 border bg-background/80 md:h-full md:overflow-hidden grid-cols-1 lg:grid-cols-2 md:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)] gap-4 p-4 **:data-[slot=card]:min-h-0 **:data-[slot=card]:rounded-lg **:data-[slot=card]:py-4 **:data-[slot=card]:gap-4 **:data-[slot=card-header]:px-4 **:data-[slot=card-content]:px-4"
+            initial="hidden"
+            animate="visible"
+            variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.1, delayChildren: 0.35 } },
+            }}
+        >
+            {CARDS.map(({ Card, className }, i) => (
+                <motion.div
+                    key={i}
+                    className={cn("min-h-0", className)}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+                    }}
+                >
+                    <Card />
+                </motion.div>
+            ))}
+        </motion.div>
     );
+}
+
+export default function LiveCardPanel() {
+    const isDesktop = useIsDesktop();
+
+    if (isDesktop === null) return null;
+    return isDesktop ? <DesktopCardGrid /> : <MobileCardCarousel />;
 }
