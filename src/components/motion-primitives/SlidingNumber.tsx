@@ -61,7 +61,7 @@ function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
     // don't render the animated number until we know the height
     if (!bounds.height) {
         return (
-            <span ref={ref} className='invisible absolute'>
+            <span ref={ref} className='invisible absolute inset-0'>
                 {number}
             </span>
         );

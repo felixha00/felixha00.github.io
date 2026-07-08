@@ -361,7 +361,7 @@ export function TimeCard() {
   const showSolar = sunTimes && solarLive;
 
   return (
-    <Card className="md:col-span-2 rounded-none h-full flex flex-col">
+    <Card className="rounded-none h-full flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Local Time
