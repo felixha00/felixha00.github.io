@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -10,6 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { LiveDot } from "@/components/cards/LiveDot";
 import {
   Area,
   AreaChart,
@@ -264,6 +265,9 @@ export function WeatherCard() {
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Weather · {weather.city}
         </CardTitle>
+        <CardAction>
+          <LiveDot />
+        </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 flex-1">
         <TooltipProvider>

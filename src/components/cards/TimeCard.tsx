@@ -1,11 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Clock } from "@/components/Clock";
+import { LiveDot } from "@/components/cards/LiveDot";
+
+const SYNODIC_DAYS = 29.53058867;
 
 const TZ = process.env.NEXT_PUBLIC_MY_TIMEZONE || "America/Toronto";
 const LAT = parseFloat(process.env.NEXT_PUBLIC_MY_LAT || "43.6532");
@@ -74,10 +83,9 @@ function computeTzAbbr(tz: string): string {
 function getMoonPhase(date: Date): MoonData {
   const JD = date.getTime() / 86400000 + 2440587.5;
   const KNOWN_NEW_MOON_JD = 2451550.1;
-  const SYNODIC = 29.53058867;
-  let raw = (JD - KNOWN_NEW_MOON_JD) % SYNODIC;
-  if (raw < 0) raw += SYNODIC;
-  const fraction = raw / SYNODIC;
+  let raw = (JD - KNOWN_NEW_MOON_JD) % SYNODIC_DAYS;
+  if (raw < 0) raw += SYNODIC_DAYS;
+  const fraction = raw / SYNODIC_DAYS;
   const illumination = Math.round(((1 - Math.cos(fraction * 2 * Math.PI)) / 2) * 100);
 
   let phaseName: string;
@@ -91,6 +99,11 @@ function getMoonPhase(date: Date): MoonData {
   else phaseName = "Waning Crescent";
 
   return { fraction, illumination, phaseName };
+}
+
+function daysUntilPhase(fraction: number, targetFraction: number): number {
+  const delta = (((targetFraction - fraction) % 1) + 1) % 1;
+  return Math.round(delta * SYNODIC_DAYS);
 }
 
 function calcSolarElevation(lat: number, lng: number, date: Date): number {
@@ -223,7 +236,12 @@ function DaylightBar({
         <div
           className="absolute inset-y-0 w-0.5 bg-foreground/65"
           style={{ left: `${Math.min(99.5, nowPct)}%` }}
-        />
+        >
+          <span
+            aria-hidden
+            className="motion-safe:animate-pulse absolute top-1/2 left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/25"
+          />
+        </div>
       </div>
       <div className="relative mt-1 h-3 font-mono text-[9px] text-muted-foreground tabular-nums">
         <span
@@ -271,7 +289,15 @@ export function TimeCard() {
   const [solarLive, setSolarLive] = useState<SolarLive | null>(null);
   const [moon, setMoon] = useState<MoonData>(() => getMoonPhase(new Date()));
   const [sunError, setSunError] = useState(false);
+  const [epochCopied, setEpochCopied] = useState(false);
   const sunTimesRef = useRef<SunTimes | null>(null);
+
+  function handleCopyEpoch() {
+    navigator.clipboard.writeText(String(extra.epoch)).then(() => {
+      setEpochCopied(true);
+      setTimeout(() => setEpochCopied(false), 1200);
+    }).catch(() => {});
+  }
 
   // Per-second ticker: epoch counter and solar "now" position
   useEffect(() => {
@@ -366,6 +392,9 @@ export function TimeCard() {
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Local Time
         </CardTitle>
+        <CardAction>
+          <LiveDot />
+        </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 flex-1">
         {/* Clock row */}
@@ -397,7 +426,16 @@ export function TimeCard() {
           </div>
           <div className="col-span-2 flex justify-between gap-2">
             <dt className="text-muted-foreground">EPOCH</dt>
-            <dd className="tabular-nums">{extra.epoch}</dd>
+            <dd>
+              <button
+                type="button"
+                onClick={handleCopyEpoch}
+                aria-label="Copy epoch timestamp"
+                className="tabular-nums underline decoration-dotted decoration-muted-foreground/40 underline-offset-2 cursor-pointer transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                {epochCopied ? "COPIED" : extra.epoch}
+              </button>
+            </dd>
           </div>
           <div className="col-span-2 flex justify-between gap-2">
             <dt className="shrink-0 text-muted-foreground">TZ</dt>
@@ -437,10 +475,25 @@ export function TimeCard() {
               <dl className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-center gap-2">
                   <dt className="text-muted-foreground">PHASE</dt>
-                  <dd className="flex items-center gap-1.5">
-                    <MoonGlyph fraction={moon.fraction} />
-                    <span className="truncate">{moon.phaseName}</span>
-                  </dd>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <dd className="flex cursor-default items-center gap-1.5">
+                          <MoonGlyph fraction={moon.fraction} />
+                          <span className="truncate">{moon.phaseName}</span>
+                        </dd>
+                      </TooltipTrigger>
+                      <TooltipContent className="font-mono text-[11px]">
+                        {daysUntilPhase(moon.fraction, 0.5) === 0
+                          ? "Full moon tonight"
+                          : `Full moon in ${daysUntilPhase(moon.fraction, 0.5)}d`}
+                        {" · "}
+                        {daysUntilPhase(moon.fraction, 0) === 0
+                          ? "new moon tonight"
+                          : `new moon in ${daysUntilPhase(moon.fraction, 0)}d`}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <div className="flex justify-between gap-2">
                   <dt className="text-muted-foreground">LIT</dt>
