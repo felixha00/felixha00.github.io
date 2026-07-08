@@ -240,21 +240,23 @@ function HomelabSkeleton() {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 flex-1">
-        <div className="flex items-center gap-2.5">
-          <Skeleton className="size-3 rounded-full" />
-          <Skeleton className="h-7 w-28" />
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-2.5">
+            <Skeleton className="size-3 rounded-full" />
+            <Skeleton className="h-7 w-28" />
+          </div>
+          <Skeleton className="h-3 w-3/4" />
         </div>
         <Separator />
-        <div className="grid grid-cols-2 gap-x-8 gap-y-1.5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
           {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-3 w-full" />
+            <Skeleton key={i} className="h-6 w-full" />
           ))}
         </div>
         <Separator />
-        <div className="flex flex-col gap-2">
-          {[0, 1, 2].map((i) => (
-            <Skeleton key={i} className="h-3 w-full" />
-          ))}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-16 w-full" />
         </div>
       </CardContent>
     </Card>
@@ -343,6 +345,12 @@ export function HomelabCard() {
   const nextSyncInSec =
     lastSyncedAt != null ? Math.max(0, Math.ceil((lastSyncedAt + POLL_INTERVAL_MS - nowMs) / 1000)) : null;
 
+  const visiblePools = pools.slice(0, 3);
+  const poolsMoreCount = Math.max(0, pools.length - visiblePools.length);
+  const vmItems = data.vms.items ?? [];
+  const visibleVmItems = vmItems.slice(0, 3);
+  const vmItemsMoreCount = Math.max(0, vmItems.length - visibleVmItems.length);
+
   return (
     <Card className="relative h-full flex flex-col">
       <CardWatermark icon={ServerCog} />
@@ -367,45 +375,50 @@ export function HomelabCard() {
       </CardHeader>
 
       <CardContent className="flex flex-1 min-h-0 flex-col gap-4 overflow-y-auto">
-        <div className="flex flex-wrap items-end gap-3">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <StatusDot status={status} />
-            <span className="truncate font-display text-3xl leading-none tracking-tight">
-              {data.system.name}
-            </span>
-          </div>
-          <div className="flex gap-1.5 pb-1">
-            <Badge variant="secondary" className="font-mono text-xs uppercase">
-              {status}
-            </Badge>
-            {data.system.nodes ? (
-              <Badge variant="outline" className="font-mono text-xs">
-                {data.system.nodes} node{data.system.nodes === 1 ? "" : "s"}
+        <div className="flex flex-col gap-1.5">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <StatusDot status={status} />
+              <span className="truncate font-display text-3xl leading-none tracking-tight">
+                {data.system.name}
+              </span>
+            </div>
+            <div className="flex gap-1.5 pb-1">
+              <Badge variant="secondary" className="font-mono text-xs uppercase">
+                {status}
               </Badge>
-            ) : null}
+              {data.system.nodes ? (
+                <Badge variant="outline" className="font-mono text-xs">
+                  {data.system.nodes} node{data.system.nodes === 1 ? "" : "s"}
+                </Badge>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[11px] text-muted-foreground">
+            <span>
+              UPTIME <span className="text-foreground/80 tabular-nums">{data.system.uptime ?? "n/a"}</span>
+            </span>
+            <span aria-hidden>·</span>
+            <span>
+              SYNCED{" "}
+              <span className="text-foreground/80 tabular-nums">
+                {isPlaceholder ? "standby" : timeAgo(data.updatedAt)}
+              </span>
+            </span>
+            <span aria-hidden>·</span>
+            <span>
+              NEXT SYNC{" "}
+              <span className="text-foreground/80 tabular-nums">
+                {nextSyncInSec == null ? "…" : `${nextSyncInSec}s`}
+              </span>
+            </span>
           </div>
         </div>
 
         <Separator />
 
-        <dl className="grid grid-cols-2 gap-x-8 gap-y-1.5 font-mono text-xs">
-          <div className="flex justify-between gap-2">
-            <dt className="text-muted-foreground">UPTIME</dt>
-            <dd className="truncate text-right">{data.system.uptime ?? "n/a"}</dd>
-          </div>
-          <div className="flex justify-between gap-2">
-            <dt className="text-muted-foreground">SYNCED</dt>
-            <dd className="tabular-nums">{isPlaceholder ? "standby" : timeAgo(data.updatedAt)}</dd>
-          </div>
-          <div className="col-span-2 flex justify-between gap-2">
-            <dt className="text-muted-foreground">NEXT SYNC</dt>
-            <dd className="tabular-nums">{nextSyncInSec == null ? "…" : `${nextSyncInSec}s`}</dd>
-          </div>
-        </dl>
-
-        <Separator />
-
-        <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
           {metricRows.map(({ key, label }) => (
             <GaugeRow key={key} label={label} value={data.metrics[key]} />
           ))}
@@ -413,38 +426,41 @@ export function HomelabCard() {
 
         <Separator />
 
-        <div className="flex flex-col gap-1.5">
-          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            Storage pools
-          </p>
-          {pools.length > 0 ? (
-            <div className="flex flex-col gap-1.5">
-              {pools.map((pool) => (
-                <StoragePoolRow key={pool.name} pool={pool} />
-              ))}
-            </div>
-          ) : (
-            <p className="font-mono text-xs text-muted-foreground">pool data n/a</p>
-          )}
-        </div>
-
-        <Separator />
-
-        <div className="flex flex-col gap-2">
-          <div className="flex items-baseline justify-between gap-2 font-mono text-xs">
-            <span className="uppercase tracking-widest text-muted-foreground">VM state</span>
-            <span className="tabular-nums">
-              {vmRunning}/{vmTotal} running
-              <span className="text-muted-foreground"> · {vmStopped} stopped</span>
-            </span>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+              Storage
+            </p>
+            {visiblePools.length > 0 ? (
+              <div className="flex flex-col gap-1.5">
+                {visiblePools.map((pool) => (
+                  <StoragePoolRow key={pool.name} pool={pool} />
+                ))}
+                {poolsMoreCount > 0 && (
+                  <p className="font-mono text-[10px] text-muted-foreground">+{poolsMoreCount} more</p>
+                )}
+              </div>
+            ) : (
+              <p className="font-mono text-xs text-muted-foreground">pool data n/a</p>
+            )}
           </div>
-          <VmRail running={vmRunning} total={vmTotal} />
-          <VmStatusList items={data.vms.items} />
+
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <div className="flex items-baseline justify-between gap-2 font-mono text-[11px]">
+              <span className="uppercase tracking-widest text-muted-foreground">VMs</span>
+              <span className="tabular-nums text-muted-foreground">
+                {vmRunning}/{vmTotal} up · {vmStopped} down
+              </span>
+            </div>
+            <VmRail running={vmRunning} total={vmTotal} />
+            <VmStatusList items={visibleVmItems} />
+            {vmItemsMoreCount > 0 && (
+              <p className="font-mono text-[10px] text-muted-foreground">+{vmItemsMoreCount} more</p>
+            )}
+          </div>
         </div>
 
-        <Separator />
-
-        <p className="font-mono text-xs text-muted-foreground">
+        <p className="mt-auto pt-1 font-mono text-[10px] uppercase tracking-wide text-muted-foreground/70">
           {endpointLabel}
         </p>
       </CardContent>
