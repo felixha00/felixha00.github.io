@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Rocket } from "lucide-react";
+import { CardWatermark } from "@/components/cards/CardWatermark";
 
 type DeployEntry = {
   sha: string | null;
@@ -126,7 +128,8 @@ export function LastDeployCard() {
     isLatestDeployed ?? (current.sha != null && visibleCommit.sha === current.sha);
 
   return (
-    <Card className="rounded-none h-full">
+    <Card className="rounded-none h-full relative">
+      <CardWatermark icon={Rocket} />
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Last Deploy

@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { LiveDot } from "@/components/cards/LiveDot";
+import { CardWatermark } from "@/components/cards/CardWatermark";
 import {
   Area,
   AreaChart,
@@ -260,7 +261,8 @@ export function WeatherCard() {
   }).format(new Date()).toUpperCase();
 
   return (
-    <Card className="rounded-none h-full flex flex-col">
+    <Card className="rounded-none h-full flex flex-col relative">
+      <CardWatermark icon={Icon} />
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Weather · {weather.city}

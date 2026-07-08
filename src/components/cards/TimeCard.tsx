@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Clock } from "@/components/Clock";
 import { LiveDot } from "@/components/cards/LiveDot";
+import { CardWatermark } from "@/components/cards/CardWatermark";
+import { Clock as ClockIcon } from "lucide-react";
 
 const SYNODIC_DAYS = 29.53058867;
 
@@ -296,7 +298,7 @@ export function TimeCard() {
     navigator.clipboard.writeText(String(extra.epoch)).then(() => {
       setEpochCopied(true);
       setTimeout(() => setEpochCopied(false), 1200);
-    }).catch(() => {});
+    }).catch(() => { });
   }
 
   // Per-second ticker: epoch counter and solar "now" position
@@ -387,7 +389,8 @@ export function TimeCard() {
   const showSolar = sunTimes && solarLive;
 
   return (
-    <Card className="rounded-none h-full flex flex-col">
+    <Card className="rounded-none h-full flex flex-col relative">
+      <CardWatermark icon={ClockIcon} />
       <CardHeader className="pb-2">
         <CardTitle className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
           Local Time
