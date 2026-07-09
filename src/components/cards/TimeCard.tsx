@@ -507,7 +507,7 @@ export function TimeCard() {
           <LiveDot />
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col justify-between gap-4 flex-1">
+      <CardContent className="flex min-h-0 flex-1 flex-col justify-between gap-4 overflow-y-auto">
         {/* Clock row */}
         <div className="flex flex-wrap items-end gap-3">
           <div className="text-5xl">

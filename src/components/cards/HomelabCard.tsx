@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -263,7 +263,17 @@ function HomelabSkeleton() {
   );
 }
 
-export function HomelabCard() {
+type HomelabStatusState = {
+  data: HomelabStatus | null;
+  error: boolean;
+  pollFailing: boolean;
+  lastSyncedAt: number | null;
+  nowMs: number;
+};
+
+const HomelabStatusContext = createContext<HomelabStatusState | null>(null);
+
+function usePolledHomelabStatus(): HomelabStatusState {
   const [data, setData] = useState<HomelabStatus | null>(null);
   const [error, setError] = useState(false);
   const [pollFailing, setPollFailing] = useState(false);
@@ -314,6 +324,29 @@ export function HomelabCard() {
     return () => clearInterval(id);
   }, []);
 
+  return { data, error, pollFailing, lastSyncedAt, nowMs };
+}
+
+// Owns the poll loop above LiveCardPanel's layout switch, so the 15s fetch
+// cadence and "next sync" countdown survive the card moving between the
+// desktop grid and the carousel instead of restarting on every crossing.
+export function HomelabStatusProvider({ children }: { children: React.ReactNode }) {
+  const status = usePolledHomelabStatus();
+  return (
+    <HomelabStatusContext.Provider value={status}>
+      {children}
+    </HomelabStatusContext.Provider>
+  );
+}
+
+function useHomelabStatus(): HomelabStatusState {
+  const ctx = useContext(HomelabStatusContext);
+  if (!ctx) throw new Error("HomelabCard must be rendered within HomelabStatusProvider");
+  return ctx;
+}
+
+export function HomelabCard() {
+  const { data, error, pollFailing, lastSyncedAt, nowMs } = useHomelabStatus();
   const pools = data?.storagePools ?? [];
 
   if (error) {

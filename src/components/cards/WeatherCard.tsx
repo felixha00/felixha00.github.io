@@ -271,7 +271,7 @@ export function WeatherCard() {
           <LiveDot />
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3 flex-1">
+      <CardContent className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
         <TooltipProvider>
           <div className="flex items-center gap-3">
             <Icon className="size-8 shrink-0 text-muted-foreground" />

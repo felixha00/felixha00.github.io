@@ -1,100 +1,118 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { TimeCard } from "@/components/cards/TimeCard";
 import { WeatherCard } from "@/components/cards/WeatherCard";
 import { LastDeployCard } from "@/components/cards/LastDeployCard";
-import { HomelabCard } from "@/components/cards/HomelabCard";
+import { HomelabCard, HomelabStatusProvider } from "@/components/cards/HomelabCard";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    type CarouselApi,
+} from "@/components/ui/carousel";
 
-const CARDS: { Card: React.ComponentType; label: string; className?: string }[] = [
+const CARDS: { Card: React.ComponentType; label: string }[] = [
     { Card: TimeCard, label: "Local Time" },
     { Card: WeatherCard, label: "Weather" },
     { Card: HomelabCard, label: "Homelab" },
     { Card: LastDeployCard, label: "Last Deploy" },
 ];
 
-function useIsDesktop() {
-    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+type Tier = "horizontal" | "vertical" | "grid";
+
+// Content-driven, not device-driven: below sm there's only room for one
+// narrow card at a time; sm-md has height to spare so cards stack instead;
+// md+ has width for all four to sit in a static grid at once.
+function useTier(): Tier | null {
+    const [tier, setTier] = useState<Tier | null>(null);
 
     useEffect(() => {
-        const query = window.matchMedia("(min-width: 768px)");
-        const update = () => setIsDesktop(query.matches);
+        const mdQuery = window.matchMedia("(min-width: 768px)");
+        const smQuery = window.matchMedia("(min-width: 640px)");
 
+        const update = () => {
+            if (mdQuery.matches) setTier("grid");
+            else if (smQuery.matches) setTier("vertical");
+            else setTier("horizontal");
+        };
+
+        update();
+        mdQuery.addEventListener("change", update);
+        smQuery.addEventListener("change", update);
+        return () => {
+            mdQuery.removeEventListener("change", update);
+            smQuery.removeEventListener("change", update);
+        };
+    }, []);
+
+    return tier;
+}
+
+function usePrefersReducedMotion() {
+    const [reduced, setReduced] = useState(false);
+
+    useEffect(() => {
+        const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const update = () => setReduced(query.matches);
         update();
         query.addEventListener("change", update);
         return () => query.removeEventListener("change", update);
     }, []);
 
-    return isDesktop;
+    return reduced;
 }
 
-// Below md there's no room for three stacked panels, so the same cards
-// become a swipeable strip instead, one full card in view at a time.
-function MobileCardCarousel() {
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+// One carousel instance covers both sub-md tiers. Swapping `orientation`
+// changes embla's axis under the hood (reInit, not a remount) so the four
+// cards stay mounted — no lost polling, no replayed skeletons — while
+// swiping horizontally on narrow phones or vertically once there's height
+// to spare.
+function CardCarousel({ tier }: { tier: "horizontal" | "vertical" }) {
+    const [api, setApi] = useState<CarouselApi>();
     const [activeIndex, setActiveIndex] = useState(0);
+    const reduceMotion = usePrefersReducedMotion();
 
     useEffect(() => {
-        const root = scrollRef.current;
-        if (!root) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const mostVisible = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-                if (!mostVisible) return;
-                const index = slideRefs.current.findIndex((el) => el === mostVisible.target);
-                if (index !== -1) setActiveIndex(index);
-            },
-            { root, threshold: [0.6] }
-        );
-
-        slideRefs.current.forEach((el) => el && observer.observe(el));
-        return () => observer.disconnect();
-    }, []);
-
-    function goTo(index: number) {
-        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        slideRefs.current[index]?.scrollIntoView({
-            behavior: reduceMotion ? "auto" : "smooth",
-            inline: "center",
-            block: "nearest",
-        });
-    }
+        if (!api) return;
+        const onSelect = () => setActiveIndex(api.selectedScrollSnap());
+        onSelect();
+        api.on("select", onSelect);
+        api.on("reInit", onSelect);
+        return () => {
+            api.off("select", onSelect);
+            api.off("reInit", onSelect);
+        };
+    }, [api]);
 
     return (
         <motion.div
-            className="md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
-            <div
-                ref={scrollRef}
-                tabIndex={0}
-                role="region"
-                aria-roledescription="carousel"
+            <Carousel
+                orientation={tier}
+                opts={{ duration: reduceMotion ? 0 : 20 }}
+                setApi={setApi}
                 aria-label="Live status cards"
-                className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto motion-safe:scroll-smooth px-4 focus-visible:outline-none"
+                className="px-4"
             >
-                {CARDS.map(({ Card, label }, i) => (
-                    <div
-                        key={label}
-                        ref={(el) => {
-                            slideRefs.current[i] = el;
-                        }}
-                        className="w-[85%] shrink-0 snap-center"
-                    >
-                        <Card />
-                    </div>
-                ))}
-            </div>
+                <CarouselContent className={cn(tier === "vertical" && "h-[min(70vh,600px)]")}>
+                    {CARDS.map(({ Card, label }) => (
+                        <CarouselItem
+                            key={label}
+                            className={cn("min-h-0", tier === "horizontal" ? "basis-[85%]" : "basis-1/2")}
+                        >
+                            <Card />
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+            </Carousel>
 
             <div className="flex items-center justify-center h-12">
                 {CARDS.map(({ label }, i) => (
@@ -102,7 +120,7 @@ function MobileCardCarousel() {
                         key={label}
                         size="icon-xs"
                         variant="ghost"
-                        onClick={() => goTo(i)}
+                        onClick={() => api?.scrollTo(i)}
                         aria-label={`Show ${label} card`}
                         aria-current={i === activeIndex ? "true" : undefined}
                         className="flex items-center justify-center p-2"
@@ -126,7 +144,7 @@ function DesktopCardGrid() {
         <motion.div
             role="region"
             aria-label="Live status cards"
-            className="hidden md:grid relative min-h-0 border bg-background/80 md:h-full md:overflow-hidden grid-cols-2 grid-rows-2 gap-4 p-4 **:data-[slot=card]:min-h-0 **:data-[slot=card]:rounded-lg **:data-[slot=card]:py-3 **:data-[slot=card]:gap-3 **:data-[slot=card-header]:px-4 **:data-[slot=card-content]:px-4"
+            className="grid relative min-h-0 border bg-background/80 h-full overflow-hidden grid-cols-2 grid-rows-2 gap-4 p-4 **:data-[slot=card]:min-h-0 **:data-[slot=card]:rounded-lg **:data-[slot=card]:py-3 **:data-[slot=card]:gap-3 **:data-[slot=card-header]:px-4 **:data-[slot=card-content]:px-4"
             initial="hidden"
             animate="visible"
             variants={{
@@ -134,10 +152,10 @@ function DesktopCardGrid() {
                 visible: { transition: { staggerChildren: 0.1, delayChildren: 0.35 } },
             }}
         >
-            {CARDS.map(({ Card, className }, i) => (
+            {CARDS.map(({ Card, label }) => (
                 <motion.div
-                    key={i}
-                    className={cn("min-h-0", className)}
+                    key={label}
+                    className="min-h-0"
                     variants={{
                         hidden: { opacity: 0 },
                         visible: { opacity: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
@@ -151,8 +169,15 @@ function DesktopCardGrid() {
 }
 
 export default function LiveCardPanel() {
-    const isDesktop = useIsDesktop();
+    const tier = useTier();
 
-    if (isDesktop === null) return null;
-    return isDesktop ? <DesktopCardGrid /> : <MobileCardCarousel />;
+    // HomelabStatusProvider sits above the tier switch so its poll loop and
+    // countdown never restart when tier changes, even though the grid and
+    // carousel below it are still two distinct trees.
+    return (
+        <HomelabStatusProvider>
+            {tier === "grid" && <DesktopCardGrid />}
+            {(tier === "horizontal" || tier === "vertical") && <CardCarousel tier={tier} />}
+        </HomelabStatusProvider>
+    );
 }
