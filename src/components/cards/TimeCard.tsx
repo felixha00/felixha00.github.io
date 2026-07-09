@@ -507,7 +507,7 @@ export function TimeCard() {
           <LiveDot />
         </CardAction>
       </CardHeader>
-      <CardContent className="flex min-h-0 flex-1 flex-col justify-between gap-4 overflow-y-auto">
+      <CardContent className="flex min-h-0 flex-1 flex-col justify-between gap-3 overflow-x-hidden overflow-y-auto">
         {/* Clock row */}
         <div className="flex flex-wrap items-end gap-3">
           <div className="text-5xl">
@@ -526,7 +526,7 @@ export function TimeCard() {
         <Separator />
 
         {/* Time metadata */}
-        <dl className="grid grid-cols-2 gap-x-8 gap-y-1.5 font-mono text-xs">
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-1.5 font-mono text-xs @sm/card-content:grid-cols-2">
           <div className="flex justify-between gap-2">
             <dt className="text-muted-foreground">DAY</dt>
             <dd>{extra.dayOfWeek}</dd>
@@ -535,7 +535,7 @@ export function TimeCard() {
             <dt className="text-muted-foreground">DATE</dt>
             <dd>{extra.dateStr}</dd>
           </div>
-          <div className="col-span-2 flex justify-between gap-2">
+          <div className="flex justify-between gap-2">
             <dt className="text-muted-foreground">EPOCH</dt>
             <dd>
               <button
@@ -548,12 +548,12 @@ export function TimeCard() {
               </button>
             </dd>
           </div>
-          <div className="col-span-2 flex justify-between gap-2">
+          <div className="flex min-w-0 justify-between gap-2">
             <dt className="shrink-0 text-muted-foreground">TZ</dt>
             <dd className="truncate text-right">{TZ}</dd>
           </div>
           {showVisitorTime ? (
-            <div className="col-span-2 flex justify-between gap-2">
+            <div className="flex justify-between gap-2 @sm/card-content:col-span-2">
               <dt className="shrink-0 text-muted-foreground">YOUR TIME</dt>
               <TooltipProvider>
                 <Tooltip>
@@ -576,8 +576,8 @@ export function TimeCard() {
 
         {/* Solar & lunar section */}
         {showSolar ? (
-          <div className="flex flex-col gap-3">
-            <div className="grid grid-cols-2 gap-x-8 font-mono text-xs">
+          <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-3 font-mono text-xs @md/card-content:grid-cols-2 @md/card-content:gap-y-0">
               {/* Sun */}
               <dl className="flex flex-col gap-1.5">
                 <div className="flex justify-between gap-2">

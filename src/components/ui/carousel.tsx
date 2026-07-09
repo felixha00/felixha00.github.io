@@ -122,7 +122,7 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn("relative", className)}
+        className={cn("relative flex flex-col", className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
@@ -140,12 +140,20 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden"
+      // flex-1 (not h-full): this viewport's own height comes from the
+      // Carousel flex column above it, which may itself be content-sized
+      // rather than a definite pixel height (e.g. a mobile layout with no
+      // explicit height anywhere in the ancestor chain). A percentage
+      // height resolved against that kind of indefinite ancestor collapses
+      // to 0 in Safari instead of falling back to content size, so slides
+      // render with no visible height. flex-grow degrades to content size
+      // in the same situation without collapsing, in every browser.
+      className="min-h-0 flex-1 overflow-hidden"
       data-slot="carousel-content"
     >
       <div
         className={cn(
-          "flex",
+          "flex h-full",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
         )}

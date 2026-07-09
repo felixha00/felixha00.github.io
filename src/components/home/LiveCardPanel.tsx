@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { TimeCard } from "@/components/cards/TimeCard";
 import { WeatherCard } from "@/components/cards/WeatherCard";
@@ -23,32 +23,48 @@ const CARDS: { Card: React.ComponentType; label: string }[] = [
     { Card: LastDeployCard, label: "Last Deploy" },
 ];
 
-type Tier = "horizontal" | "vertical" | "grid";
+type Tier = { kind: "grid" } | { kind: "carousel" };
 
-// Content-driven, not device-driven: below sm there's only room for one
-// narrow card at a time; sm-md has height to spare so cards stack instead;
-// md+ has width for all four to sit in a static grid at once.
-function useTier(): Tier | null {
+// Panel width alone isn't a reliable signal for whether a 2x2 grid fits: this
+// panel sits in a column that's roughly half the *viewport* width, so a wide
+// but short browser window (common on laptops) can be plenty wide while still
+// too short for two rows of card content, forcing internal scrollbars. So the
+// tier is driven by the panel's own rendered box (via ResizeObserver on the
+// wrapper below) rather than viewport media queries — a container query in
+// spirit, just computed in JS since the choice also swaps which component
+// tree mounts (grid vs. carousel), which CSS alone can't decide.
+//
+// Both numbers were picked against the cards' actual rendered content (not
+// round breakpoint numbers): below this row height/width the denser cards
+// (Local Time, Weather) start needing their internal scroll, so anything
+// short of this reads better as a full-size carousel slide than a cramped
+// grid cell. Tuned so ordinary maximized-browser desktops land in the grid —
+// only genuinely small (tablet-width) or short (unmaximized-window) viewports
+// fall back to the carousel.
+const GRID_MIN_WIDTH = 600;
+const GRID_MIN_HEIGHT = 680;
+
+function computeTier(width: number, height: number): Tier {
+    if (width >= GRID_MIN_WIDTH && height >= GRID_MIN_HEIGHT) return { kind: "grid" };
+    return { kind: "carousel" };
+}
+
+function useContainerTier(ref: React.RefObject<HTMLElement | null>): Tier | null {
     const [tier, setTier] = useState<Tier | null>(null);
 
     useEffect(() => {
-        const mdQuery = window.matchMedia("(min-width: 768px)");
-        const smQuery = window.matchMedia("(min-width: 640px)");
+        const el = ref.current;
+        if (!el) return;
 
-        const update = () => {
-            if (mdQuery.matches) setTier("grid");
-            else if (smQuery.matches) setTier("vertical");
-            else setTier("horizontal");
-        };
-
-        update();
-        mdQuery.addEventListener("change", update);
-        smQuery.addEventListener("change", update);
-        return () => {
-            mdQuery.removeEventListener("change", update);
-            smQuery.removeEventListener("change", update);
-        };
-    }, []);
+        const observer = new ResizeObserver((entries) => {
+            const entry = entries[0];
+            if (!entry) return;
+            const { width, height } = entry.contentRect;
+            setTier(computeTier(width, height));
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [ref]);
 
     return tier;
 }
@@ -67,12 +83,17 @@ function usePrefersReducedMotion() {
     return reduced;
 }
 
-// One carousel instance covers both sub-md tiers. Swapping `orientation`
-// changes embla's axis under the hood (reInit, not a remount) so the four
-// cards stay mounted — no lost polling, no replayed skeletons — while
-// swiping horizontally on narrow phones or vertically once there's height
-// to spare.
-function CardCarousel({ tier }: { tier: "horizontal" | "vertical" }) {
+// The only carousel tier left scrolls horizontally, but the wrapper still
+// stretches to the panel's full height (rather than hugging the card's
+// natural height) so a wide-but-short desktop window — which lands here
+// because it failed the grid's *height* check, not its width one — doesn't
+// leave a blank gap under the card while the hero's left column keeps going
+// to the bottom of the row. That stretch is gated to md: (rather than
+// unconditional h-full) because below md the panel is genuinely auto-height
+// with no definite size anywhere in its ancestor chain, and a percentage
+// height resolved against an indefinite ancestor renders as a collapsed,
+// content-free slide in Safari instead of falling back to content size.
+function CardCarousel() {
     const [api, setApi] = useState<CarouselApi>();
     const [activeIndex, setActiveIndex] = useState(0);
     const reduceMotion = usePrefersReducedMotion();
@@ -91,22 +112,27 @@ function CardCarousel({ tier }: { tier: "horizontal" | "vertical" }) {
 
     return (
         <motion.div
+            className="flex flex-col md:h-full px-4 md:py-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
             <Carousel
-                orientation={tier}
+                orientation="horizontal"
                 opts={{ duration: reduceMotion ? 0 : 20 }}
                 setApi={setApi}
                 aria-label="Live status cards"
-                className="px-4"
+                className="min-h-0 flex-1"
             >
-                <CarouselContent className={cn(tier === "vertical" && "h-[min(70vh,600px)]")}>
+                <CarouselContent>
                     {CARDS.map(({ Card, label }) => (
                         <CarouselItem
                             key={label}
-                            className={cn("min-h-0", tier === "horizontal" ? "basis-[85%]" : "basis-1/2")}
+                            // Slides are capped in absolute width, not just percentage —
+                            // 85% of a wide-but-short panel produced an oversized, sparse
+                            // card. Capping keeps the card a sane size and just grows the
+                            // peek of the neighboring card on wider panels instead.
+                            className="min-h-0 basis-[min(85%,26rem)]"
                         >
                             <Card />
                         </CarouselItem>
@@ -169,15 +195,26 @@ function DesktopCardGrid() {
 }
 
 export default function LiveCardPanel() {
-    const tier = useTier();
+    const panelRef = useRef<HTMLDivElement>(null);
+    const tier = useContainerTier(panelRef);
 
     // HomelabStatusProvider sits above the tier switch so its poll loop and
-    // countdown never restart when tier changes, even though the grid and
-    // carousel below it are still two distinct trees.
+    // countdown survive the grid/carousel boundary even though those are
+    // still two distinct trees (a static grid can't carry carousel ARIA
+    // semantics, so they're deliberately not unified into one component).
+    // The wrapper fills its grid cell at md: and up so ResizeObserver
+    // measures the desktop column's real available space rather than
+    // content size. Below md the grid cell has no defined height budget to
+    // measure against (single-column, auto-height layout), so the wrapper
+    // is left auto-height there too instead of asking for a percentage of
+    // an ancestor that has none to give — the source of the Safari bug
+    // where CardCarousel's slides rendered with zero height.
     return (
         <HomelabStatusProvider>
-            {tier === "grid" && <DesktopCardGrid />}
-            {(tier === "horizontal" || tier === "vertical") && <CardCarousel tier={tier} />}
+            <div ref={panelRef} className="min-h-0 h-auto md:h-full">
+                {tier?.kind === "grid" && <DesktopCardGrid />}
+                {tier?.kind === "carousel" && <CardCarousel />}
+            </div>
         </HomelabStatusProvider>
     );
 }

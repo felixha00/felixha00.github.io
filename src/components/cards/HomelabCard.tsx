@@ -239,24 +239,24 @@ function HomelabSkeleton() {
           Homelab
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
+      <CardContent className="flex flex-col gap-3 flex-1">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2.5">
             <Skeleton className="size-3 rounded-full" />
-            <Skeleton className="h-7 w-28" />
+            <Skeleton className="h-6 w-28" />
           </div>
           <Skeleton className="h-3 w-3/4" />
         </div>
         <Separator />
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-6 w-full" />
           ))}
         </div>
         <Separator />
-        <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
-          <Skeleton className="h-16 w-full" />
-          <Skeleton className="h-16 w-full" />
+        <div className="grid grid-cols-1 gap-x-6 gap-y-1.5 @md/card-content:grid-cols-2">
+          <Skeleton className="h-14 w-full" />
+          <Skeleton className="h-14 w-full" />
         </div>
       </CardContent>
     </Card>
@@ -373,15 +373,14 @@ export function HomelabCard() {
   const vmRunning = data.vms.running ?? 0;
   const vmStopped = data.vms.stopped ?? Math.max(0, vmTotal - vmRunning);
   const isPlaceholder = data.source === "placeholder";
-  const endpointLabel = data.endpoint?.package || data.endpoint?.mode || "read-only json";
 
   const nextSyncInSec =
     lastSyncedAt != null ? Math.max(0, Math.ceil((lastSyncedAt + POLL_INTERVAL_MS - nowMs) / 1000)) : null;
 
-  const visiblePools = pools.slice(0, 3);
+  const visiblePools = pools.slice(0, 2);
   const poolsMoreCount = Math.max(0, pools.length - visiblePools.length);
   const vmItems = data.vms.items ?? [];
-  const visibleVmItems = vmItems.slice(0, 3);
+  const visibleVmItems = vmItems.slice(0, 2);
   const vmItemsMoreCount = Math.max(0, vmItems.length - visibleVmItems.length);
 
   return (
@@ -407,12 +406,12 @@ export function HomelabCard() {
         </CardAction>
       </CardHeader>
 
-      <CardContent className="flex flex-1 min-h-0 flex-col gap-4 overflow-y-auto">
+      <CardContent className="flex flex-1 min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto">
         <div className="flex flex-col gap-1.5">
           <div className="flex flex-wrap items-end gap-3">
             <div className="flex min-w-0 items-center gap-2.5">
               <StatusDot status={status} />
-              <span className="truncate font-display text-3xl leading-none tracking-tight">
+              <span className="truncate font-display text-2xl leading-none tracking-tight">
                 {data.system.name}
               </span>
             </div>
@@ -451,7 +450,7 @@ export function HomelabCard() {
 
         <Separator />
 
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
           {metricRows.map(({ key, label }) => (
             <GaugeRow key={key} label={label} value={data.metrics[key]} />
           ))}
@@ -459,13 +458,13 @@ export function HomelabCard() {
 
         <Separator />
 
-        <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
-          <div className="flex min-w-0 flex-col gap-1.5">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-1.5 @md/card-content:grid-cols-2">
+          <div className="flex min-w-0 flex-col gap-1">
             <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
               Storage
             </p>
             {visiblePools.length > 0 ? (
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-1">
                 {visiblePools.map((pool) => (
                   <StoragePoolRow key={pool.name} pool={pool} />
                 ))}
@@ -478,7 +477,7 @@ export function HomelabCard() {
             )}
           </div>
 
-          <div className="flex min-w-0 flex-col gap-1.5">
+          <div className="flex min-w-0 flex-col gap-1">
             <div className="flex items-baseline justify-between gap-2 font-mono text-[11px]">
               <span className="uppercase tracking-widest text-muted-foreground">VMs</span>
               <span className="tabular-nums text-muted-foreground">
@@ -492,10 +491,6 @@ export function HomelabCard() {
             )}
           </div>
         </div>
-
-        <p className="mt-auto pt-1 font-mono text-[10px] uppercase tracking-wide text-muted-foreground/70">
-          {endpointLabel}
-        </p>
       </CardContent>
     </Card>
   );
