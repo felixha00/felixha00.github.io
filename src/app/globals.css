@@ -3,6 +3,15 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-heading: var(--font-geist-mono);

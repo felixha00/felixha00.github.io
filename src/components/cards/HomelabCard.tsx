@@ -66,6 +66,26 @@ function pct(value: number | null | undefined): number | null {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
+const CAPACITY_UNITS: Record<string, number> = {
+  "": 1,
+  K: 1024,
+  M: 1024 ** 2,
+  G: 1024 ** 3,
+  T: 1024 ** 4,
+  P: 1024 ** 5,
+};
+
+// Pools are shown biggest-first so a card's largest, most-significant volume
+// (e.g. a NAS mount) never gets buried behind a "+N more" truncation just
+// because a small default local pool happened to sort earlier upstream.
+function capacityToBytes(text: string | null | undefined): number {
+  const match = text?.trim().match(/^([\d.]+)\s*([KMGTP]?)i?B?$/i);
+  if (!match) return 0;
+  const value = parseFloat(match[1]!);
+  if (!Number.isFinite(value)) return 0;
+  return value * (CAPACITY_UNITS[match[2]!.toUpperCase()] ?? 1);
+}
+
 function timeAgo(iso: string | null): string {
   if (!iso) return "not live";
   const ms = new Date(iso).getTime();
@@ -377,7 +397,10 @@ export function HomelabCard() {
   const nextSyncInSec =
     lastSyncedAt != null ? Math.max(0, Math.ceil((lastSyncedAt + POLL_INTERVAL_MS - nowMs) / 1000)) : null;
 
-  const visiblePools = pools.slice(0, 2);
+  const sortedPools = [...pools].sort(
+    (a, b) => capacityToBytes(b.total) - capacityToBytes(a.total)
+  );
+  const visiblePools = sortedPools.slice(0, 2);
   const poolsMoreCount = Math.max(0, pools.length - visiblePools.length);
   const vmItems = data.vms.items ?? [];
   const visibleVmItems = vmItems.slice(0, 2);
@@ -406,7 +429,7 @@ export function HomelabCard() {
         </CardAction>
       </CardHeader>
 
-      <CardContent className="flex flex-1 min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto">
+      <CardContent className="no-scrollbar flex flex-1 min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto">
         <div className="flex flex-col gap-1.5">
           <div className="flex flex-wrap items-end gap-3">
             <div className="flex min-w-0 items-center gap-2.5">

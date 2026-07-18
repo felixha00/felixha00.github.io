@@ -135,7 +135,7 @@ export function LastDeployCard() {
           Last Deploy
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex h-full min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto">
+      <CardContent className="no-scrollbar flex h-full min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto">
 
         {/* Status row */}
         <div className="flex items-center gap-2">
